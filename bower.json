@@ -1,0 +1,35 @@
+{
+    "name": "contextamber",
+    "description": "A COP implementation for Amber Smalltalk",
+    "version": "0.1.0",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "/test_runner.js",
+        "test",
+        "tests"
+    ],
+    "authors": [
+        {
+            "name": "Matthias Springer",
+            "email": "me@matthiasspringer.de"
+        }
+    ],
+    "homepage": "https://github.com/matthias-springer/ContextAmber",
+    "keywords": [
+        "Amber",
+        "Smalltalk"
+    ],
+    "license": [
+        "MIT"
+    ],
+    "private": false,
+    "dependencies": {
+        "amber": "^0.13.2"
+    },
+    "devDependencies": {
+        "amber-ide-starter-dialog": "^0.1.0",
+        "helios": "^0.3.0"
+    }
+}
