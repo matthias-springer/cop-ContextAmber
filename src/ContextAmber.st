@@ -3,7 +3,7 @@ Object subclass: #ContextAmber
 	instanceVariableNames: ''
 	package: 'ContextAmber'!
 
-ContextAmber class instanceVariableNames: 'instance defaultActive scopedStack'!
+ContextAmber class instanceVariableNames: 'instance defaultActive scopedStack compiler'!
 
 !ContextAmber class methodsFor: 'accessing'!
 
@@ -16,22 +16,55 @@ defaultActive
 initialize
 	defaultActive := OrderedCollection new.
 	scopedStack := LayerStack new.
+	compiler := Compiler new.
+	"self registerAnnouncements."
+!
+
+registerAnnouncements
+	SystemAnnouncer current on: ClassRemove do: [ :announcement | | partial |
+		partial := announcement theClass.
+		partial isPartial ifTrue: [
+			partial class base removePartial: partial ] ].
 ! !
 
 !ContextAmber class methodsFor: 'layer creation'!
 
-newLayer: name layerClasses: layerClasses instanceVariableNames: instVarNames pacakge: package
-	| layer |
+newLayer: name layerClasses: layerClasses instanceVariableNames: instVarNames package: package
+	| layer partialClassesSource |
+	partialClassesSource := self partialClassesMethod: layerClasses.
 	layer := Layer subclass: name instanceVariableNames: instVarNames package: package.
-	layer layerClasses: layerClasses.
+	compiler install: partialClassesSource forClass: layer class protocol: 'initializing'.
+	layer initialize.
 	^ layer
 !
 
-newLayerClass: name baseClass: baseClass instanceVariableNames: instVarNames package: package
-	| layerClass |
-	layerClass := LayerClass subclass: name instanceVariableNames: instVarNames package: package.
-	layerClass baseClass: baseClass.
-	^ layerClass
+newPartialClass: name baseClass: base package: package
+	^ PartialClass new: name baseClass: base package: package
+! !
+
+!ContextAmber class methodsFor: 'private'!
+
+partialClassesCollection: collection
+	| stream |
+	stream := '' writeStream.
+	stream nextPut: '{'.
+	collection do: [ :class | 
+		(class isClass and: [class isPartial]) ifFalse: [ self error: 'object is not a partial class' ].
+		stream nextPutAll: class asString; 
+		nextPutAll: '. ' ].
+	stream nextPut: '}'.
+	^ stream contents
+!
+
+partialClassesMethod: collection
+	| stream |
+	stream := '' writeStream.
+	stream 
+		nextPutAll: 'partialClasses';
+		lf; tab;
+		nextPutAll: '^ ';
+		nextPutAll: (self partialClassesCollection: collection).
+	^ stream contents
 ! !
 
 !ContextAmber class methodsFor: 'singleton'!
@@ -41,9 +74,28 @@ instance
 	^ instance
 ! !
 
+!ContextAmber class methodsFor: 'testing'!
+
+shouldCacheIR: selector for: class
+	^ class isPartial or: [
+		class partials anySatisfy: [ :partialClass | partialClass includesSelector: selector ] ]
+! !
+
 IRVisitor subclass: #IRProceedInliner
 	instanceVariableNames: ''
 	package: 'ContextAmber'!
+
+!IRProceedInliner methodsFor: 'inlining'!
+
+inlinedMethod: selector for: baseClass with: layers
+	| recent |
+	recent := nil.		"TODO: IR for layers base method"
+	layers do: [ :layer |
+		layer class at: baseClass ifPresent: [ :partialClass |
+			(partialClass includesSelector: baseClass) ifTrue: [ | ir |
+				ir := nil.		"TODO: unoptimized IR for that method"
+				recent := nil.		"TODO: run inliner on ir with partial == recent" ] ] ].
+! !
 
 !IRProceedInliner methodsFor: 'testing'!
 
@@ -63,7 +115,7 @@ shouldInline: anIRInstruction
 ! !
 
 Object subclass: #Layer
-	instanceVariableNames: 'layerClasses'
+	instanceVariableNames: ''
 	package: 'ContextAmber'!
 
 !Layer methodsFor: 'default activation'!
@@ -76,18 +128,40 @@ deactivate
 	ContextAmber defaultActive remove: self ifAbsent: [ ].
 ! !
 
-Layer class instanceVariableNames: 'layerClasses'!
+Layer class instanceVariableNames: 'partialClasses'!
 
 !Layer class methodsFor: 'accessing'!
 
-layerClasses
-	^ layerClasses
+at: base ifPresent: block
+	partialClasses at: base ifPresent: block.
+! !
+
+!Layer class methodsFor: 'error handling'!
+
+error: aString
+	" defer executing to allow IDE to show up. "
+	"[ super error: aString ] valueWithTimeout: 0."
+	super error: aString.
+! !
+
+!Layer class methodsFor: 'initializing'!
+
+initialize
+	self ~= Layer ifTrue: [
+		partialClasses := Dictionary new.
+		self partialClasses do: [ :class |
+			(class isClass and: [class isPartial]) ifFalse: [ self error: 'object is not a partial class' ].
+			partialClasses at: class base put: class ] ].
 !
 
-layerClasses: aCollection
-	aCollection do: [ :class | class isClass & class isPartial
-		ifFalse: [ self error: 'not a layer class' ] ].
-	layerClasses := aCollection.
+partialClasses
+	self error: 'no partial classes defined for layer'.
+! !
+
+!Layer class methodsFor: 'testing'!
+
+isLayer
+	^ self ~= Layer
 ! !
 
 Object subclass: #LayerStack
@@ -144,30 +218,58 @@ size
 ! !
 
 Object subclass: #PartialClass
-	instanceVariableNames: 'layer'
+	instanceVariableNames: ''
 	package: 'ContextAmber'!
-
-!PartialClass methodsFor: 'accessing'!
-
-layer
-	^ layer
-!
-
-layer: aLayer
-	layer := aLayer.
-! !
-
-PartialClass class instanceVariableNames: 'base'!
 
 !PartialClass class methodsFor: 'accessing'!
 
 base
-	^ base
+	self error: 'no base class defined for partial class'.
+! !
+
+!PartialClass class methodsFor: 'class creation'!
+
+new: name baseClass: base package: package
+	| partialClass |
+	base isClass ifFalse: [ super error: 'object is not a class' ].
+	partialClass := super subclass: name instanceVariableNames: '' package: package.
+	partialClass class compile: 'base ^ ', String lf, String tab, base name protocol: 'accessing'.
+	base addPartial: partialClass.
 !
 
-base: aClass
-	aClass isClass ifFalse: [ self error: 'not a class' ].
-	base := aClass.
+subclass: aString instanceVariableNames: anotherString
+	self signalSubclassNotAllowed.
+!
+
+subclass: aString instanceVariableNames: aString2 category: aString3
+	self signalSubclassNotAllowed.
+!
+
+subclass: aString instanceVariableNames: aString2 classVariableNames: classVars poolDictionaries: pools category: aString3
+	self signalSubclassNotAllowed.
+!
+
+subclass: aString instanceVariableNames: aString2 package: aString3
+	self signalSubclassNotAllowed.
+! !
+
+!PartialClass class methodsFor: 'error handling'!
+
+error: aString
+	" defer executing to allow IDE to show up. "
+	"[ super error: aString ] valueWithTimeout: 0."
+	super error: aString.
+!
+
+signalSubclassNotAllowed
+	self error: 'subclassing not allowed for partial classes'.
+! !
+
+!PartialClass class methodsFor: 'initializing'!
+
+initialize
+	self ~= PartialClass ifTrue: [
+		self base isClass ifFalse: [ self error: 'object is not a class' ] ].
 ! !
 
 !PartialClass class methodsFor: 'testing'!
@@ -182,7 +284,7 @@ generateWrapper: method
 	| wrapper wrapperTemplate compiler |
 	compiler := Compiler new.
 	wrapperTemplate := (PartialClass class methodAt: #wrapperTemplate) source.
-	wrapper := compiler eval: (compiler compile: wrapperTemplate forClass: base).
+	wrapper := compiler eval: (compiler compile: wrapperTemplate forClass: self base).
 	wrapper fn basicAt: #selector put: method selector.
 	wrapper fn basicAt: #original put: method.
 	wrapper selector: method selector.
@@ -192,10 +294,10 @@ generateWrapper: method
 
 installWrapperForSelector: selector
 	| original |
-	original := base methodAt: selector.
+	original := self base methodAt: selector.
 	ClassBuilder new
 		installMethod: (self generateWrapper: original)
-		forClass: base
+		forClass: self base
 		protocol: original protocol.
 !
 
@@ -206,13 +308,108 @@ wrapperTemplate
 	^ (nextLayer class methodAt: selector) fn apply: self withPossibleArguments: arguments
 ! !
 
+!Behavior methodsFor: '*ContextAmber'!
+
+addPartial: class
+	self ensurePartialsCollectionInitialized.
+	self partials add: class.
+!
+
+ensurePartialsCollectionInitialized
+	< if (typeof(self['partials']) === 'undefined') {
+		self['partials'] = $core.Set._new();
+	} >
+!
+
+partials
+	< if (typeof(self['partials']) === 'undefined') {
+		return $core.Set._new();
+	} else {
+		return self['partials'];
+	} >
+!
+
+removePartial: class
+	self partials remove: class ifAbsent: [ self error: 'list of partial classes out of sync' ].
+! !
+
 !BlockClosure methodsFor: '*ContextAmber'!
 
 apply: anObject valueWithPossibleArguments: aCollection
 	<return self.apply(anObject, aCollection);>
 ! !
 
+!Browser methodsFor: '*ContextAmber'!
+
+classDeclarationSource
+	| stream |
+	stream := '' writeStream.
+	selectedClass ifNil: [ ^ self classDeclarationTemplate ].
+	" TODO: encapsulate in layer "
+	selectedClass isLayer	
+		ifTrue: [ ^ self layerDeclarationSource ].
+	selectedClass isPartial
+		ifTrue: [ ^ self partialDeclarationSource ].
+	stream
+		nextPutAll: selectedClass superclass asString;
+		nextPutAll: ' subclass: #';
+		nextPutAll: selectedClass name;
+		nextPutAll: String lf, String tab;
+		nextPutAll: 'instanceVariableNames: '''.
+	selectedClass instanceVariableNames
+		do: [ :each | stream nextPutAll: each ]
+		separatedBy: [ stream nextPutAll: ' ' ].
+	stream
+		nextPutAll: '''', String lf, String tab;
+		nextPutAll: 'package: ''';
+		nextPutAll: selectedClass category;
+		nextPutAll: ''''.
+	^ stream contents
+!
+
+layerDeclarationSource
+	| stream |
+	stream := '' writeStream.
+	stream
+		nextPutAll: 'ContextAmber newLayer: #';
+		nextPutAll: selectedClass name;
+		nextPutAll: String lf, String tab;
+		nextPutAll: 'layerClasses: ';
+		nextPutAll: (ContextAmber partialClassesCollection: selectedClass partialClasses);
+		nextPutAll: String lf, String tab;
+		nextPutAll: 'instanceVariableNames: '''.
+	selectedClass instanceVariableNames
+		do: [ :each | stream nextPutAll: each ]
+		separatedBy: [ stream nextPutAll: ' ' ].
+	stream
+		nextPutAll: '''', String lf, String tab;
+		nextPutAll: 'package: ''';
+		nextPutAll: selectedClass category;
+		nextPutAll: ''''.
+	^ stream contents
+!
+
+partialDeclarationSource
+	| stream |
+	stream := '' writeStream.
+	stream
+		nextPutAll: 'ContextAmber newPartialClass: #';
+		nextPutAll: selectedClass name;
+		nextPutAll: String lf, String tab;
+		nextPutAll: 'baseClass: ';
+		nextPutAll: selectedClass base asString;
+		nextPutAll: String lf, String tab;
+		nextPutAll: 'package: ''';
+		nextPutAll: selectedClass category;
+		nextPutAll: ''''.
+	^ stream contents
+! !
+
 !Class methodsFor: '*ContextAmber'!
+
+isLayer
+	^ false
+!
 
 isPartial
 	^ false

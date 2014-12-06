@@ -1,4 +1,14 @@
 Smalltalk createPackage: 'ContextAmber-Tests'!
+Layer subclass: #AaaLayer
+	instanceVariableNames: ''
+	package: 'ContextAmber-Tests'!
+
+!AaaLayer class methodsFor: 'initializing'!
+
+partialClasses
+	^ {}
+! !
+
 TestCase subclass: #ContextAmberTest
 	instanceVariableNames: ''
 	package: 'ContextAmber-Tests'!
@@ -17,26 +27,13 @@ wrapperTemplate
 	console log: 'TODO: check layer composition, call layer on top of stack'.
 ! !
 
-LayerClass subclass: #DemoClassLayer
+PartialClass subclass: #DemoPartialClass
 	instanceVariableNames: ''
 	package: 'ContextAmber-Tests'!
 
-!DemoClassLayer class methodsFor: 'initializing'!
+!DemoPartialClass class methodsFor: 'accessing'!
 
-initialize
-	baseClass := DemoClass.
-! !
-
-Object subclass: #DemoLayer
-	instanceVariableNames: ''
-	package: 'ContextAmber-Tests'!
-
-!DemoLayer methodsFor: 'not yet classified'!
-
-jsMethod
-	< x = self; >
-!
-
-method1
+base ^ 
+	DemoClass
 ! !
 

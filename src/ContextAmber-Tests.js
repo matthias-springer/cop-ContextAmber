@@ -4,6 +4,29 @@ var smalltalk=$core,_st=$recv,globals=$globals;
 $core.addPackage('ContextAmber-Tests');
 $core.packages["ContextAmber-Tests"].transport = {"type":"amd","amdNamespace":"amber-context"};
 
+$core.addClass('AaaLayer', $globals.Layer, [], 'ContextAmber-Tests');
+
+$core.addMethod(
+$core.method({
+selector: "partialClasses",
+protocol: 'initializing',
+fn: function (){
+var self=this;
+var $1;
+$1=[];
+return $1;
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "partialClasses\x0a\x09^ {}",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.AaaLayer.klass);
+
+
 $core.addClass('ContextAmberTest', $globals.TestCase, [], 'ContextAmber-Tests');
 
 
@@ -58,71 +81,25 @@ $globals.DemoClass);
 
 
 
-$core.addClass('DemoClassLayer', $globals.LayerClass, [], 'ContextAmber-Tests');
+$core.addClass('DemoPartialClass', $globals.PartialClass, [], 'ContextAmber-Tests');
 
 $core.addMethod(
 $core.method({
-selector: "initialize",
-protocol: 'initializing',
+selector: "base",
+protocol: 'accessing',
 fn: function (){
 var self=this;
 function $DemoClass(){return $globals.DemoClass||(typeof DemoClass=="undefined"?nil:DemoClass)}
-self["@baseClass"]=$DemoClass();
-return self;
+return $DemoClass();
 
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "initialize\x0a\x09baseClass := DemoClass.",
+source: "base ^ \x0a\x09DemoClass",
 referencedClasses: ["DemoClass"],
 //>>excludeEnd("ide");
 messageSends: []
 }),
-$globals.DemoClassLayer.klass);
-
-
-$core.addClass('DemoLayer', $globals.Object, [], 'ContextAmber-Tests');
-$core.addMethod(
-$core.method({
-selector: "jsMethod",
-protocol: 'not yet classified',
-fn: function (){
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) { 
-//>>excludeEnd("ctx");
- x = self; ;
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"jsMethod",{},$globals.DemoLayer)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "jsMethod\x0a\x09< x = self; >",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: []
-}),
-$globals.DemoLayer);
-
-$core.addMethod(
-$core.method({
-selector: "method1",
-protocol: 'not yet classified',
-fn: function (){
-var self=this;
-return self;
-
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "method1",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: []
-}),
-$globals.DemoLayer);
-
+$globals.DemoPartialClass.klass);
 
 });
