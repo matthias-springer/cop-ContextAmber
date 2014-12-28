@@ -1,4 +1,41 @@
 Smalltalk createPackage: 'ContextAmber-Tests'!
+TestCase subclass: #ASTProceedInlinerTest
+	instanceVariableNames: ''
+	package: 'ContextAmber-Tests'!
+
+!ASTProceedInlinerTest methodsFor: 'tests'!
+
+testSkipLayers
+	| inliner skipped layer |
+	layer := ContextAmberDemoLayer new.
+
+	"skip all layers"
+	inliner := ASTProceedInliner 
+		for: #method3 
+		in: ContextAmberDemoClass2 
+		withLayers: { layer. ContextAmberDemoLayer2 new }.
+	skipped := inliner skipLayers.
+	self assert: skipped size equals: 0.
+	
+	"skip last layer"
+	inliner := ASTProceedInliner 
+		for: #method2 
+		in: ContextAmberDemoClass2 
+		withLayers: { layer. ContextAmberDemoLayer2 new }.
+	skipped := inliner skipLayers.
+	self assert: skipped size equals: 1.
+	self assert: (skipped at: 1) equals: layer.
+	
+	"no skipping"
+	inliner := ASTProceedInliner
+		for: #method2
+		in: ContextAmberDemoClass2
+		withLayers: { ContextAmberDemoLayer2 new. layer }.
+	skipped := inliner skipLayers.
+	self assert: skipped size equals: 2.
+	self assert: (skipped at: 2) equals: layer.
+! !
+
 Object subclass: #ContextAmberDemoClass1
 	instanceVariableNames: ''
 	package: 'ContextAmber-Tests'!
@@ -6,9 +43,14 @@ Object subclass: #ContextAmberDemoClass1
 !ContextAmberDemoClass1 methodsFor: 'not yet classified'!
 
 method1
+	^ 5
 !
 
 method3
+!
+
+multiply: aNumber with: anotherNumber
+	^ aNumber * anotherNumber
 ! !
 
 Object subclass: #ContextAmberDemoClass2
@@ -16,6 +58,10 @@ Object subclass: #ContextAmberDemoClass2
 	package: 'ContextAmber-Tests'!
 
 !ContextAmberDemoClass2 methodsFor: 'not yet classified'!
+
+add: aNumber and: anotherNumber
+	^ aNumber + anotherNumber
+!
 
 method1
 !
@@ -47,6 +93,12 @@ PartialClass subclass: #ContextAmberDemoPartial2Class2
 	instanceVariableNames: ''
 	package: 'ContextAmber-Tests'!
 
+!ContextAmberDemoPartial2Class2 methodsFor: 'not yet classified'!
+
+add: aNumber and: anotherNumber
+	^ (self proceed: aNumber * 2 value: anotherNumber) + 5
+! !
+
 !ContextAmberDemoPartial2Class2 class methodsFor: 'accessing'!
 
 base ^ 
@@ -60,6 +112,11 @@ PartialClass subclass: #ContextAmberDemoPartialClass1
 !ContextAmberDemoPartialClass1 methodsFor: 'not yet classified'!
 
 method1
+	^ 10
+!
+
+multiply: aNumber with: anotherNumber
+	^ aNumber * anotherNumber * 10
 ! !
 
 !ContextAmberDemoPartialClass1 class methodsFor: 'accessing'!
@@ -73,6 +130,10 @@ PartialClass subclass: #ContextAmberDemoPartialClass2
 	package: 'ContextAmber-Tests'!
 
 !ContextAmberDemoPartialClass2 methodsFor: 'not yet classified'!
+
+add: aNumber and: anotherNumber
+	^ (self proceed: aNumber + 1 value: anotherNumber) * 10
+!
 
 method2
 ! !
@@ -94,6 +155,13 @@ setUp
 	layer1 := ContextAmberDemoLayer new.
 	layer2 := ContextAmberDemoLayer new.
 	layer3 := ContextAmberDemoLayer new.
+!
+
+testCompositionVersion
+	| oldVersion |
+	oldVersion := ContextAmberDemoClass1 compositionVersion.
+	ContextAmberDemoClass1 incrementCompositionVersion.
+	self assert: ContextAmberDemoClass1 compositionVersion equals: oldVersion + 1.
 !
 
 testDefaultLayers
@@ -179,35 +247,6 @@ PartialClass subclass: #DemoPartialClass
 
 base ^ 
 	DemoClass
-! !
-
-TestCase subclass: #IRProceedInlinerTest
-	instanceVariableNames: ''
-	package: 'ContextAmber-Tests'!
-
-!IRProceedInlinerTest methodsFor: 'tests'!
-
-testSkipLayers
-	| inliner skipped layer |
-	layer := ContextAmberDemoLayer new.
-	
-	"skip last layer"
-	inliner := IRProceedInliner 
-		for: #method2 
-		in: ContextAmberDemoClass2 
-		withLayers: { layer. ContextAmberDemoLayer2 new }.
-	skipped := inliner skipLayers.
-	self assert: skipped size equals: 1.
-	self assert: (skipped at: 1) equals: layer.
-	
-	"no skipping"
-	inliner := IRProceedInliner
-		for: #method2
-		in: ContextAmberDemoClass2
-		withLayers: { ContextAmberDemoLayer2 new. layer }.
-	skipped := inliner skipLayers.
-	self assert: skipped size equals: 2.
-	self assert: (skipped at: 2) equals: layer.
 ! !
 
 TestCase subclass: #LayerStackTest
@@ -316,6 +355,35 @@ testCreation
 	Smalltalk removeClass: layer.
 !
 
+testDefaultLayer
+	| obj layer |
+	obj := ContextAmberDemoClass1 new.
+	layer := ContextAmberDemoLayer new.
+	self assert: obj method1 equals: 5.
+	
+	layer activate.
+	self assert: obj method1 equals: 10.
+	
+	layer deactivate.
+	self assert: obj method1 equals: 5.
+!
+
+testDefaultScopedLayer
+	| obj layer |
+	obj := ContextAmberDemoClass1 new.
+	layer := ContextAmberDemoLayer new.
+	self assert: obj method1 equals: 5.
+	
+	layer activate.
+	self assert: obj method1 equals: 10.
+	
+	self assert: ([ obj method1 ] withoutLayer: layer) equals: 5.
+	self assert: obj method1 equals: 10.
+	
+	layer deactivate.
+	self assert: obj method1 equals: 5.
+!
+
 testHasPartial
 	self assert: (ContextAmberDemoLayer hasPartial: #method2 for: ContextAmberDemoClass2).
 	self deny: (ContextAmberDemoLayer hasPartial: #method1 for: ContextAmberDemoClass2).
@@ -323,9 +391,45 @@ testHasPartial
 	self deny: (ContextAmberDemoLayer hasPartial: #method1 for: nil).
 !
 
+testMultiArgsMethod
+	| layer obj |
+	obj := ContextAmberDemoClass1 new.
+	layer := ContextAmberDemoLayer new.
+	self assert: (obj multiply: 6 with: 7) equals: 42.
+	
+	layer activate.
+	self assert: (obj multiply: 6 with: 7) equals: 420.
+	
+	layer deactivate.
+!
+
+testMultiArgsProceed
+	| layer1 layer2 obj |
+	obj := ContextAmberDemoClass2 new.
+	layer1 := ContextAmberDemoLayer new.
+	layer2 := ContextAmberDemoLayer2 new.
+	
+	self assert: (obj add: 5 and: 8) equals: 13.
+	
+	layer1 activate.
+	self assert: (obj add: 5 and: 8) equals: 140.
+	
+	layer1 deactivate.
+!
+
 testPartialFor
 	self assert: (ContextAmberDemoLayer2 partialFor: ContextAmberDemoClass2) equals: ContextAmberDemoPartial2Class2.
 	self should: [ ContextAmberDemoLayer2 partialFor: ContextAmberDemoClass1 ] raise: Error.
+!
+
+testScopedLayer
+	| obj layer |
+	obj := ContextAmberDemoClass1 new.
+	layer := ContextAmberDemoLayer new.
+	
+	self assert: obj method1 equals: 5.
+	self assert: ([ obj method1 ] withLayer: layer) equals: 10.
+	self assert: obj method1 equals: 5.
 ! !
 
 TestCase subclass: #PartialClassTest

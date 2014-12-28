@@ -1,4 +1,155 @@
 Smalltalk createPackage: 'ContextAmber'!
+NodeVisitor subclass: #ASTProceedInliner
+	instanceVariableNames: 'inlinedSend base selector activeLayers'
+	package: 'ContextAmber'!
+
+!ASTProceedInliner methodsFor: 'accessing'!
+
+activeLayers
+	^ activeLayers
+!
+
+activeLayers: aCollection
+	activeLayers := aCollection.
+!
+
+base
+	^ base
+!
+
+base: class
+	base := class.
+!
+
+selector
+	^ selector
+!
+
+selector: aString
+	selector := aString.
+! !
+
+!ASTProceedInliner methodsFor: 'inlining'!
+
+inlinedCompiledMethod
+	^ self eval: self inlinedMethod
+!
+
+inlinedMethod
+	| remainingLayers nextLayer partialMethodNode |
+	self activeLayers: self skipLayers.
+	self activeLayers isEmpty
+		ifTrue: [
+			partialMethodNode := (self base >> self selector) ast ]
+		ifFalse: [ 
+			nextLayer := self activeLayers removeLast.
+			partialMethodNode := ((nextLayer class partialFor: self base) >> self selector) ast ].
+	partialMethodNode sequenceNode addFirstNode: self updateMethodAST sequenceNode.
+	self visit: partialMethodNode.
+	^ InliningCodeGenerator new
+		currentClass: self base;
+		compileNode: partialMethodNode
+!
+
+inlinedSend: args
+	inlinedSend ifNil: [ | recursiveInliner nextLayer nextPartialMethodAST remainingLayers blockNode blockScope |
+		"Caches IRSend node for proceed calls. IRSend node has further partial calls inlined recursively."
+		remainingLayers := self skipLayers.
+		remainingLayers isEmpty
+			ifTrue: [
+				nextPartialMethodAST := (self base >> self selector) ast ]
+			ifFalse: [ 
+				nextLayer := remainingLayers removeLast.
+				nextPartialMethodAST := ((nextLayer class partialFor: self base) >> self selector) ast ].
+		(SemanticAnalyzer on: self base) visit: nextPartialMethodAST.
+		recursiveInliner := self class for: self selector in: self base withLayers: remainingLayers.
+		recursiveInliner visit: nextPartialMethodAST.
+		blockNode := PartialBlockNode new
+			parameters: nextPartialMethodAST arguments;
+			addNode: nextPartialMethodAST sequenceNode asBlockSequenceNode;
+			yourself.
+		inlinedSend := SendNode new
+			receiver: blockNode;
+			selector: (self valueSelector: args size);
+			arguments: args;
+			yourself ].
+	^ inlinedSend
+!
+
+skipLayers
+	" returns a collection of activeLayers beginning with the next layer that contains a partial for the current selector "
+	| result |
+	result := self activeLayers copy.
+	
+	result reverseDo: [ :layer |
+		(layer class hasPartial: self selector for: self base)
+			ifTrue: [ ^ result ]
+			ifFalse: [ result removeLast ] ].
+	
+	^ result
+!
+
+updateMethodAST
+	| source |
+	source := (self class >> #updateMethodTemplate) source.
+	source := source replace: 'SELECTOR' with: '#', self selector.
+	source := source replace: 'VERSION' with: self base compositionVersion.
+	source := source replace: 'ARGUMENTS' with: '{ ', ((self base >> self selector) arguments join: '. '), ' }'.
+	^ Smalltalk parse: source
+!
+
+updateMethodTemplate
+	Transcript show: 'performing version check!!', String lf.
+	VERSION ~= self class compositionVersion ifTrue: [ 
+		self class installInlined: SELECTOR withLayers: self activeLayers.
+		^ self perform: SELECTOR withArguments: ARGUMENTS ]
+!
+
+valueSelector: numArgs
+	numArgs = 0 
+		ifTrue: [ ^ #value ]
+		ifFalse: [ | result |
+			result := ''.
+			numArgs timesRepeat: [ result := result, 'value:' ].
+			^ result ].
+! !
+
+!ASTProceedInliner methodsFor: 'private'!
+
+eval: aString
+	< return eval(aString); >
+! !
+
+!ASTProceedInliner methodsFor: 'testing'!
+
+shouldInlineSend: aSendNode
+	^ self class inlinedSelectors includes: aSendNode selector
+! !
+
+!ASTProceedInliner methodsFor: 'visiting'!
+
+visitSendNode: aSendNode
+	^ (self shouldInlineSend: aSendNode)
+		ifTrue: [ aSendNode replaceWith: (self inlinedSend: aSendNode arguments) ]
+		ifFalse: [ super visitSendNode: aSendNode ]
+! !
+
+!ASTProceedInliner class methodsFor: 'accessing'!
+
+inlinedSelectors
+	^ #('proceed' 'proceed:' 'proceed:value:' 'proceed:value:value:' 'proceed:value:value:value:' 'proceed:value:value:value:value:' 'proceed:value:value:value:value:value:')
+! !
+
+!ASTProceedInliner class methodsFor: 'instance creation'!
+
+for: selector in: base withLayers: aCollection
+	^ self new
+		base: base;
+		selector: selector;
+		activeLayers: aCollection;
+		yourself
+! !
+
 Object subclass: #ContextAmber
 	instanceVariableNames: ''
 	package: 'ContextAmber'!
@@ -121,125 +272,6 @@ shouldCacheIR: selector for: class
 		class partials anySatisfy: [ :partialClass | partialClass includesSelector: selector ] ]
 ! !
 
-InliningCodeGenerator subclass: #ContextInliningCodeGenerator
-	instanceVariableNames: ''
-	package: 'ContextAmber'!
-
-!ContextInliningCodeGenerator methodsFor: 'compiling'!
-
-compileNode: aNode
-	^ self irTranslator
-		currentClass: self currentClass;
-		visit: (self unoptimizedIR: aNode);
-		contents
-!
-
-inliner
-	^ IRProceedInliner new
-!
-
-unoptimizedIR: aNode
-	| ir |
-
-	self semanticAnalyzer visit: aNode.
-	ir := self translator visit: aNode.
-	super inliner visit: ir.
-	
-	^ ir
-! !
-
-IRVisitor subclass: #IRProceedInliner
-	instanceVariableNames: 'inlinedSend base selector activeLayers'
-	package: 'ContextAmber'!
-
-!IRProceedInliner methodsFor: 'accessing'!
-
-activeLayers
-	^ activeLayers
-!
-
-activeLayers: aCollection
-	activeLayers := aCollection.
-!
-
-base
-	^ base
-!
-
-base: class
-	base := class.
-!
-
-selector
-	^ selector
-!
-
-selector: aString
-	selector := aString.
-! !
-
-!IRProceedInliner methodsFor: 'inlining'!
-
-inlinedSend
-	inlinedSend ifNil: [ | recursiveInliner nextLayer nextPartialMethodIR remainingLayers |
-		"Caches IRSend node for proceed calls. IRSend node has further partial calls inlined recursively."
-		remainingLayers := self skipLayers.
-		nextLayer := remainingLayers removeLast.
-		recursiveInliner := self class for: self selector in: self base withLayers: remainingLayers.
-		nextPartialMethodIR := ((nextLayer partialFor: self base) >> self selector) IR.
-		recursiveInliner visit: nextPartialMethodIR.
-		inlinedSend := IRSend new
-			selector: #value;
-			index: 1;
-			add: nextPartialMethodIR asClosure;
-			yourself ].
-	^ inlinedSend
-!
-
-skipLayers
-	" returns a collection of activeLayers beginning with the next layer that contains a partial for the current selector "
-	| result |
-	result := self activeLayers copy.
-	
-	result reverseDo: [ :layer |
-		(layer class hasPartial: self selector for: self base)
-			ifTrue: [ ^ result ]
-			ifFalse: [ result removeLast ] ].
-	
-	^ result
-! !
-
-!IRProceedInliner methodsFor: 'testing'!
-
-shouldInlineSend: anIRSend
-	^ anIRSend isInlined not and: [
-		self class inlinedSelectors includes: anIRSend selector ]
-! !
-
-!IRProceedInliner methodsFor: 'visiting'!
-
-visitIRSend: anIRSend
-	^ (self shouldInlineSend: anIRSend)
-		ifTrue: [ anIRSend replaceWith: self inlinedSend ]
-		ifFalse: [ super visitIRSend: anIRSend ]
-! !
-
-!IRProceedInliner class methodsFor: 'accessing'!
-
-inlinedSelectors
-	^ #('proceed' 'proceed:')
-! !
-
-!IRProceedInliner class methodsFor: 'instance creation'!
-
-for: selector in: base withLayers: aCollection
-	^ self new
-		base: base;
-		selector: selector;
-		activeLayers: aCollection;
-		yourself
-! !
-
 Object subclass: #Layer
 	instanceVariableNames: 'id'
 	package: 'ContextAmber'!
@@ -253,11 +285,14 @@ id
 !Layer methodsFor: 'default activation'!
 
 activate
-	ContextAmber defaultActive indexOf: self ifAbsent: [ ContextAmber defaultActive add: self ].
+	ContextAmber defaultActive indexOf: self ifAbsent: [ 
+		ContextAmber defaultActive add: self.
+		self class incrementCompositionVersion ].
 !
 
 deactivate
-	ContextAmber defaultActive remove: self ifAbsent: [ ].
+	ContextAmber defaultActive remove: self ifAbsent: [ ^ self ].
+	self class incrementCompositionVersion.
 ! !
 
 !Layer methodsFor: 'initializing'!
@@ -281,6 +316,13 @@ nextId
 
 partialFor: base
 	^ partialClasses at: base ifAbsent: [ self error: 'no partial class for base in this layer' ].
+! !
+
+!Layer class methodsFor: 'composition'!
+
+incrementCompositionVersion
+	self partialClasses do: [ :partial |
+		partial base incrementCompositionVersion ].
 ! !
 
 !Layer class methodsFor: 'error handling'!
@@ -387,6 +429,16 @@ size
 	^ addStack size
 ! !
 
+BlockNode subclass: #PartialBlockNode
+	instanceVariableNames: ''
+	package: 'ContextAmber'!
+
+!PartialBlockNode methodsFor: 'testing'!
+
+isPartialBlockNode
+	^ true
+! !
+
 Object subclass: #PartialClass
 	instanceVariableNames: ''
 	package: 'ContextAmber'!
@@ -455,11 +507,27 @@ isPartial
 	^ self ~= PartialClass
 ! !
 
+!AssignmentNode methodsFor: '*ContextAmber'!
+
+replace: aNode with: anotherNode
+	super replace: aNode with: anotherNode.
+	left = aNode ifTrue: [ self left: anotherNode ].
+	right = aNode ifTrue: [ self right: anotherNode ].
+! !
+
 !Behavior methodsFor: '*ContextAmber'!
 
 addPartial: class
 	self ensurePartialsCollectionInitialized.
 	self partials add: class.
+!
+
+compositionVersion
+	< if (typeof(self['compositionVersion']) === 'undefined') {
+		return 0;
+	} else {
+		return self['compositionVersion'];
+	} >
 !
 
 ensurePartialsCollectionInitialized
@@ -469,15 +537,44 @@ ensurePartialsCollectionInitialized
 !
 
 generateWrapper: method
-	| wrapper wrapperTemplate compiler |
+	| wrapper wrapperTemplate compiler methodSignature |
 	compiler := Compiler new.
+	methodSignature := ''.
+	(method selector tokenize: ':') allButLast with: method arguments do: [ :sel :arg | methodSignature := methodSignature, sel, ': ', arg, ' ' ].
+	methodSignature = '' ifTrue: [ methodSignature := method selector ].
 	wrapperTemplate := (Behavior >> #wrapperTemplate) source.
+	wrapperTemplate := wrapperTemplate replace: 'wrapperTemplate' with: methodSignature.
+	wrapperTemplate := wrapperTemplate replace: 'SELECTOR' with: '#', method selector.
+	wrapperTemplate := wrapperTemplate replace: 'ARGUMENTS' with: '{ ', (method arguments join: '. '), ' }'.
 	wrapper := compiler eval: (compiler compile: wrapperTemplate forClass: self).
 	wrapper fn basicAt: #selector put: method selector.
 	wrapper fn basicAt: #original put: method.
+	wrapper fn basicAt: #compiledSource put: method fn compiledSource.
+	wrapper basicAt: #args put: method arguments.
 	wrapper selector: method selector.
 	wrapper source: method source.
 	^ wrapper
+!
+
+incrementCompositionVersion
+	< if (typeof(self['compositionVersion']) === 'undefined') {
+		self['compositionVersion'] = 1;
+	} else {
+		self['compositionVersion'] = self['compositionVersion'] + 1;
+	} >
+!
+
+installInlined: selector withLayers: activeLayers
+	| method wrapper |
+	wrapper := self >> selector.
+	Transcript show: '[LOG] installing inlined method class ', self asString, ' selector ', selector, ' activeLayers: ', activeLayers asString, String lf.
+	method := ASTProceedInliner new
+		selector: selector;
+		base: self;
+		activeLayers: activeLayers;
+		inlinedCompiledMethod.
+	wrapper fn: method fn.
+	ClassBuilder new installMethod: wrapper forClass: self protocol: wrapper protocol.
 !
 
 installWrapper: selector
@@ -501,11 +598,8 @@ removePartial: class
 !
 
 wrapperTemplate
-	| nextLayer selector |
-	Transcript show: '[LOG] wrapper call', String lf.
-	nextLayer := self activeLayers last.
-	selector := arguments callee basicAt: #selector.
-	^ (nextLayer class >> selector) fn apply: self withPossibleArguments: arguments
+	self class installInlined: SELECTOR withLayers: self activeLayers.
+	^ self perform: SELECTOR withArguments: ARGUMENTS
 ! !
 
 !BlockClosure methodsFor: '*ContextAmber'!
@@ -514,20 +608,42 @@ apply: anObject valueWithPossibleArguments: aCollection
 	<return self.apply(anObject, aCollection);>
 !
 
+sourceString
+	< return self.toString() >
+!
+
 withLayer: layer
 	| result |
 	ContextAmber scopedStack add: layer.
+	layer class incrementCompositionVersion.
 	result := self value.
 	ContextAmber scopedStack pop.
+	layer class incrementCompositionVersion.
 	^ result
 !
 
 withoutLayer: layer
 	| result |
 	ContextAmber scopedStack remove: layer.
+	layer class incrementCompositionVersion.
 	result := self value.
 	ContextAmber scopedStack pop.
+	layer class incrementCompositionVersion.
 	^ result
+! !
+
+!BlockNode methodsFor: '*ContextAmber'!
+
+isPartialBlockNode
+	^ false
+!
+
+replace: aNode with: anotherNode
+	| index |
+	super replace: aNode with: anotherNode.
+	anotherNode parent: self.
+	index := self parameters indexOf: aNode ifAbsent: [ ^ self ].
+	self parameters at: index put: anotherNode.
 ! !
 
 !Browser methodsFor: '*ContextAmber'!
@@ -596,6 +712,15 @@ partialDeclarationSource
 	^ stream contents
 ! !
 
+!CascadeNode methodsFor: '*ContextAmber'!
+
+replace: aNode with: anotherNode
+	super replace: aNode with: anotherNode.
+	receiver = aNode ifTrue: [
+		anotherNode parent: self.
+		self receiver: anotherNode ].
+! !
+
 !Class methodsFor: '*ContextAmber'!
 
 isLayer
@@ -608,43 +733,60 @@ isPartial
 
 !CompiledMethod methodsFor: '*ContextAmber'!
 
-IR
-	| ir ast generator |
-	"ir := self basicAt: #IR.
-	ir ifNotNil: [ ^ ir ]."
-	
-	ast := Smalltalk parse: self source.
-	generator := ContextInliningCodeGenerator new.
-	ir := generator
-		source: self source;
-		currentClass: self class;
-		unoptimizedIR: ast.
-	
-	" TODO: caching (deepCopy fails)"
-	"ir := ir deepCopy.
-	self basicAt: #IR put: ir."
-	^ ir
-!
-
 isPartial
 	^ (self fn basicAt: #original) isNil not
 ! !
 
-!IRMethod methodsFor: '*ContextAmber'!
+!Compiler methodsFor: '*ContextAmber'!
 
-asClosure
-	| closure |
-	closure := IRClosure new.
-	closure arguments: self arguments.
-	closure scope: self scope.
-	self instructions do: [ :instr | closure add: instr ].
-	^ closure
+inlineLayers: activeLayers
+	| method |
+	method := ContextInliningCodeGenerator new
+		activeLayers: activeLayers;
+		source: self source;
+		currentClass: self currentClass;
+		compileNode: (Smalltalk parse: self source).
+	^ self eval: method
+! !
+
+!LexicalScope methodsFor: '*ContextAmber'!
+
+args: aDictionary
+	args := aDictionary.
+!
+
+temps: aDictionary
+	temps := aDictionary.
 ! !
 
 !Metaclass methodsFor: '*ContextAmber'!
 
 isPartial
 	^ false
+! !
+
+!MethodNode methodsFor: '*ContextAmber'!
+
+isPartialBlockNode
+	^ false
+! !
+
+!Node methodsFor: '*ContextAmber'!
+
+addFirstNode: aNode
+	self nodes addFirst: aNode.
+	aNode parent: self
+!
+
+replace: aNode with: anotherNode
+	| index |
+	anotherNode parent: self.
+	index := self nodes indexOf: aNode ifAbsent: [ ^ self ].
+	self nodes at: index put: anotherNode.
+!
+
+replaceWith: aNode
+	self parent replace: self with: aNode
 ! !
 
 !Object methodsFor: '*ContextAmber'!
@@ -705,6 +847,34 @@ objectLayersDirty: aBoolean
 resetLayer: aLayer
 	self initializeLayers.
 	self layerStack reset: aLayer.
+! !
+
+!ReturnNode methodsFor: '*ContextAmber'!
+
+nonLocalReturn
+	^ self scope isMethodScope not & self scope node isPartialBlockNode not
+! !
+
+!SemanticAnalyzer methodsFor: '*ContextAmber'!
+
+errorShadowingVariable: aString
+	
+	"TODO: allow shadowing for inling only"
+	"
+	ShadowingVariableError new
+		variableName: aString;
+		signal
+	"
+! !
+
+!SendNode methodsFor: '*ContextAmber'!
+
+replace: aNode with: anotherNode
+	| idx |
+	receiver = aNode ifTrue: [ self receiver: anotherNode ].
+	anotherNode parent: self.
+	idx := self arguments indexOf: aNode ifAbsent: [ ^ self ].
+	self arguments at: idx put: anotherNode.
 ! !
 
 !SequenceableCollection methodsFor: '*ContextAmber'!
