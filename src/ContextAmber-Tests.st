@@ -42,11 +42,34 @@ Object subclass: #ContextAmberDemoClass1
 
 !ContextAmberDemoClass1 methodsFor: 'not yet classified'!
 
+callMethod1
+	self error: 'expected partial'.
+!
+
+callMethod4
+	self error: 'expected partial'.
+!
+
 method1
 	^ 5
 !
 
 method3
+	^ 90
+!
+
+method4
+	^ 90
+!
+
+method5
+	^ 100
+!
+
+methodWithBlock: var1 and: var2
+	var1 = var2
+		ifTrue: [ ^ var1 * 2 ].
+	^ var1 + var2
 !
 
 multiply: aNumber with: anotherNumber
@@ -111,8 +134,24 @@ PartialClass subclass: #ContextAmberDemoPartialClass1
 
 !ContextAmberDemoPartialClass1 methodsFor: 'not yet classified'!
 
+callMethod1
+	^ self method1
+!
+
+callMethod4
+	^ self method4
+!
+
 method1
 	^ 10
+!
+
+method5
+	^ 110
+!
+
+methodWithBlock: var1 and: var2
+	^ self proceed: 2 * var1 value: 3 * var2.
 !
 
 multiply: aNumber with: anotherNumber
@@ -347,6 +386,12 @@ TestCase subclass: #LayerTest
 
 !LayerTest methodsFor: 'tests'!
 
+testBaseMethodWithoutLayer
+	| obj |
+	obj := ContextAmberDemoClass1 new.
+	self assert: obj method5 equals: 100.
+!
+
 testCreation
 	| layer |
 	layer := ContextAmber newLayer: #ContextAmberTestLayer partialClasses: {} instanceVariableNames: '' package: 'ContextAmber-Tests'.
@@ -391,6 +436,18 @@ testHasPartial
 	self deny: (ContextAmberDemoLayer hasPartial: #method1 for: nil).
 !
 
+testInlinedNonLocalReturn
+	| obj layer |
+	obj := ContextAmberDemoClass1 new.
+	layer := ContextAmberDemoLayer new.
+	layer activate.
+	
+	self assert: (obj methodWithBlock: 3 and: 2) equals: 12.
+	self assert: (obj methodWithBlock: 0 and: 1) equals: 3.
+	
+	layer deactivate.
+!
+
 testMultiArgsMethod
 	| layer obj |
 	obj := ContextAmberDemoClass1 new.
@@ -404,6 +461,19 @@ testMultiArgsMethod
 !
 
 testMultiArgsProceed
+	| layer1 obj |
+	obj := ContextAmberDemoClass2 new.
+	layer1 := ContextAmberDemoLayer new.
+	
+	self assert: (obj add: 5 and: 8) equals: 13.
+	
+	layer1 activate.
+	self assert: (obj add: 5 and: 8) equals: 140.
+	
+	layer1 deactivate.
+!
+
+testMultiLevelInline
 	| layer1 layer2 obj |
 	obj := ContextAmberDemoClass2 new.
 	layer1 := ContextAmberDemoLayer new.
@@ -412,7 +482,7 @@ testMultiArgsProceed
 	self assert: (obj add: 5 and: 8) equals: 13.
 	
 	layer1 activate.
-	self assert: (obj add: 5 and: 8) equals: 140.
+	self assert: ([ (obj add: 5 and: 8) ] withLayer: layer2) equals: 195.
 	
 	layer1 deactivate.
 !
@@ -430,6 +500,18 @@ testScopedLayer
 	self assert: obj method1 equals: 5.
 	self assert: ([ obj method1 ] withLayer: layer) equals: 10.
 	self assert: obj method1 equals: 5.
+!
+
+testSelfCallFromPartial
+	| obj layer |
+	obj := ContextAmberDemoClass1 new.
+	layer := ContextAmberDemoLayer new.
+	layer activate.
+	
+	self assert: obj callMethod1 equals: 10.
+	self assert: obj callMethod4 equals: 90.
+	
+	layer deactivate.
 ! !
 
 TestCase subclass: #PartialClassTest

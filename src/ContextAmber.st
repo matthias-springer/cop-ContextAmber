@@ -46,7 +46,7 @@ inlinedMethod
 			partialMethodNode := ((nextLayer class partialFor: self base) >> self selector) ast ].
 	partialMethodNode sequenceNode addFirstNode: self updateMethodAST sequenceNode.
 	self visit: partialMethodNode.
-	^ InliningCodeGenerator new
+	^ ContextInliningCodeGenerator new
 		currentClass: self base;
 		compileNode: partialMethodNode
 !
@@ -61,7 +61,6 @@ inlinedSend: args
 			ifFalse: [ 
 				nextLayer := remainingLayers removeLast.
 				nextPartialMethodAST := ((nextLayer class partialFor: self base) >> self selector) ast ].
-		(SemanticAnalyzer on: self base) visit: nextPartialMethodAST.
 		recursiveInliner := self class for: self selector in: self base withLayers: remainingLayers.
 		recursiveInliner visit: nextPartialMethodAST.
 		blockNode := PartialBlockNode new
@@ -272,6 +271,42 @@ shouldCacheIR: selector for: class
 		class partials anySatisfy: [ :partialClass | partialClass includesSelector: selector ] ]
 ! !
 
+InliningCodeGenerator subclass: #ContextInliningCodeGenerator
+	instanceVariableNames: ''
+	package: 'ContextAmber'!
+
+!ContextInliningCodeGenerator methodsFor: 'compiling'!
+
+semanticAnalyzer
+	^ ContextInliningSemanticAnalyzer on: self currentClass
+! !
+
+SemanticAnalyzer subclass: #ContextInliningSemanticAnalyzer
+	instanceVariableNames: ''
+	package: 'ContextAmber'!
+
+!ContextInliningSemanticAnalyzer methodsFor: 'error handling'!
+
+errorShadowingVariable: aString
+	"shadowing allowed for inlined proceed calls"
+! !
+
+IRClosure subclass: #IRPartialClosure
+	instanceVariableNames: ''
+	package: 'ContextAmber'!
+
+!IRPartialClosure methodsFor: 'testing'!
+
+isPartialClosure
+	^ true
+! !
+
+!IRPartialClosure methodsFor: 'visiting'!
+
+accept: aVisitor
+	^ aVisitor visitIRPartialClosure: self
+! !
+
 Object subclass: #Layer
 	instanceVariableNames: 'id'
 	package: 'ContextAmber'!
@@ -437,6 +472,12 @@ BlockNode subclass: #PartialBlockNode
 
 isPartialBlockNode
 	^ true
+! !
+
+!PartialBlockNode methodsFor: 'visiting'!
+
+accept: aVisitor
+	^ aVisitor visitPartialBlockNode: self
 ! !
 
 Object subclass: #PartialClass
@@ -612,6 +653,18 @@ sourceString
 	< return self.toString() >
 !
 
+value: firstArg value: secondArg value: thirdArg value: forthArg
+	<return self(firstArg, secondArg, thirdArg, forthArg);>
+!
+
+value: firstArg value: secondArg value: thirdArg value: forthArg value: fifthArg
+	<return self(firstArg, secondArg, thirdArg, forthArg, fifthArg);>
+!
+
+value: firstArg value: secondArg value: thirdArg value: forthArg value: fifthArg value: sixthArg
+	<return self(firstArg, secondArg, thirdArg, forthArg, fifthArg, sixthArg);>
+!
+
 withLayer: layer
 	| result |
 	ContextAmber scopedStack add: layer.
@@ -749,6 +802,50 @@ inlineLayers: activeLayers
 	^ self eval: method
 ! !
 
+!IRASTTranslator methodsFor: '*ContextAmber'!
+
+visitPartialBlockNode: aNode
+	| closure |
+	closure := IRPartialClosure new
+		arguments: aNode parameters;
+		requiresSmalltalkContext: aNode requiresSmalltalkContext;
+		scope: aNode scope;
+		yourself.
+	aNode scope temps do: [ :each |
+		closure add: (IRTempDeclaration new
+			name: each name;
+			scope: aNode scope;
+			yourself) ].
+	aNode nodes do: [ :each | closure add: (self visit: each) ].
+	^ closure
+! !
+
+!IRClosure methodsFor: '*ContextAmber'!
+
+isPartialClosure
+	^ false
+! !
+
+!IRJSTranslator methodsFor: '*ContextAmber'!
+
+visitIRPartialClosure: anIRClosure
+	self stream
+		nextPutClosureWith: [
+			
+				self stream nextPutVars: (anIRClosure tempDeclarations collect: [ :each |
+						each name asVariableName ]).
+				self stream
+					nextPutBlockContextFor: anIRClosure
+					during: [ self stream nextPutNonLocalReturnHandlingWith: [ super visitIRClosure: anIRClosure ] ] ]
+		arguments: anIRClosure arguments
+! !
+
+!IRVisitor methodsFor: '*ContextAmber'!
+
+visitIRPartialClosure: anIRPartialClosure
+	^ self visitIRClosure: anIRPartialClosure
+! !
+
 !LexicalScope methodsFor: '*ContextAmber'!
 
 args: aDictionary
@@ -787,6 +884,12 @@ replace: aNode with: anotherNode
 
 replaceWith: aNode
 	self parent replace: self with: aNode
+! !
+
+!NodeVisitor methodsFor: '*ContextAmber'!
+
+visitPartialBlockNode: aNode
+	^ self visitBlockNode: aNode
 ! !
 
 !Object methodsFor: '*ContextAmber'!
@@ -853,18 +956,6 @@ resetLayer: aLayer
 
 nonLocalReturn
 	^ self scope isMethodScope not & self scope node isPartialBlockNode not
-! !
-
-!SemanticAnalyzer methodsFor: '*ContextAmber'!
-
-errorShadowingVariable: aString
-	
-	"TODO: allow shadowing for inling only"
-	"
-	ShadowingVariableError new
-		variableName: aString;
-		signal
-	"
 ! !
 
 !SendNode methodsFor: '*ContextAmber'!
