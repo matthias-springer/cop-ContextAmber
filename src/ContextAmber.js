@@ -501,10 +501,13 @@ $4=self._class();
 $ctx1.sendIdx["class"]=1;
 //>>excludeEnd("ctx");
 $3=$recv($4).__gt_gt($SELECTOR());
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[">>"]=1;
+//>>excludeEnd("ctx");
 $2=$recv($3)._compositionVersion();
 $1=$recv($VERSION()).__tild_eq($2);
 if($core.assert($1)){
-$recv(self._class())._installInlined_withLayers_($SELECTOR(),self._activeLayers());
+$recv($recv($recv(self._class()).__gt_gt($SELECTOR()))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
 $5=self._perform_withArguments_($SELECTOR(),$ARGUMENTS());
 return $5;
 };
@@ -515,10 +518,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "updateMethodTemplate\x0a\x09Transcript show: 'performing version check!', String lf.\x0a\x09VERSION ~= (self class >> SELECTOR) compositionVersion ifTrue: [ \x0a\x09\x09self class installInlined: SELECTOR withLayers: self activeLayers.\x0a\x09\x09^ self perform: SELECTOR withArguments: ARGUMENTS ]",
+source: "updateMethodTemplate\x0a\x09Transcript show: 'performing version check!', String lf.\x0a\x09VERSION ~= (self class >> SELECTOR) compositionVersion ifTrue: [ \x0a\x09\x09(self class >> SELECTOR) inliningStrategy installInlinedWithLayers: self activeLayers.\x0a\x09\x09^ self perform: SELECTOR withArguments: ARGUMENTS ]",
 referencedClasses: ["Transcript", "String", "VERSION", "SELECTOR", "ARGUMENTS"],
 //>>excludeEnd("ide");
-messageSends: ["show:", ",", "lf", "ifTrue:", "~=", "compositionVersion", ">>", "class", "installInlined:withLayers:", "activeLayers", "perform:withArguments:"]
+messageSends: ["show:", ",", "lf", "ifTrue:", "~=", "compositionVersion", ">>", "class", "installInlinedWithLayers:", "inliningStrategy", "activeLayers", "perform:withArguments:"]
 }),
 $globals.ASTProceedInliner);
 
@@ -723,7 +726,7 @@ method=$recv(announcement)._method();
 class_=$recv(method)._methodClass();
 $1=$recv(class_)._isPartial();
 if($core.assert($1)){
-$recv($recv(class_)._base())._installWrapper_($recv(method)._selector());
+$recv($recv($recv($recv(class_)._base()).__gt_gt($recv(method)._selector()))._inliningStrategy())._installWrapper();
 };
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -732,10 +735,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["announcement"],
-source: "handleMethodAdded: announcement\x0a\x09| method class |\x0a\x09method := announcement method.\x0a\x09class := method methodClass.\x0a\x09class isPartial ifTrue: [\x0a\x09\x09class base installWrapper: method selector ].",
+source: "handleMethodAdded: announcement\x0a\x09| method class |\x0a\x09method := announcement method.\x0a\x09class := method methodClass.\x0a\x09class isPartial ifTrue: [\x0a\x09\x09(class base >> method selector) inliningStrategy installWrapper ].",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["method", "methodClass", "ifTrue:", "isPartial", "installWrapper:", "base", "selector"]
+messageSends: ["method", "methodClass", "ifTrue:", "isPartial", "installWrapper", "inliningStrategy", ">>", "base", "selector"]
 }),
 $globals.ContextAmber.klass);
 
@@ -770,7 +773,7 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["announcement"],
-source: "handleMethodModified: announcement\x0a\x09| oldMethod newMethod class |\x0a\x09oldMethod := announcement oldMethod.\x0a\x09newMethod := announcement method.\x0a\x09oldMethod isPartial & newMethod isPartial not ifTrue: [\x0a\x09\x09\x22not a partial method\x22\x0a\x09\x09oldMethod incrementCompositionVersion.\x0a\x09\x09oldMethod source: newMethod source.\x0a\x09\x09ClassBuilder new installMethod: oldMethod forClass: oldMethod methodClass protocol: oldMethod protocol\x0a\x09\x09\x22oldMethod methodClass installWrapper: oldMethod selector\x22 ].",
+source: "handleMethodModified: announcement\x0a\x09| oldMethod newMethod class |\x0a\x09oldMethod := announcement oldMethod.\x0a\x09newMethod := announcement method.\x0a\x09oldMethod isPartial & newMethod isPartial not ifTrue: [\x0a\x09\x09\x22not a partial method\x22\x0a\x09\x09oldMethod incrementCompositionVersion.\x0a\x09\x09oldMethod source: newMethod source.\x0a\x09\x09ClassBuilder new installMethod: oldMethod forClass: oldMethod methodClass protocol: oldMethod protocol ].",
 referencedClasses: ["ClassBuilder"],
 //>>excludeEnd("ide");
 messageSends: ["oldMethod", "method", "ifTrue:", "&", "isPartial", "not", "incrementCompositionVersion", "source:", "source", "installMethod:forClass:protocol:", "new", "methodClass", "protocol"]
@@ -1286,6 +1289,487 @@ messageSends: []
 }),
 $globals.IRPartialClosure);
 
+
+
+$core.addClass('InliningStrategy', $globals.Object, ['method', 'compiler'], 'ContextAmber');
+$core.addMethod(
+$core.method({
+selector: "base",
+protocol: 'accessing',
+fn: function (){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+var $1;
+$1=$recv(self._method())._methodClass();
+return $1;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"base",{},$globals.InliningStrategy)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "base\x0a\x09^ self method methodClass",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["methodClass", "method"]
+}),
+$globals.InliningStrategy);
+
+$core.addMethod(
+$core.method({
+selector: "compiler",
+protocol: 'accessing',
+fn: function (){
+var self=this;
+function $Compiler(){return $globals.Compiler||(typeof Compiler=="undefined"?nil:Compiler)}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+var $1,$2;
+$1=$recv(self["@compiler"]).__eq(nil);
+if($core.assert($1)){
+self["@compiler"]=$recv($Compiler())._new();
+self["@compiler"];
+};
+$2=self["@compiler"];
+return $2;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"compiler",{},$globals.InliningStrategy)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "compiler\x0a\x09compiler = nil\x0a\x09\x09ifTrue: [ compiler := Compiler new ].\x0a\x09^ compiler",
+referencedClasses: ["Compiler"],
+//>>excludeEnd("ide");
+messageSends: ["ifTrue:", "=", "new"]
+}),
+$globals.InliningStrategy);
+
+$core.addMethod(
+$core.method({
+selector: "method",
+protocol: 'accessing',
+fn: function (){
+var self=this;
+var $1;
+$1=self["@method"];
+return $1;
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "method\x0a\x09^ method",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.InliningStrategy);
+
+$core.addMethod(
+$core.method({
+selector: "method:",
+protocol: 'accessing',
+fn: function (aCompiledMethod){
+var self=this;
+self["@method"]=aCompiledMethod;
+return self;
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["aCompiledMethod"],
+source: "method: aCompiledMethod\x0a\x09method := aCompiledMethod.",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.InliningStrategy);
+
+$core.addMethod(
+$core.method({
+selector: "protocol",
+protocol: 'accessing',
+fn: function (){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+var $1;
+$1=$recv(self._method())._protocol();
+return $1;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"protocol",{},$globals.InliningStrategy)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "protocol\x0a\x09^ self method protocol",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["protocol", "method"]
+}),
+$globals.InliningStrategy);
+
+$core.addMethod(
+$core.method({
+selector: "selector",
+protocol: 'accessing',
+fn: function (){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+var $1;
+$1=$recv(self._method())._selector();
+return $1;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"selector",{},$globals.InliningStrategy)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "selector\x0a\x09^ self method selector",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["selector", "method"]
+}),
+$globals.InliningStrategy);
+
+
+$globals.InliningStrategy.klass.iVarNames = ['instance'];
+$core.addMethod(
+$core.method({
+selector: "on:",
+protocol: 'singleton',
+fn: function (aCompiledMethod){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+var $1,$2;
+$1=$recv(self["@instance"]).__eq(nil);
+if($core.assert($1)){
+self["@instance"]=self._new();
+self["@instance"];
+};
+$recv(self["@instance"])._method_(aCompiledMethod);
+$2=self["@instance"];
+return $2;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"on:",{aCompiledMethod:aCompiledMethod},$globals.InliningStrategy.klass)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["aCompiledMethod"],
+source: "on: aCompiledMethod\x0a\x09instance = nil\x0a\x09\x09ifTrue: [ instance := self new ].\x0a\x09instance method: aCompiledMethod.\x0a\x09^ instance",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["ifTrue:", "=", "new", "method:"]
+}),
+$globals.InliningStrategy.klass);
+
+
+$core.addClass('ClassWideInliningStrategy', $globals.InliningStrategy, [], 'ContextAmber');
+$core.addMethod(
+$core.method({
+selector: "installInlinedWithLayers:",
+protocol: 'inlining',
+fn: function (activeLayers){
+var self=this;
+var inlined;
+function $Transcript(){return $globals.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
+function $String(){return $globals.String||(typeof String=="undefined"?nil:String)}
+function $ASTProceedInliner(){return $globals.ASTProceedInliner||(typeof ASTProceedInliner=="undefined"?nil:ASTProceedInliner)}
+function $ClassBuilder(){return $globals.ClassBuilder||(typeof ClassBuilder=="undefined"?nil:ClassBuilder)}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+var $8,$7,$6,$5,$10,$9,$4,$3,$2,$1,$11,$12,$13,$14,$15;
+$8=self._base();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["base"]=1;
+//>>excludeEnd("ctx");
+$7=$recv($8)._asString();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["asString"]=1;
+//>>excludeEnd("ctx");
+$6="[LOG] installing inlined method class ".__comma($7);
+$5=$recv($6).__comma(" selector ");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=5;
+//>>excludeEnd("ctx");
+$10=self._method();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["method"]=1;
+//>>excludeEnd("ctx");
+$9=$recv($10)._selector();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["selector"]=1;
+//>>excludeEnd("ctx");
+$4=$recv($5).__comma($9);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=4;
+//>>excludeEnd("ctx");
+$3=$recv($4).__comma(" activeLayers: ");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=3;
+//>>excludeEnd("ctx");
+$2=$recv($3).__comma($recv(activeLayers)._asString());
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=2;
+//>>excludeEnd("ctx");
+$1=$recv($2).__comma($recv($String())._lf());
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=1;
+//>>excludeEnd("ctx");
+$recv($Transcript())._show_($1);
+$11=$recv($ASTProceedInliner())._new();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["new"]=1;
+//>>excludeEnd("ctx");
+$recv($11)._selector_(self._selector());
+$12=$11;
+$13=self._base();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["base"]=2;
+//>>excludeEnd("ctx");
+$recv($12)._base_($13);
+$recv($11)._activeLayers_(activeLayers);
+$14=$recv($11)._inlinedCompiledMethod();
+inlined=$14;
+$15=self._method();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["method"]=2;
+//>>excludeEnd("ctx");
+$recv($15)._fn_($recv(inlined)._fn());
+$recv($recv($ClassBuilder())._new())._installMethod_forClass_protocol_(self._method(),self._base(),self._protocol());
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"installInlinedWithLayers:",{activeLayers:activeLayers,inlined:inlined},$globals.ClassWideInliningStrategy)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["activeLayers"],
+source: "installInlinedWithLayers: activeLayers\x0a\x09| inlined |\x0a\x09Transcript show: '[LOG] installing inlined method class ', self base asString, ' selector ', self method selector, ' activeLayers: ', activeLayers asString, String lf.\x0a\x09inlined := ASTProceedInliner new\x0a\x09\x09selector: self selector;\x0a\x09\x09base: self base;\x0a\x09\x09activeLayers: activeLayers;\x0a\x09\x09inlinedCompiledMethod.\x0a\x09self method fn: inlined fn.\x0a\x09ClassBuilder new installMethod: self method forClass: self base protocol: self protocol.",
+referencedClasses: ["Transcript", "String", "ASTProceedInliner", "ClassBuilder"],
+//>>excludeEnd("ide");
+messageSends: ["show:", ",", "asString", "base", "selector", "method", "lf", "selector:", "new", "base:", "activeLayers:", "inlinedCompiledMethod", "fn:", "fn", "installMethod:forClass:protocol:", "protocol"]
+}),
+$globals.ClassWideInliningStrategy);
+
+$core.addMethod(
+$core.method({
+selector: "installWrapper",
+protocol: 'wrapper',
+fn: function (){
+var self=this;
+function $Transcript(){return $globals.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
+function $String(){return $globals.String||(typeof String=="undefined"?nil:String)}
+function $ClassBuilder(){return $globals.ClassBuilder||(typeof ClassBuilder=="undefined"?nil:ClassBuilder)}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+var $3,$2,$1;
+$3=$recv("[LOG] installing wrapper for ".__comma($recv($recv(self["@method"])._methodClass())._asString())).__comma(">>");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=3;
+//>>excludeEnd("ctx");
+$2=$recv($3).__comma($recv(self["@method"])._selector());
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=2;
+//>>excludeEnd("ctx");
+$1=$recv($2).__comma($recv($String())._lf());
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=1;
+//>>excludeEnd("ctx");
+$recv($Transcript())._show_($1);
+$recv($recv($ClassBuilder())._new())._installMethod_forClass_protocol_(self._wrapper(),self._base(),self._protocol());
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"installWrapper",{},$globals.ClassWideInliningStrategy)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "installWrapper\x0a\x09Transcript show: '[LOG] installing wrapper for ', method methodClass asString, '>>', method selector, String lf.\x0a\x09ClassBuilder new installMethod: self wrapper forClass: self base protocol: self protocol.",
+referencedClasses: ["Transcript", "String", "ClassBuilder"],
+//>>excludeEnd("ide");
+messageSends: ["show:", ",", "asString", "methodClass", "selector", "lf", "installMethod:forClass:protocol:", "new", "wrapper", "base", "protocol"]
+}),
+$globals.ClassWideInliningStrategy);
+
+$core.addMethod(
+$core.method({
+selector: "wrapper",
+protocol: 'wrapper',
+fn: function (){
+var self=this;
+var wrapper,wrapperTemplate,methodSignature;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+var $3,$2,$1,$4,$7,$6,$5,$8,$9,$11,$10,$12,$16,$15,$14,$13,$17,$18,$19,$20,$21,$22;
+methodSignature="";
+$3=$recv(self["@method"])._selector();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["selector"]=1;
+//>>excludeEnd("ctx");
+$2=$recv($3)._tokenize_(":");
+$1=$recv($2)._allButLast();
+$4=$recv(self["@method"])._arguments();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["arguments"]=1;
+//>>excludeEnd("ctx");
+$recv($1)._with_do_($4,(function(sel,arg){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+$7=$recv(methodSignature).__comma(sel);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx[","]=4;
+//>>excludeEnd("ctx");
+$6=$recv($7).__comma(": ");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx[","]=3;
+//>>excludeEnd("ctx");
+$5=$recv($6).__comma(arg);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx[","]=2;
+//>>excludeEnd("ctx");
+methodSignature=$recv($5).__comma(" ");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx[","]=1;
+//>>excludeEnd("ctx");
+return methodSignature;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({sel:sel,arg:arg},$ctx1,1)});
+//>>excludeEnd("ctx");
+}));
+$8=$recv(methodSignature).__eq("");
+if($core.assert($8)){
+methodSignature=$recv(self["@method"])._selector();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["selector"]=2;
+//>>excludeEnd("ctx");
+methodSignature;
+};
+wrapperTemplate=$recv($recv(self._class()).__gt_gt("wrapperTemplate"))._source();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["source"]=1;
+//>>excludeEnd("ctx");
+wrapperTemplate=$recv(wrapperTemplate)._replace_with_("wrapperTemplate",methodSignature);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["replace:with:"]=1;
+//>>excludeEnd("ctx");
+$9=wrapperTemplate;
+$11=$recv(self["@method"])._selector();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["selector"]=3;
+//>>excludeEnd("ctx");
+$10="#".__comma($11);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=5;
+//>>excludeEnd("ctx");
+wrapperTemplate=$recv($9)._replace_with_("SELECTOR",$10);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["replace:with:"]=2;
+//>>excludeEnd("ctx");
+$12=wrapperTemplate;
+$16=$recv(self["@method"])._arguments();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["arguments"]=2;
+//>>excludeEnd("ctx");
+$15=$recv($16)._join_(". ");
+$14="{ ".__comma($15);
+$13=$recv($14).__comma(" }");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=6;
+//>>excludeEnd("ctx");
+wrapperTemplate=$recv($12)._replace_with_("ARGUMENTS",$13);
+$17=self._compiler();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["compiler"]=1;
+//>>excludeEnd("ctx");
+wrapper=$recv($17)._eval_($recv(self._compiler())._compile_forClass_(wrapperTemplate,self._base()));
+$18=$recv(wrapper)._fn();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["fn"]=1;
+//>>excludeEnd("ctx");
+$19=$recv(self["@method"])._selector();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["selector"]=4;
+//>>excludeEnd("ctx");
+$recv($18)._basicAt_put_("selector",$19);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["basicAt:put:"]=1;
+//>>excludeEnd("ctx");
+$20=$recv(wrapper)._fn();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["fn"]=2;
+//>>excludeEnd("ctx");
+$recv($20)._basicAt_put_("original",self["@method"]);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["basicAt:put:"]=2;
+//>>excludeEnd("ctx");
+$21=$recv(wrapper)._fn();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["fn"]=3;
+//>>excludeEnd("ctx");
+$recv($21)._basicAt_put_("compiledSource",$recv($recv(self["@method"])._fn())._compiledSource());
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["basicAt:put:"]=3;
+//>>excludeEnd("ctx");
+$recv(wrapper)._basicAt_put_("args",$recv(self["@method"])._arguments());
+$recv(wrapper)._selector_($recv(self["@method"])._selector());
+$recv(wrapper)._source_($recv(self["@method"])._source());
+$22=wrapper;
+return $22;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"wrapper",{wrapper:wrapper,wrapperTemplate:wrapperTemplate,methodSignature:methodSignature},$globals.ClassWideInliningStrategy)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "wrapper\x0a\x09| wrapper wrapperTemplate methodSignature |\x0a\x09methodSignature := ''.\x0a\x09(method selector tokenize: ':') allButLast with: method arguments do: [ :sel :arg | methodSignature := methodSignature, sel, ': ', arg, ' ' ].\x0a\x09methodSignature = '' ifTrue: [ methodSignature := method selector ].\x0a\x09wrapperTemplate := (self class >> #wrapperTemplate) source.\x0a\x09wrapperTemplate := wrapperTemplate replace: 'wrapperTemplate' with: methodSignature.\x0a\x09wrapperTemplate := wrapperTemplate replace: 'SELECTOR' with: '#', method selector.\x0a\x09wrapperTemplate := wrapperTemplate replace: 'ARGUMENTS' with: '{ ', (method arguments join: '. '), ' }'.\x0a\x09wrapper := self compiler eval: (self compiler compile: wrapperTemplate forClass: self base).\x0a\x09wrapper fn basicAt: #selector put: method selector.\x0a\x09wrapper fn basicAt: #original put: method.\x0a\x09wrapper fn basicAt: #compiledSource put: method fn compiledSource.\x0a\x09wrapper basicAt: #args put: method arguments.\x0a\x09wrapper selector: method selector.\x0a\x09wrapper source: method source.\x0a\x09^ wrapper",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["with:do:", "allButLast", "tokenize:", "selector", "arguments", ",", "ifTrue:", "=", "source", ">>", "class", "replace:with:", "join:", "eval:", "compiler", "compile:forClass:", "base", "basicAt:put:", "fn", "compiledSource", "selector:", "source:"]
+}),
+$globals.ClassWideInliningStrategy);
+
+$core.addMethod(
+$core.method({
+selector: "wrapperTemplate",
+protocol: 'wrapper',
+fn: function (){
+var self=this;
+function $SELECTOR(){return $globals.SELECTOR||(typeof SELECTOR=="undefined"?nil:SELECTOR)}
+function $ARGUMENTS(){return $globals.ARGUMENTS||(typeof ARGUMENTS=="undefined"?nil:ARGUMENTS)}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+var $1;
+$recv($recv($recv(self._class()).__gt_gt($SELECTOR()))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
+$1=self._perform_withArguments_($SELECTOR(),$ARGUMENTS());
+return $1;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"wrapperTemplate",{},$globals.ClassWideInliningStrategy)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "wrapperTemplate\x0a\x09(self class >> SELECTOR) inliningStrategy installInlinedWithLayers: self activeLayers.\x0a\x09^ self perform: SELECTOR withArguments: ARGUMENTS",
+referencedClasses: ["SELECTOR", "ARGUMENTS"],
+//>>excludeEnd("ide");
+messageSends: ["installInlinedWithLayers:", "inliningStrategy", ">>", "class", "activeLayers", "perform:withArguments:"]
+}),
+$globals.ClassWideInliningStrategy);
+
+
+
+$core.addClass('ObjectWideInliningStrategy', $globals.InliningStrategy, [], 'ContextAmber');
 
 
 $core.addClass('Layer', $globals.Object, ['id'], 'ContextAmber');
@@ -2173,7 +2657,7 @@ $recv(self._methods())._do_((function(method){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
-return $recv(self._base())._installWrapper_($recv(method)._selector());
+return $recv($recv($recv(self._base()).__gt_gt($recv(method)._selector()))._inliningStrategy())._installWrapper();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx2) {$ctx2.fillBlock({method:method},$ctx1,3)});
 //>>excludeEnd("ctx");
@@ -2186,10 +2670,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "initialize\x0a\x09self ~= PartialClass ifTrue: [\x0a\x09\x09self base isClass ifFalse: [ self error: 'object is not a class' ].\x0a\x09\x09self base addPartial: self.\x0a\x09\x09self methods do: [ :method | self base installWrapper: method selector ] ].",
+source: "initialize\x0a\x09self ~= PartialClass ifTrue: [\x0a\x09\x09self base isClass ifFalse: [ self error: 'object is not a class' ].\x0a\x09\x09self base addPartial: self.\x0a\x09\x09self methods do: [ :method | (self base >> method selector) inliningStrategy installWrapper ] ].",
 referencedClasses: ["PartialClass"],
 //>>excludeEnd("ide");
-messageSends: ["ifTrue:", "~=", "ifFalse:", "isClass", "base", "error:", "addPartial:", "do:", "methods", "installWrapper:", "selector"]
+messageSends: ["ifTrue:", "~=", "ifFalse:", "isClass", "base", "error:", "addPartial:", "do:", "methods", "installWrapper", "inliningStrategy", ">>", "selector"]
 }),
 $globals.PartialClass.klass);
 
@@ -2492,144 +2976,6 @@ $globals.Behavior);
 
 $core.addMethod(
 $core.method({
-selector: "generateWrapper:",
-protocol: '*ContextAmber',
-fn: function (method){
-var self=this;
-var wrapper,wrapperTemplate,compiler,methodSignature;
-function $Compiler(){return $globals.Compiler||(typeof Compiler=="undefined"?nil:Compiler)}
-function $Behavior(){return $globals.Behavior||(typeof Behavior=="undefined"?nil:Behavior)}
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) { 
-//>>excludeEnd("ctx");
-var $3,$2,$1,$4,$7,$6,$5,$8,$9,$11,$10,$12,$16,$15,$14,$13,$17,$18,$19,$20,$21;
-compiler=$recv($Compiler())._new();
-methodSignature="";
-$3=$recv(method)._selector();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["selector"]=1;
-//>>excludeEnd("ctx");
-$2=$recv($3)._tokenize_(":");
-$1=$recv($2)._allButLast();
-$4=$recv(method)._arguments();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["arguments"]=1;
-//>>excludeEnd("ctx");
-$recv($1)._with_do_($4,(function(sel,arg){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx2) {
-//>>excludeEnd("ctx");
-$7=$recv(methodSignature).__comma(sel);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx[","]=4;
-//>>excludeEnd("ctx");
-$6=$recv($7).__comma(": ");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx[","]=3;
-//>>excludeEnd("ctx");
-$5=$recv($6).__comma(arg);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx[","]=2;
-//>>excludeEnd("ctx");
-methodSignature=$recv($5).__comma(" ");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx[","]=1;
-//>>excludeEnd("ctx");
-return methodSignature;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({sel:sel,arg:arg},$ctx1,1)});
-//>>excludeEnd("ctx");
-}));
-$8=$recv(methodSignature).__eq("");
-if($core.assert($8)){
-methodSignature=$recv(method)._selector();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["selector"]=2;
-//>>excludeEnd("ctx");
-methodSignature;
-};
-wrapperTemplate=$recv($recv($Behavior()).__gt_gt("wrapperTemplate"))._source();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["source"]=1;
-//>>excludeEnd("ctx");
-wrapperTemplate=$recv(wrapperTemplate)._replace_with_("wrapperTemplate",methodSignature);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["replace:with:"]=1;
-//>>excludeEnd("ctx");
-$9=wrapperTemplate;
-$11=$recv(method)._selector();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["selector"]=3;
-//>>excludeEnd("ctx");
-$10="#".__comma($11);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx[","]=5;
-//>>excludeEnd("ctx");
-wrapperTemplate=$recv($9)._replace_with_("SELECTOR",$10);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["replace:with:"]=2;
-//>>excludeEnd("ctx");
-$12=wrapperTemplate;
-$16=$recv(method)._arguments();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["arguments"]=2;
-//>>excludeEnd("ctx");
-$15=$recv($16)._join_(". ");
-$14="{ ".__comma($15);
-$13=$recv($14).__comma(" }");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx[","]=6;
-//>>excludeEnd("ctx");
-wrapperTemplate=$recv($12)._replace_with_("ARGUMENTS",$13);
-wrapper=$recv(compiler)._eval_($recv(compiler)._compile_forClass_(wrapperTemplate,self));
-$17=$recv(wrapper)._fn();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["fn"]=1;
-//>>excludeEnd("ctx");
-$18=$recv(method)._selector();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["selector"]=4;
-//>>excludeEnd("ctx");
-$recv($17)._basicAt_put_("selector",$18);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["basicAt:put:"]=1;
-//>>excludeEnd("ctx");
-$19=$recv(wrapper)._fn();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["fn"]=2;
-//>>excludeEnd("ctx");
-$recv($19)._basicAt_put_("original",method);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["basicAt:put:"]=2;
-//>>excludeEnd("ctx");
-$20=$recv(wrapper)._fn();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["fn"]=3;
-//>>excludeEnd("ctx");
-$recv($20)._basicAt_put_("compiledSource",$recv($recv(method)._fn())._compiledSource());
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["basicAt:put:"]=3;
-//>>excludeEnd("ctx");
-$recv(wrapper)._basicAt_put_("args",$recv(method)._arguments());
-$recv(wrapper)._selector_($recv(method)._selector());
-$recv(wrapper)._source_($recv(method)._source());
-$21=wrapper;
-return $21;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"generateWrapper:",{method:method,wrapper:wrapper,wrapperTemplate:wrapperTemplate,compiler:compiler,methodSignature:methodSignature},$globals.Behavior)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["method"],
-source: "generateWrapper: method\x0a\x09| wrapper wrapperTemplate compiler methodSignature |\x0a\x09compiler := Compiler new.\x0a\x09methodSignature := ''.\x0a\x09(method selector tokenize: ':') allButLast with: method arguments do: [ :sel :arg | methodSignature := methodSignature, sel, ': ', arg, ' ' ].\x0a\x09methodSignature = '' ifTrue: [ methodSignature := method selector ].\x0a\x09wrapperTemplate := (Behavior >> #wrapperTemplate) source.\x0a\x09wrapperTemplate := wrapperTemplate replace: 'wrapperTemplate' with: methodSignature.\x0a\x09wrapperTemplate := wrapperTemplate replace: 'SELECTOR' with: '#', method selector.\x0a\x09wrapperTemplate := wrapperTemplate replace: 'ARGUMENTS' with: '{ ', (method arguments join: '. '), ' }'.\x0a\x09wrapper := compiler eval: (compiler compile: wrapperTemplate forClass: self).\x0a\x09wrapper fn basicAt: #selector put: method selector.\x0a\x09wrapper fn basicAt: #original put: method.\x0a\x09wrapper fn basicAt: #compiledSource put: method fn compiledSource.\x0a\x09wrapper basicAt: #args put: method arguments.\x0a\x09wrapper selector: method selector.\x0a\x09wrapper source: method source.\x0a\x09^ wrapper",
-referencedClasses: ["Compiler", "Behavior"],
-//>>excludeEnd("ide");
-messageSends: ["new", "with:do:", "allButLast", "tokenize:", "selector", "arguments", ",", "ifTrue:", "=", "source", ">>", "replace:with:", "join:", "eval:", "compile:forClass:", "basicAt:put:", "fn", "compiledSource", "selector:", "source:"]
-}),
-$globals.Behavior);
-
-$core.addMethod(
-$core.method({
 selector: "installInlined:withLayers:",
 protocol: '*ContextAmber',
 fn: function (selector,activeLayers){
@@ -2697,50 +3043,6 @@ $globals.Behavior);
 
 $core.addMethod(
 $core.method({
-selector: "installWrapper:",
-protocol: '*ContextAmber',
-fn: function (selector){
-var self=this;
-var original,wrapper;
-function $Transcript(){return $globals.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
-function $String(){return $globals.String||(typeof String=="undefined"?nil:String)}
-function $ClassBuilder(){return $globals.ClassBuilder||(typeof ClassBuilder=="undefined"?nil:ClassBuilder)}
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) { 
-//>>excludeEnd("ctx");
-var $3,$2,$1;
-$3=$recv("[LOG] installing wrapper for ".__comma(self._asString())).__comma(">>");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx[","]=3;
-//>>excludeEnd("ctx");
-$2=$recv($3).__comma(selector);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx[","]=2;
-//>>excludeEnd("ctx");
-$1=$recv($2).__comma($recv($String())._lf());
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx[","]=1;
-//>>excludeEnd("ctx");
-$recv($Transcript())._show_($1);
-original=self.__gt_gt(selector);
-wrapper=self._generateWrapper_(original);
-$recv($recv($ClassBuilder())._new())._installMethod_forClass_protocol_(wrapper,self,$recv(original)._protocol());
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"installWrapper:",{selector:selector,original:original,wrapper:wrapper},$globals.Behavior)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["selector"],
-source: "installWrapper: selector\x0a\x09| original wrapper |\x0a\x09Transcript show: '[LOG] installing wrapper for ', self asString, '>>', selector, String lf.\x0a\x09original := self >> selector.\x0a\x09wrapper := self generateWrapper: original.\x0a\x09ClassBuilder new installMethod: wrapper forClass: self protocol: original protocol.",
-referencedClasses: ["Transcript", "String", "ClassBuilder"],
-//>>excludeEnd("ide");
-messageSends: ["show:", ",", "asString", "lf", ">>", "generateWrapper:", "installMethod:forClass:protocol:", "new", "protocol"]
-}),
-$globals.Behavior);
-
-$core.addMethod(
-$core.method({
 selector: "partials",
 protocol: '*ContextAmber',
 fn: function (){
@@ -2797,34 +3099,6 @@ source: "removePartial: class\x0a\x09self partials remove: class ifAbsent: [ Con
 referencedClasses: ["ContextAmber"],
 //>>excludeEnd("ide");
 messageSends: ["remove:ifAbsent:", "partials", "warning:"]
-}),
-$globals.Behavior);
-
-$core.addMethod(
-$core.method({
-selector: "wrapperTemplate",
-protocol: '*ContextAmber',
-fn: function (){
-var self=this;
-function $SELECTOR(){return $globals.SELECTOR||(typeof SELECTOR=="undefined"?nil:SELECTOR)}
-function $ARGUMENTS(){return $globals.ARGUMENTS||(typeof ARGUMENTS=="undefined"?nil:ARGUMENTS)}
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) { 
-//>>excludeEnd("ctx");
-var $1;
-$recv(self._class())._installInlined_withLayers_($SELECTOR(),self._activeLayers());
-$1=self._perform_withArguments_($SELECTOR(),$ARGUMENTS());
-return $1;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"wrapperTemplate",{},$globals.Behavior)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "wrapperTemplate\x0a\x09self class installInlined: SELECTOR withLayers: self activeLayers.\x0a\x09^ self perform: SELECTOR withArguments: ARGUMENTS",
-referencedClasses: ["SELECTOR", "ARGUMENTS"],
-//>>excludeEnd("ide");
-messageSends: ["installInlined:withLayers:", "class", "activeLayers", "perform:withArguments:"]
 }),
 $globals.Behavior);
 
@@ -3580,6 +3854,32 @@ source: "incrementCompositionVersion\x0a\x09< if (typeof(self['compositionVersio
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: []
+}),
+$globals.CompiledMethod);
+
+$core.addMethod(
+$core.method({
+selector: "inliningStrategy",
+protocol: '*ContextAmber',
+fn: function (){
+var self=this;
+function $ClassWideInliningStrategy(){return $globals.ClassWideInliningStrategy||(typeof ClassWideInliningStrategy=="undefined"?nil:ClassWideInliningStrategy)}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+var $1;
+$1=$recv($ClassWideInliningStrategy())._on_(self);
+return $1;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"inliningStrategy",{},$globals.CompiledMethod)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "inliningStrategy\x0a\x09^ ClassWideInliningStrategy on: self",
+referencedClasses: ["ClassWideInliningStrategy"],
+//>>excludeEnd("ide");
+messageSends: ["on:"]
 }),
 $globals.CompiledMethod);
 

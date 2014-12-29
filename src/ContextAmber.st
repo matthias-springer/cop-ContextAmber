@@ -100,7 +100,7 @@ updateMethodAST
 updateMethodTemplate
 	Transcript show: 'performing version check!!', String lf.
 	VERSION ~= (self class >> SELECTOR) compositionVersion ifTrue: [ 
-		self class installInlined: SELECTOR withLayers: self activeLayers.
+		(self class >> SELECTOR) inliningStrategy installInlinedWithLayers: self activeLayers.
 		^ self perform: SELECTOR withArguments: ARGUMENTS ]
 !
 
@@ -179,7 +179,7 @@ handleMethodAdded: announcement
 	method := announcement method.
 	class := method methodClass.
 	class isPartial ifTrue: [
-		class base installWrapper: method selector ].
+		(class base >> method selector) inliningStrategy installWrapper ].
 !
 
 handleMethodModified: announcement
@@ -190,8 +190,7 @@ handleMethodModified: announcement
 		"not a partial method"
 		oldMethod incrementCompositionVersion.
 		oldMethod source: newMethod source.
-		ClassBuilder new installMethod: oldMethod forClass: oldMethod methodClass protocol: oldMethod protocol
-		"oldMethod methodClass installWrapper: oldMethod selector" ].
+		ClassBuilder new installMethod: oldMethod forClass: oldMethod methodClass protocol: oldMethod protocol ].
 !
 
 registerAnnouncements
@@ -310,6 +309,102 @@ isPartialClosure
 accept: aVisitor
 	^ aVisitor visitIRPartialClosure: self
 ! !
+
+Object subclass: #InliningStrategy
+	instanceVariableNames: 'method compiler'
+	package: 'ContextAmber'!
+
+!InliningStrategy methodsFor: 'accessing'!
+
+base
+	^ self method methodClass
+!
+
+compiler
+	compiler = nil
+		ifTrue: [ compiler := Compiler new ].
+	^ compiler
+!
+
+method
+	^ method
+!
+
+method: aCompiledMethod
+	method := aCompiledMethod.
+!
+
+protocol
+	^ self method protocol
+!
+
+selector
+	^ self method selector
+! !
+
+InliningStrategy class instanceVariableNames: 'instance'!
+
+!InliningStrategy class methodsFor: 'singleton'!
+
+on: aCompiledMethod
+	instance = nil
+		ifTrue: [ instance := self new ].
+	instance method: aCompiledMethod.
+	^ instance
+! !
+
+InliningStrategy subclass: #ClassWideInliningStrategy
+	instanceVariableNames: ''
+	package: 'ContextAmber'!
+
+!ClassWideInliningStrategy methodsFor: 'inlining'!
+
+installInlinedWithLayers: activeLayers
+	| inlined |
+	Transcript show: '[LOG] installing inlined method class ', self base asString, ' selector ', self method selector, ' activeLayers: ', activeLayers asString, String lf.
+	inlined := ASTProceedInliner new
+		selector: self selector;
+		base: self base;
+		activeLayers: activeLayers;
+		inlinedCompiledMethod.
+	self method fn: inlined fn.
+	ClassBuilder new installMethod: self method forClass: self base protocol: self protocol.
+! !
+
+!ClassWideInliningStrategy methodsFor: 'wrapper'!
+
+installWrapper
+	Transcript show: '[LOG] installing wrapper for ', method methodClass asString, '>>', method selector, String lf.
+	ClassBuilder new installMethod: self wrapper forClass: self base protocol: self protocol.
+!
+
+wrapper
+	| wrapper wrapperTemplate methodSignature |
+	methodSignature := ''.
+	(method selector tokenize: ':') allButLast with: method arguments do: [ :sel :arg | methodSignature := methodSignature, sel, ': ', arg, ' ' ].
+	methodSignature = '' ifTrue: [ methodSignature := method selector ].
+	wrapperTemplate := (self class >> #wrapperTemplate) source.
+	wrapperTemplate := wrapperTemplate replace: 'wrapperTemplate' with: methodSignature.
+	wrapperTemplate := wrapperTemplate replace: 'SELECTOR' with: '#', method selector.
+	wrapperTemplate := wrapperTemplate replace: 'ARGUMENTS' with: '{ ', (method arguments join: '. '), ' }'.
+	wrapper := self compiler eval: (self compiler compile: wrapperTemplate forClass: self base).
+	wrapper fn basicAt: #selector put: method selector.
+	wrapper fn basicAt: #original put: method.
+	wrapper fn basicAt: #compiledSource put: method fn compiledSource.
+	wrapper basicAt: #args put: method arguments.
+	wrapper selector: method selector.
+	wrapper source: method source.
+	^ wrapper
+!
+
+wrapperTemplate
+	(self class >> SELECTOR) inliningStrategy installInlinedWithLayers: self activeLayers.
+	^ self perform: SELECTOR withArguments: ARGUMENTS
+! !
+
+InliningStrategy subclass: #ObjectWideInliningStrategy
+	instanceVariableNames: ''
+	package: 'ContextAmber'!
 
 Object subclass: #Layer
 	instanceVariableNames: 'id'
@@ -547,7 +642,7 @@ initialize
 	self ~= PartialClass ifTrue: [
 		self base isClass ifFalse: [ self error: 'object is not a class' ].
 		self base addPartial: self.
-		self methods do: [ :method | self base installWrapper: method selector ] ].
+		self methods do: [ :method | (self base >> method selector) inliningStrategy installWrapper ] ].
 ! !
 
 !PartialClass class methodsFor: 'testing'!
@@ -581,26 +676,6 @@ ensurePartialsCollectionInitialized
 	} >
 !
 
-generateWrapper: method
-	| wrapper wrapperTemplate compiler methodSignature |
-	compiler := Compiler new.
-	methodSignature := ''.
-	(method selector tokenize: ':') allButLast with: method arguments do: [ :sel :arg | methodSignature := methodSignature, sel, ': ', arg, ' ' ].
-	methodSignature = '' ifTrue: [ methodSignature := method selector ].
-	wrapperTemplate := (Behavior >> #wrapperTemplate) source.
-	wrapperTemplate := wrapperTemplate replace: 'wrapperTemplate' with: methodSignature.
-	wrapperTemplate := wrapperTemplate replace: 'SELECTOR' with: '#', method selector.
-	wrapperTemplate := wrapperTemplate replace: 'ARGUMENTS' with: '{ ', (method arguments join: '. '), ' }'.
-	wrapper := compiler eval: (compiler compile: wrapperTemplate forClass: self).
-	wrapper fn basicAt: #selector put: method selector.
-	wrapper fn basicAt: #original put: method.
-	wrapper fn basicAt: #compiledSource put: method fn compiledSource.
-	wrapper basicAt: #args put: method arguments.
-	wrapper selector: method selector.
-	wrapper source: method source.
-	^ wrapper
-!
-
 installInlined: selector withLayers: activeLayers
 	| method wrapper |
 	wrapper := self >> selector.
@@ -614,14 +689,6 @@ installInlined: selector withLayers: activeLayers
 	ClassBuilder new installMethod: wrapper forClass: self protocol: wrapper protocol.
 !
 
-installWrapper: selector
-	| original wrapper |
-	Transcript show: '[LOG] installing wrapper for ', self asString, '>>', selector, String lf.
-	original := self >> selector.
-	wrapper := self generateWrapper: original.
-	ClassBuilder new installMethod: wrapper forClass: self protocol: original protocol.
-!
-
 partials
 	< if (typeof(self['partials']) === 'undefined') {
 		return $core.Set._new();
@@ -632,11 +699,6 @@ partials
 
 removePartial: class
 	self partials remove: class ifAbsent: [ ContextAmber warning: 'list of partial classes out of sync' ].
-!
-
-wrapperTemplate
-	self class installInlined: SELECTOR withLayers: self activeLayers.
-	^ self perform: SELECTOR withArguments: ARGUMENTS
 ! !
 
 !BlockClosure methodsFor: '*ContextAmber'!
@@ -800,6 +862,10 @@ incrementCompositionVersion
 	} else {
 		self['compositionVersion'] = self['compositionVersion'] + 1;
 	} >
+!
+
+inliningStrategy
+	^ ClassWideInliningStrategy on: self
 !
 
 isPartial
