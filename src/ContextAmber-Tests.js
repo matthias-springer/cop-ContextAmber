@@ -97,6 +97,50 @@ messageSends: ["new", "for:in:withLayers:", "skipLayers", "assert:equals:", "siz
 }),
 $globals.ASTProceedInlinerTest);
 
+$core.addMethod(
+$core.method({
+selector: "testValueSelector",
+protocol: 'tests',
+fn: function (){
+var self=this;
+var inliner;
+function $ASTProceedInliner(){return $globals.ASTProceedInliner||(typeof ASTProceedInliner=="undefined"?nil:ASTProceedInliner)}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+var $1,$2;
+inliner=$recv($ASTProceedInliner())._new();
+$1=$recv(inliner)._valueSelector_((0));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["valueSelector:"]=1;
+//>>excludeEnd("ctx");
+self._assert_equals_($1,"value");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["assert:equals:"]=1;
+//>>excludeEnd("ctx");
+$2=$recv(inliner)._valueSelector_((1));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["valueSelector:"]=2;
+//>>excludeEnd("ctx");
+self._assert_equals_($2,"value:");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["assert:equals:"]=2;
+//>>excludeEnd("ctx");
+self._assert_equals_($recv(inliner)._valueSelector_((3)),"value:value:value:");
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"testValueSelector",{inliner:inliner},$globals.ASTProceedInlinerTest)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "testValueSelector\x0a\x09| inliner |\x0a\x09inliner := ASTProceedInliner new.\x0a\x09\x0a\x09self assert: (inliner valueSelector: 0) equals: #value.\x0a\x09self assert: (inliner valueSelector: 1) equals: #value:.\x0a\x09self assert: (inliner valueSelector: 3) equals: #value:value:value:.",
+referencedClasses: ["ASTProceedInliner"],
+//>>excludeEnd("ide");
+messageSends: ["new", "assert:equals:", "valueSelector:"]
+}),
+$globals.ASTProceedInlinerTest);
+
 
 
 $core.addClass('ContextAmberDemoClass1', $globals.Object, [], 'ContextAmber-Tests');
@@ -743,12 +787,21 @@ function $ContextAmberDemoClass1(){return $globals.ContextAmberDemoClass1||(type
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-oldVersion=$recv($ContextAmberDemoClass1())._compositionVersion();
+var $1,$2;
+$1=$recv($ContextAmberDemoClass1()).__gt_gt("method1");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[">>"]=1;
+//>>excludeEnd("ctx");
+oldVersion=$recv($1)._compositionVersion();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["compositionVersion"]=1;
 //>>excludeEnd("ctx");
-$recv($ContextAmberDemoClass1())._incrementCompositionVersion();
-self._assert_equals_($recv($ContextAmberDemoClass1())._compositionVersion(),$recv(oldVersion).__plus((1)));
+$2=$recv($ContextAmberDemoClass1()).__gt_gt("method1");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[">>"]=2;
+//>>excludeEnd("ctx");
+$recv($2)._incrementCompositionVersion();
+self._assert_equals_($recv($recv($ContextAmberDemoClass1()).__gt_gt("method1"))._compositionVersion(),$recv(oldVersion).__plus((1)));
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"testCompositionVersion",{oldVersion:oldVersion},$globals.ContextAmberTest)});
@@ -756,10 +809,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "testCompositionVersion\x0a\x09| oldVersion |\x0a\x09oldVersion := ContextAmberDemoClass1 compositionVersion.\x0a\x09ContextAmberDemoClass1 incrementCompositionVersion.\x0a\x09self assert: ContextAmberDemoClass1 compositionVersion equals: oldVersion + 1.",
+source: "testCompositionVersion\x0a\x09| oldVersion |\x0a\x09oldVersion := (ContextAmberDemoClass1>>#method1) compositionVersion.\x0a\x09(ContextAmberDemoClass1>>#method1) incrementCompositionVersion.\x0a\x09self assert: (ContextAmberDemoClass1>>#method1) compositionVersion equals: oldVersion + 1.",
 referencedClasses: ["ContextAmberDemoClass1"],
 //>>excludeEnd("ide");
-messageSends: ["compositionVersion", "incrementCompositionVersion", "assert:equals:", "+"]
+messageSends: ["compositionVersion", ">>", "incrementCompositionVersion", "assert:equals:", "+"]
 }),
 $globals.ContextAmberTest);
 
@@ -816,6 +869,41 @@ source: "testDefaultLayers\x0a\x09| layers |\x0a\x09self assert: self activeLaye
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["assert:equals:", "size", "activeLayers", "activate", "first", "deactivate"]
+}),
+$globals.ContextAmberTest);
+
+$core.addMethod(
+$core.method({
+selector: "testHasPartial",
+protocol: 'running',
+fn: function (){
+var self=this;
+function $ContextAmberDemoClass1(){return $globals.ContextAmberDemoClass1||(typeof ContextAmberDemoClass1=="undefined"?nil:ContextAmberDemoClass1)}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+var $2,$1;
+$2=$recv($ContextAmberDemoClass1()).__gt_gt("method1");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[">>"]=1;
+//>>excludeEnd("ctx");
+$1=$recv($2)._hasPartial();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["hasPartial"]=1;
+//>>excludeEnd("ctx");
+self._assert_($1);
+self._deny_($recv($recv($ContextAmberDemoClass1()).__gt_gt("method4"))._hasPartial());
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"testHasPartial",{},$globals.ContextAmberTest)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "testHasPartial\x0a\x09self assert: (ContextAmberDemoClass1>>#method1) hasPartial.\x0a\x09self deny: (ContextAmberDemoClass1>>#method4) hasPartial.",
+referencedClasses: ["ContextAmberDemoClass1"],
+//>>excludeEnd("ide");
+messageSends: ["assert:", "hasPartial", ">>", "deny:"]
 }),
 $globals.ContextAmberTest);
 
@@ -2253,6 +2341,45 @@ source: "testWrapperInstalledOnCompilation\x0a\x09self deny: (ContextAmberDemoCl
 referencedClasses: ["ContextAmberDemoClass1", "ContextAmberDemoPartialClass1"],
 //>>excludeEnd("ide");
 messageSends: ["deny:", "isPartial", ">>", "compile:", "assert:"]
+}),
+$globals.PartialClassTest);
+
+$core.addMethod(
+$core.method({
+selector: "testWrapperInstalledOnRecompilation",
+protocol: 'tests',
+fn: function (){
+var self=this;
+function $ContextAmberDemoClass1(){return $globals.ContextAmberDemoClass1||(typeof ContextAmberDemoClass1=="undefined"?nil:ContextAmberDemoClass1)}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+var $2,$1;
+$2=$recv($ContextAmberDemoClass1()).__gt_gt("method1");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[">>"]=1;
+//>>excludeEnd("ctx");
+$1=$recv($2)._isPartial();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["isPartial"]=1;
+//>>excludeEnd("ctx");
+self._assert_($1);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["assert:"]=1;
+//>>excludeEnd("ctx");
+$recv($ContextAmberDemoClass1())._compile_("method1 ^ 5");
+self._assert_($recv($recv($ContextAmberDemoClass1()).__gt_gt("method1"))._isPartial());
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"testWrapperInstalledOnRecompilation",{},$globals.PartialClassTest)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "testWrapperInstalledOnRecompilation\x0a\x09self assert: (ContextAmberDemoClass1 >> #method1) isPartial.\x0a\x09ContextAmberDemoClass1 compile: 'method1 ^ 5'.\x0a\x09self assert: (ContextAmberDemoClass1 >> #method1) isPartial.",
+referencedClasses: ["ContextAmberDemoClass1"],
+//>>excludeEnd("ide");
+messageSends: ["assert:", "isPartial", ">>", "compile:"]
 }),
 $globals.PartialClassTest);
 

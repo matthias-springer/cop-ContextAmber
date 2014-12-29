@@ -422,7 +422,7 @@ function $Smalltalk(){return $globals.Smalltalk||(typeof Smalltalk=="undefined"?
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1,$2,$4,$3,$5,$7,$6,$8,$9,$10;
+var $1,$2,$4,$3,$5,$8,$9,$7,$6,$10,$11,$12;
 $1=$recv(self._class()).__gt_gt("updateMethodTemplate");
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx[">>"]=1;
@@ -442,30 +442,38 @@ source=$recv($2)._replace_with_("SELECTOR",$3);
 $ctx1.sendIdx["replace:with:"]=1;
 //>>excludeEnd("ctx");
 $5=source;
-$7=self._base();
+$8=self._base();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["base"]=1;
+//>>excludeEnd("ctx");
+$9=self._selector();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["selector"]=2;
+//>>excludeEnd("ctx");
+$7=$recv($8).__gt_gt($9);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[">>"]=2;
 //>>excludeEnd("ctx");
 $6=$recv($7)._compositionVersion();
 source=$recv($5)._replace_with_("VERSION",$6);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["replace:with:"]=2;
 //>>excludeEnd("ctx");
-$8=source;
-$9=$recv("{ ".__comma($recv($recv($recv(self._base()).__gt_gt(self._selector()))._arguments())._join_(". "))).__comma(" }");
+$10=source;
+$11=$recv("{ ".__comma($recv($recv($recv(self._base()).__gt_gt(self._selector()))._arguments())._join_(". "))).__comma(" }");
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx[","]=2;
 //>>excludeEnd("ctx");
-source=$recv($8)._replace_with_("ARGUMENTS",$9);
-$10=$recv($Smalltalk())._parse_(source);
-return $10;
+source=$recv($10)._replace_with_("ARGUMENTS",$11);
+$12=$recv($Smalltalk())._parse_(source);
+return $12;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"updateMethodAST",{source:source},$globals.ASTProceedInliner)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "updateMethodAST\x0a\x09| source |\x0a\x09source := (self class >> #updateMethodTemplate) source.\x0a\x09source := source replace: 'SELECTOR' with: '#', self selector.\x0a\x09source := source replace: 'VERSION' with: self base compositionVersion.\x0a\x09source := source replace: 'ARGUMENTS' with: '{ ', ((self base >> self selector) arguments join: '. '), ' }'.\x0a\x09^ Smalltalk parse: source",
+source: "updateMethodAST\x0a\x09| source |\x0a\x09source := (self class >> #updateMethodTemplate) source.\x0a\x09source := source replace: 'SELECTOR' with: '#', self selector.\x0a\x09source := source replace: 'VERSION' with: (self base >> self selector) compositionVersion.\x0a\x09source := source replace: 'ARGUMENTS' with: '{ ', ((self base >> self selector) arguments join: '. '), ' }'.\x0a\x09^ Smalltalk parse: source",
 referencedClasses: ["Smalltalk"],
 //>>excludeEnd("ide");
 messageSends: ["source", ">>", "class", "replace:with:", ",", "selector", "compositionVersion", "base", "join:", "arguments", "parse:"]
@@ -486,18 +494,19 @@ function $ARGUMENTS(){return $globals.ARGUMENTS||(typeof ARGUMENTS=="undefined"?
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $3,$2,$1,$4;
+var $4,$3,$2,$1,$5;
 $recv($Transcript())._show_("performing version check!".__comma($recv($String())._lf()));
-$3=self._class();
+$4=self._class();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["class"]=1;
 //>>excludeEnd("ctx");
+$3=$recv($4).__gt_gt($SELECTOR());
 $2=$recv($3)._compositionVersion();
 $1=$recv($VERSION()).__tild_eq($2);
 if($core.assert($1)){
 $recv(self._class())._installInlined_withLayers_($SELECTOR(),self._activeLayers());
-$4=self._perform_withArguments_($SELECTOR(),$ARGUMENTS());
-return $4;
+$5=self._perform_withArguments_($SELECTOR(),$ARGUMENTS());
+return $5;
 };
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -506,10 +515,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "updateMethodTemplate\x0a\x09Transcript show: 'performing version check!', String lf.\x0a\x09VERSION ~= self class compositionVersion ifTrue: [ \x0a\x09\x09self class installInlined: SELECTOR withLayers: self activeLayers.\x0a\x09\x09^ self perform: SELECTOR withArguments: ARGUMENTS ]",
+source: "updateMethodTemplate\x0a\x09Transcript show: 'performing version check!', String lf.\x0a\x09VERSION ~= (self class >> SELECTOR) compositionVersion ifTrue: [ \x0a\x09\x09self class installInlined: SELECTOR withLayers: self activeLayers.\x0a\x09\x09^ self perform: SELECTOR withArguments: ARGUMENTS ]",
 referencedClasses: ["Transcript", "String", "VERSION", "SELECTOR", "ARGUMENTS"],
 //>>excludeEnd("ide");
-messageSends: ["show:", ",", "lf", "ifTrue:", "~=", "compositionVersion", "class", "installInlined:withLayers:", "activeLayers", "perform:withArguments:"]
+messageSends: ["show:", ",", "lf", "ifTrue:", "~=", "compositionVersion", ">>", "class", "installInlined:withLayers:", "activeLayers", "perform:withArguments:"]
 }),
 $globals.ASTProceedInliner);
 
@@ -737,6 +746,7 @@ protocol: 'announcements',
 fn: function (announcement){
 var self=this;
 var oldMethod,newMethod,class_;
+function $ClassBuilder(){return $globals.ClassBuilder||(typeof ClassBuilder=="undefined"?nil:ClassBuilder)}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
@@ -749,7 +759,9 @@ $ctx1.sendIdx["isPartial"]=1;
 //>>excludeEnd("ctx");
 $1=$recv($2).__and($recv($recv(newMethod)._isPartial())._not());
 if($core.assert($1)){
-$recv($recv(oldMethod)._methodClass())._installWrapper_($recv(oldMethod)._selector());
+$recv(oldMethod)._incrementCompositionVersion();
+$recv(oldMethod)._source_($recv(newMethod)._source());
+$recv($recv($ClassBuilder())._new())._installMethod_forClass_protocol_(oldMethod,$recv(oldMethod)._methodClass(),$recv(oldMethod)._protocol());
 };
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -758,10 +770,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["announcement"],
-source: "handleMethodModified: announcement\x0a\x09| oldMethod newMethod class |\x0a\x09oldMethod := announcement oldMethod.\x0a\x09newMethod := announcement method.\x0a\x09oldMethod isPartial & newMethod isPartial not ifTrue: [\x0a\x09\x09oldMethod methodClass installWrapper: oldMethod selector ].",
-referencedClasses: [],
+source: "handleMethodModified: announcement\x0a\x09| oldMethod newMethod class |\x0a\x09oldMethod := announcement oldMethod.\x0a\x09newMethod := announcement method.\x0a\x09oldMethod isPartial & newMethod isPartial not ifTrue: [\x0a\x09\x09\x22not a partial method\x22\x0a\x09\x09oldMethod incrementCompositionVersion.\x0a\x09\x09oldMethod source: newMethod source.\x0a\x09\x09ClassBuilder new installMethod: oldMethod forClass: oldMethod methodClass protocol: oldMethod protocol\x0a\x09\x09\x22oldMethod methodClass installWrapper: oldMethod selector\x22 ].",
+referencedClasses: ["ClassBuilder"],
 //>>excludeEnd("ide");
-messageSends: ["oldMethod", "method", "ifTrue:", "&", "isPartial", "not", "installWrapper:", "methodClass", "selector"]
+messageSends: ["oldMethod", "method", "ifTrue:", "&", "isPartial", "not", "incrementCompositionVersion", "source:", "source", "installMethod:forClass:protocol:", "new", "methodClass", "protocol"]
 }),
 $globals.ContextAmber.klass);
 
@@ -1506,7 +1518,7 @@ $recv(self._partialClasses())._do_((function(partial){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
-return $recv($recv(partial)._base())._incrementCompositionVersion();
+return $recv(partial)._incrementCompositionVersion();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx2) {$ctx2.fillBlock({partial:partial},$ctx1,1)});
 //>>excludeEnd("ctx");
@@ -1518,10 +1530,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "incrementCompositionVersion\x0a\x09self partialClasses do: [ :partial |\x0a\x09\x09partial base incrementCompositionVersion ].",
+source: "incrementCompositionVersion\x0a\x09\x22TODO: get list of partial selectors here, so that we do not increment a version number more than once\x22\x0a\x09self partialClasses do: [ :partial |\x0a\x09\x09partial incrementCompositionVersion ].",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["do:", "partialClasses", "incrementCompositionVersion", "base"]
+messageSends: ["do:", "partialClasses", "incrementCompositionVersion"]
 }),
 $globals.Layer.klass);
 
@@ -2101,6 +2113,38 @@ $globals.PartialClass.klass);
 
 $core.addMethod(
 $core.method({
+selector: "incrementCompositionVersion",
+protocol: 'composition',
+fn: function (){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+$recv(self._selectors())._do_((function(selector){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $recv($recv(self._base()).__gt_gt(selector))._incrementCompositionVersion();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({selector:selector},$ctx1,1)});
+//>>excludeEnd("ctx");
+}));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"incrementCompositionVersion",{},$globals.PartialClass.klass)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "incrementCompositionVersion\x0a\x09self selectors do: [ :selector |\x0a\x09\x09(self base >> selector) incrementCompositionVersion ].",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["do:", "selectors", "incrementCompositionVersion", ">>", "base"]
+}),
+$globals.PartialClass.klass);
+
+$core.addMethod(
+$core.method({
 selector: "initialize",
 protocol: 'initializing',
 fn: function (){
@@ -2422,34 +2466,6 @@ $globals.Behavior);
 
 $core.addMethod(
 $core.method({
-selector: "compositionVersion",
-protocol: '*ContextAmber',
-fn: function (){
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) { 
-//>>excludeEnd("ctx");
- if (typeof(self['compositionVersion']) === 'undefined') {
-		return 0;
-	} else {
-		return self['compositionVersion'];
-	} ;
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"compositionVersion",{},$globals.Behavior)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "compositionVersion\x0a\x09< if (typeof(self['compositionVersion']) === 'undefined') {\x0a\x09\x09return 0;\x0a\x09} else {\x0a\x09\x09return self['compositionVersion'];\x0a\x09} >",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: []
-}),
-$globals.Behavior);
-
-$core.addMethod(
-$core.method({
 selector: "ensurePartialsCollectionInitialized",
 protocol: '*ContextAmber',
 fn: function (){
@@ -2609,34 +2625,6 @@ source: "generateWrapper: method\x0a\x09| wrapper wrapperTemplate compiler metho
 referencedClasses: ["Compiler", "Behavior"],
 //>>excludeEnd("ide");
 messageSends: ["new", "with:do:", "allButLast", "tokenize:", "selector", "arguments", ",", "ifTrue:", "=", "source", ">>", "replace:with:", "join:", "eval:", "compile:forClass:", "basicAt:put:", "fn", "compiledSource", "selector:", "source:"]
-}),
-$globals.Behavior);
-
-$core.addMethod(
-$core.method({
-selector: "incrementCompositionVersion",
-protocol: '*ContextAmber',
-fn: function (){
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) { 
-//>>excludeEnd("ctx");
- if (typeof(self['compositionVersion']) === 'undefined') {
-		self['compositionVersion'] = 1;
-	} else {
-		self['compositionVersion'] = self['compositionVersion'] + 1;
-	} ;
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"incrementCompositionVersion",{},$globals.Behavior)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "incrementCompositionVersion\x0a\x09< if (typeof(self['compositionVersion']) === 'undefined') {\x0a\x09\x09self['compositionVersion'] = 1;\x0a\x09} else {\x0a\x09\x09self['compositionVersion'] = self['compositionVersion'] + 1;\x0a\x09} >",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: []
 }),
 $globals.Behavior);
 
@@ -3508,6 +3496,95 @@ $globals.Class);
 
 $core.addMethod(
 $core.method({
+selector: "compositionVersion",
+protocol: '*ContextAmber',
+fn: function (){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+ if (typeof(self['compositionVersion']) === 'undefined') {
+		return 0;
+	} else {
+		return self['compositionVersion'];
+	} ;
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"compositionVersion",{},$globals.CompiledMethod)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "compositionVersion\x0a\x09< if (typeof(self['compositionVersion']) === 'undefined') {\x0a\x09\x09return 0;\x0a\x09} else {\x0a\x09\x09return self['compositionVersion'];\x0a\x09} >",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.CompiledMethod);
+
+$core.addMethod(
+$core.method({
+selector: "hasPartial",
+protocol: '*ContextAmber',
+fn: function (){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+var $1;
+$1=$recv($recv(self._methodClass())._partials())._anySatisfy_((function(partial){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $recv(partial)._hasPartial_(self._selector());
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({partial:partial},$ctx1,1)});
+//>>excludeEnd("ctx");
+}));
+return $1;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"hasPartial",{},$globals.CompiledMethod)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "hasPartial\x0a\x09^ self methodClass partials anySatisfy: [ :partial | partial hasPartial: self selector ].",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["anySatisfy:", "partials", "methodClass", "hasPartial:", "selector"]
+}),
+$globals.CompiledMethod);
+
+$core.addMethod(
+$core.method({
+selector: "incrementCompositionVersion",
+protocol: '*ContextAmber',
+fn: function (){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+ if (typeof(self['compositionVersion']) === 'undefined') {
+		self['compositionVersion'] = 1;
+	} else {
+		self['compositionVersion'] = self['compositionVersion'] + 1;
+	} ;
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"incrementCompositionVersion",{},$globals.CompiledMethod)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "incrementCompositionVersion\x0a\x09< if (typeof(self['compositionVersion']) === 'undefined') {\x0a\x09\x09self['compositionVersion'] = 1;\x0a\x09} else {\x0a\x09\x09self['compositionVersion'] = self['compositionVersion'] + 1;\x0a\x09} >",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.CompiledMethod);
+
+$core.addMethod(
+$core.method({
 selector: "isPartial",
 protocol: '*ContextAmber',
 fn: function (){
@@ -3739,7 +3816,7 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["anIRClosure"],
-source: "visitIRPartialClosure: anIRClosure\x0a\x09self stream\x0a\x09\x09nextPutClosureWith: [\x0a\x09\x09\x09\x0a\x09\x09\x09\x09self stream nextPutVars: (anIRClosure tempDeclarations collect: [ :each |\x0a\x09\x09\x09\x09\x09\x09each name asVariableName ]).\x0a\x09\x09\x09\x09self stream\x0a\x09\x09\x09\x09\x09nextPutBlockContextFor: anIRClosure\x0a\x09\x09\x09\x09\x09during: [ self stream nextPutNonLocalReturnHandlingWith: [ super visitIRClosure: anIRClosure ] ] ]\x0a\x09\x09arguments: anIRClosure arguments",
+source: "visitIRPartialClosure: anIRClosure\x0a\x09self stream\x0a\x09\x09nextPutClosureWith: [\x0a\x09\x09\x09self stream nextPutVars: (anIRClosure tempDeclarations collect: [ :each |\x0a\x09\x09\x09\x09\x09each name asVariableName ]).\x0a\x09\x09\x09self stream\x0a\x09\x09\x09\x09nextPutBlockContextFor: anIRClosure\x0a\x09\x09\x09\x09during: [ \x0a\x09\x09\x09\x09\x09self stream nextPutNonLocalReturnHandlingWith: [ super visitIRClosure: anIRClosure ] ] ]\x0a\x09\x09arguments: anIRClosure arguments",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["nextPutClosureWith:arguments:", "stream", "nextPutVars:", "collect:", "tempDeclarations", "asVariableName", "name", "nextPutBlockContextFor:during:", "nextPutNonLocalReturnHandlingWith:", "visitIRClosure:", "arguments"]

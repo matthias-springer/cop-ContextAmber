@@ -92,14 +92,14 @@ updateMethodAST
 	| source |
 	source := (self class >> #updateMethodTemplate) source.
 	source := source replace: 'SELECTOR' with: '#', self selector.
-	source := source replace: 'VERSION' with: self base compositionVersion.
+	source := source replace: 'VERSION' with: (self base >> self selector) compositionVersion.
 	source := source replace: 'ARGUMENTS' with: '{ ', ((self base >> self selector) arguments join: '. '), ' }'.
 	^ Smalltalk parse: source
 !
 
 updateMethodTemplate
 	Transcript show: 'performing version check!!', String lf.
-	VERSION ~= self class compositionVersion ifTrue: [ 
+	VERSION ~= (self class >> SELECTOR) compositionVersion ifTrue: [ 
 		self class installInlined: SELECTOR withLayers: self activeLayers.
 		^ self perform: SELECTOR withArguments: ARGUMENTS ]
 !
@@ -187,7 +187,11 @@ handleMethodModified: announcement
 	oldMethod := announcement oldMethod.
 	newMethod := announcement method.
 	oldMethod isPartial & newMethod isPartial not ifTrue: [
-		oldMethod methodClass installWrapper: oldMethod selector ].
+		"not a partial method"
+		oldMethod incrementCompositionVersion.
+		oldMethod source: newMethod source.
+		ClassBuilder new installMethod: oldMethod forClass: oldMethod methodClass protocol: oldMethod protocol
+		"oldMethod methodClass installWrapper: oldMethod selector" ].
 !
 
 registerAnnouncements
@@ -356,8 +360,9 @@ partialFor: base
 !Layer class methodsFor: 'composition'!
 
 incrementCompositionVersion
+	"TODO: get list of partial selectors here, so that we do not increment a version number more than once"
 	self partialClasses do: [ :partial |
-		partial base incrementCompositionVersion ].
+		partial incrementCompositionVersion ].
 ! !
 
 !Layer class methodsFor: 'error handling'!
@@ -517,6 +522,13 @@ subclass: aString instanceVariableNames: aString2 package: aString3
 	self signalSubclassNotAllowed.
 ! !
 
+!PartialClass class methodsFor: 'composition'!
+
+incrementCompositionVersion
+	self selectors do: [ :selector |
+		(self base >> selector) incrementCompositionVersion ].
+! !
+
 !PartialClass class methodsFor: 'error handling'!
 
 error: aString
@@ -563,14 +575,6 @@ addPartial: class
 	self partials add: class.
 !
 
-compositionVersion
-	< if (typeof(self['compositionVersion']) === 'undefined') {
-		return 0;
-	} else {
-		return self['compositionVersion'];
-	} >
-!
-
 ensurePartialsCollectionInitialized
 	< if (typeof(self['partials']) === 'undefined') {
 		self['partials'] = $core.Set._new();
@@ -595,14 +599,6 @@ generateWrapper: method
 	wrapper selector: method selector.
 	wrapper source: method source.
 	^ wrapper
-!
-
-incrementCompositionVersion
-	< if (typeof(self['compositionVersion']) === 'undefined') {
-		self['compositionVersion'] = 1;
-	} else {
-		self['compositionVersion'] = self['compositionVersion'] + 1;
-	} >
 !
 
 installInlined: selector withLayers: activeLayers
@@ -786,6 +782,26 @@ isPartial
 
 !CompiledMethod methodsFor: '*ContextAmber'!
 
+compositionVersion
+	< if (typeof(self['compositionVersion']) === 'undefined') {
+		return 0;
+	} else {
+		return self['compositionVersion'];
+	} >
+!
+
+hasPartial
+	^ self methodClass partials anySatisfy: [ :partial | partial hasPartial: self selector ].
+!
+
+incrementCompositionVersion
+	< if (typeof(self['compositionVersion']) === 'undefined') {
+		self['compositionVersion'] = 1;
+	} else {
+		self['compositionVersion'] = self['compositionVersion'] + 1;
+	} >
+!
+
 isPartial
 	^ (self fn basicAt: #original) isNil not
 ! !
@@ -831,12 +847,12 @@ isPartialClosure
 visitIRPartialClosure: anIRClosure
 	self stream
 		nextPutClosureWith: [
-			
-				self stream nextPutVars: (anIRClosure tempDeclarations collect: [ :each |
-						each name asVariableName ]).
-				self stream
-					nextPutBlockContextFor: anIRClosure
-					during: [ self stream nextPutNonLocalReturnHandlingWith: [ super visitIRClosure: anIRClosure ] ] ]
+			self stream nextPutVars: (anIRClosure tempDeclarations collect: [ :each |
+					each name asVariableName ]).
+			self stream
+				nextPutBlockContextFor: anIRClosure
+				during: [ 
+					self stream nextPutNonLocalReturnHandlingWith: [ super visitIRClosure: anIRClosure ] ] ]
 		arguments: anIRClosure arguments
 ! !
 

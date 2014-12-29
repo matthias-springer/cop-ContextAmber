@@ -34,6 +34,15 @@ testSkipLayers
 	skipped := inliner skipLayers.
 	self assert: skipped size equals: 2.
 	self assert: (skipped at: 2) equals: layer.
+!
+
+testValueSelector
+	| inliner |
+	inliner := ASTProceedInliner new.
+	
+	self assert: (inliner valueSelector: 0) equals: #value.
+	self assert: (inliner valueSelector: 1) equals: #value:.
+	self assert: (inliner valueSelector: 3) equals: #value:value:value:.
 ! !
 
 Object subclass: #ContextAmberDemoClass1
@@ -198,9 +207,9 @@ setUp
 
 testCompositionVersion
 	| oldVersion |
-	oldVersion := ContextAmberDemoClass1 compositionVersion.
-	ContextAmberDemoClass1 incrementCompositionVersion.
-	self assert: ContextAmberDemoClass1 compositionVersion equals: oldVersion + 1.
+	oldVersion := (ContextAmberDemoClass1>>#method1) compositionVersion.
+	(ContextAmberDemoClass1>>#method1) incrementCompositionVersion.
+	self assert: (ContextAmberDemoClass1>>#method1) compositionVersion equals: oldVersion + 1.
 !
 
 testDefaultLayers
@@ -214,6 +223,11 @@ testDefaultLayers
 	
 	layer1 deactivate.
 	self assert: self activeLayers size equals: 0.
+!
+
+testHasPartial
+	self assert: (ContextAmberDemoClass1>>#method1) hasPartial.
+	self deny: (ContextAmberDemoClass1>>#method4) hasPartial.
 !
 
 testObjectLayers
@@ -552,6 +566,12 @@ testWrapperInstalledOnCompilation
 	self deny: (ContextAmberDemoClass1 >> #method3) isPartial.
 	ContextAmberDemoPartialClass1 compile: 'method3'.
 	self assert: (ContextAmberDemoClass1 >> #method3) isPartial.
+!
+
+testWrapperInstalledOnRecompilation
+	self assert: (ContextAmberDemoClass1 >> #method1) isPartial.
+	ContextAmberDemoClass1 compile: 'method1 ^ 5'.
+	self assert: (ContextAmberDemoClass1 >> #method1) isPartial.
 !
 
 testWrapperInstalledOnStartup
