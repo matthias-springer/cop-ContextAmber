@@ -36,7 +36,8 @@ inlinedCompiledMethod
 !
 
 inlinedMethod
-	| remainingLayers nextLayer partialMethodNode |
+	| remainingLayers nextLayer partialMethodNode currentActiveLayers |
+	currentActiveLayers := self activeLayers.
 	self activeLayers: self skipLayers.
 	self activeLayers isEmpty
 		ifTrue: [
@@ -44,7 +45,7 @@ inlinedMethod
 		ifFalse: [ 
 			nextLayer := self activeLayers removeLast.
 			partialMethodNode := ((nextLayer class partialFor: self base) >> self selector) ast ].
-	partialMethodNode sequenceNode addFirstNode: self updateMethodAST sequenceNode.
+	partialMethodNode sequenceNode addFirstNode: ((self base >> self selector) inliningStrategy updateMethodAST: currentActiveLayers) sequenceNode.
 	self visit: partialMethodNode.
 	^ ContextInliningCodeGenerator new
 		currentClass: self base;
@@ -86,22 +87,6 @@ skipLayers
 			ifFalse: [ result removeLast ] ].
 	
 	^ result
-!
-
-updateMethodAST
-	| source |
-	source := (self class >> #updateMethodTemplate) source.
-	source := source replace: 'SELECTOR' with: '#', self selector.
-	source := source replace: 'VERSION' with: (self base >> self selector) compositionVersion.
-	source := source replace: 'ARGUMENTS' with: '{ ', ((self base >> self selector) arguments join: '. '), ' }'.
-	^ Smalltalk parse: source
-!
-
-updateMethodTemplate
-	Transcript show: 'performing version check!!', String lf.
-	VERSION ~= (self class >> SELECTOR) compositionVersion ifTrue: [ 
-		(self class >> SELECTOR) inliningStrategy installInlinedWithLayers: self activeLayers.
-		^ self perform: SELECTOR withArguments: ARGUMENTS ]
 !
 
 valueSelector: numArgs
@@ -178,8 +163,7 @@ handleMethodAdded: announcement
 	| method class |
 	method := announcement method.
 	class := method methodClass.
-	class isPartial ifTrue: [
-		(class base >> method selector) inliningStrategy installWrapper ].
+	class isPartial ifTrue: [ class handleMethodAdded: method ].
 !
 
 handleMethodModified: announcement
@@ -190,7 +174,10 @@ handleMethodModified: announcement
 		"not a partial method"
 		oldMethod incrementCompositionVersion.
 		oldMethod source: newMethod source.
-		ClassBuilder new installMethod: oldMethod forClass: oldMethod methodClass protocol: oldMethod protocol ].
+		"increase version number to cause recompilation"
+		ClassBuilder new installMethod: oldMethod forClass: oldMethod methodClass protocol: oldMethod protocol.
+		^ self ].
+	newMethod methodClass isPartial ifTrue: [ newMethod methodClass handleMethodAdded: newMethod ].
 !
 
 registerAnnouncements
@@ -369,6 +356,22 @@ installInlinedWithLayers: activeLayers
 		inlinedCompiledMethod.
 	self method fn: inlined fn.
 	ClassBuilder new installMethod: self method forClass: self base protocol: self protocol.
+!
+
+updateMethodAST: activeLayers
+	| source |
+	source := (self class >> #updateMethodTemplate) source.
+	source := source replace: 'SELECTOR' with: '#', self selector.
+	source := source replace: 'ACTIVELAYERS' with: '{ ', ((activeLayers collect: [ :layer | layer id ]) join: '. '), ' }'.
+	source := source replace: 'ARGUMENTS' with: '{ ', ((self base >> self selector) arguments join: '. '), ' }'.
+	^ Smalltalk parse: source
+!
+
+updateMethodTemplate
+	Transcript show: 'performing version check!!', String lf.
+	(self activeLayerIDs contentEquals: ACTIVELAYERS) ifFalse: [ 
+		(self class >> SELECTOR) inliningStrategy installInlinedWithLayers: self activeLayers.
+		^ self perform: SELECTOR withArguments: ARGUMENTS ]
 ! !
 
 !ClassWideInliningStrategy methodsFor: 'wrapper'!
@@ -620,8 +623,7 @@ subclass: aString instanceVariableNames: aString2 package: aString3
 !PartialClass class methodsFor: 'composition'!
 
 incrementCompositionVersion
-	self selectors do: [ :selector |
-		(self base >> selector) incrementCompositionVersion ].
+	self base incrementLayerCompositionVersion.
 ! !
 
 !PartialClass class methodsFor: 'error handling'!
@@ -642,7 +644,20 @@ initialize
 	self ~= PartialClass ifTrue: [
 		self base isClass ifFalse: [ self error: 'object is not a class' ].
 		self base addPartial: self.
-		self methods do: [ :method | (self base >> method selector) inliningStrategy installWrapper ] ].
+		self methods do: [ :method | self handleMethodAdded: method ] ].
+! !
+
+!PartialClass class methodsFor: 'partial methods'!
+
+handleMethodAdded: method
+	| isPartialMethod |
+	isPartialMethod := (self base canUnderstand: method selector) and: [ (self base >> method selector) protocol ~= '*Context-Hidden' ].
+	isPartialMethod
+			ifTrue: [ (self base >> method selector) inliningStrategy installWrapper ]
+			ifFalse: [ | protocol | "TODO: handle like partial method"
+				protocol := method protocol.
+				ClassBuilder new installMethod: method forClass: self base protocol: '*Context-Hidden'.
+				method protocol: protocol ].
 ! !
 
 !PartialClass class methodsFor: 'testing'!
@@ -653,6 +668,18 @@ hasPartial: selector
 
 isPartial
 	^ self ~= PartialClass
+! !
+
+!Array methodsFor: '*ContextAmber'!
+
+contentEquals: anArray
+	self size ~= anArray size
+		ifTrue: [ ^ false ].
+	
+	self withIndexDo: [ :obj :idx | 
+		(anArray at: idx) ~= obj ifTrue: [ ^ false ] ].
+	
+	^ true
 ! !
 
 !AssignmentNode methodsFor: '*ContextAmber'!
@@ -676,6 +703,14 @@ ensurePartialsCollectionInitialized
 	} >
 !
 
+incrementLayerCompositionVersion
+	< if (typeof(self['activeLayersVersion']) === 'undefined') {
+		self['layerCompositionVersion'] = 2;
+	} else {
+		self['layerCompositionVersion'] = self['layerCompositionVersion'] + 1;
+	} >
+!
+
 installInlined: selector withLayers: activeLayers
 	| method wrapper |
 	wrapper := self >> selector.
@@ -687,6 +722,14 @@ installInlined: selector withLayers: activeLayers
 		inlinedCompiledMethod.
 	wrapper fn: method fn.
 	ClassBuilder new installMethod: wrapper forClass: self protocol: wrapper protocol.
+!
+
+layerCompositionVersion
+	< if (typeof(self['layerCompositionVersion']) === 'undefined') {
+		return 1;
+	} else {
+		return self['layerCompositionVersion'];
+	} >
 !
 
 partials
@@ -979,30 +1022,71 @@ visitPartialBlockNode: aNode
 activateLayer: aLayer
 	self initializeLayers.
 	self layerStack add: aLayer.
+	self activeLayersDirty: true.
+!
+
+activeLayerIDs
+	self activeLayersDirty | (self activeLayersVersion ~= self class layerCompositionVersion)
+		ifTrue: [ self basicActiveLayersIDs: (self activeLayers collect: [ :layer | layer id ]) ].
+	
+	^ self basicActiveLayersIDs
 !
 
 activeLayers
 	| layers |
 	layers := OrderedCollection new.
 	layers addAll: ContextAmber defaultActive.
-	
+
 	ContextAmber scopedStack do: [ :operation :layer |
 		operation = #add
 			ifTrue: [ layers indexOf: layer ifAbsent: [ layers add: layer ] ]
 			ifFalse: [ layers remove: layer ifAbsent: [ ] ] ].
-			
+
 	self layerStack ifNotNil: [
 		self layerStack do: [ :operation :layer | 
 			operation = #add
 				ifTrue: [ layers indexOf: layer ifAbsent: [ layers add: layer ] ]
 				ifFalse: [ layers remove: layer ifAbsent: [ ] ] ] ].
-			
+						
 	^ layers
+!
+
+activeLayersDirty
+	< if (typeof(self['activeLayersDirty']) === 'undefined') {
+		return true;
+	} else {
+		return self['activeLayersDirty'];
+	} >
+!
+
+activeLayersDirty: aBoolean
+	< self['activeLayersDirty']  = aBoolean; >
+!
+
+activeLayersVersion
+	< if (typeof(self['activeLayersVersion']) === 'undefined') {
+		return 0;
+	} else {
+		return self['activeLayersVersion'];
+	} >
+!
+
+activeLayersVersion: anInteger
+	< self['activeLayersVersion']  = anInteger; >
+!
+
+basicActiveLayersIDs
+	< return self['activeLayersIDs']; >
+!
+
+basicActiveLayersIDs: anOrderedCollection
+	< self['activeLayersIDs']  = anOrderedCollection; >
 !
 
 deactivateLayer: aLayer
 	self initializeLayers.
 	self layerStack remove: aLayer.
+	self activeLayersDirty: true.
 !
 
 initializeLayers
@@ -1017,27 +1101,24 @@ layerStack: aStack
 	< self['layerStack'] = aStack; >
 !
 
-objectLayersDirty
-	< if (typeof(self['layersDirty']) === 'undefined') {
-		return false;
-	} else {
-		return self['layersDirty'];
-	} >
-!
-
-objectLayersDirty: aBoolean
-	< self['layersDirty']  = aBoolean; >
-!
-
 resetLayer: aLayer
 	self initializeLayers.
 	self layerStack reset: aLayer.
+	self activeLayersDirty: true.
 ! !
 
 !ReturnNode methodsFor: '*ContextAmber'!
 
 nonLocalReturn
 	^ self scope isMethodScope not & self scope node isPartialBlockNode not
+! !
+
+!SemanticAnalyzer methodsFor: '*ContextAmber'!
+
+theClass: aClass
+	(aClass notNil and: [ aClass isPartial ])
+		ifTrue: [ theClass := aClass base ]
+		ifFalse: [ theClass := aClass ].
 ! !
 
 !SendNode methodsFor: '*ContextAmber'!

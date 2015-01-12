@@ -6,15 +6,15 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="author" content="Matthias Springer" />
     <script type='text/javascript' src='the.js'></script>
+
+    <!-- Twitter Bootstrap -->
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+    <link href="//netdna.bootstrapcdn.com/bootswatch/2.3.2/cosmo/bootstrap.min.css" rel="stylesheet">
+    <link href="http://www.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet">
   </head>
 
   <body>
-  <p>Hi, Matthias Springer! Welcome to Amber project: "ContextAmber".</p>
-  <p>This is the place for your application's HTML. After getting familiar with Amber,
-      just remove this welcome contents from index.html and replace it with your own.</p>
-  <button id="amber-with">Hello from TagBrush >> with:</button>
-  <button id="jquery-append">Hello from jQuery append</button>
-  <ol id="output-list"></ol>
   <script type='text/javascript'>
       require(['app'], function (amber) {
           amber.initialize({
@@ -22,9 +22,17 @@
             'transport.defaultAmdNamespace': "amber-context"
           });
           require(["amber-ide-starter-dialog"], function (dlg) { dlg.start(); });
-          amber.globals.ContextAmber._start();
+          //amber.globals.ContextAmber._start();
+
+          amber.globals.AthensTutorial._open();
       });
   </script>
+
+    <p><a href="http://gsoc2013.esug.org/projects/athen's%20html5%20canvas/proposal-a">Project description</a></p>
+
+    <div id="workspace" style="margin-top: 10px;">
+
+    </div>
   </body>
 
 </html>

@@ -154,7 +154,7 @@ var self=this;
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
 var $1;
-$recv(self._class())._installInlined_withLayers_("callMethod1",self._activeLayers());
+$recv($recv($recv(self._class()).__gt_gt("callMethod1"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
 $1=self._perform_withArguments_("callMethod1",[]);
 return $1;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -166,7 +166,7 @@ args: [],
 source: "callMethod1\x0a\x09self error: 'expected partial'.",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["installInlined:withLayers:", "class", "activeLayers", "perform:withArguments:"]
+messageSends: ["installInlinedWithLayers:", "inliningStrategy", ">>", "class", "activeLayers", "perform:withArguments:"]
 }),
 $globals.ContextAmberDemoClass1);
 
@@ -180,7 +180,7 @@ var self=this;
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
 var $1;
-$recv(self._class())._installInlined_withLayers_("callMethod4",self._activeLayers());
+$recv($recv($recv(self._class()).__gt_gt("callMethod4"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
 $1=self._perform_withArguments_("callMethod4",[]);
 return $1;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -192,7 +192,7 @@ args: [],
 source: "callMethod4\x0a\x09self error: 'expected partial'.",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["installInlined:withLayers:", "class", "activeLayers", "perform:withArguments:"]
+messageSends: ["installInlinedWithLayers:", "inliningStrategy", ">>", "class", "activeLayers", "perform:withArguments:"]
 }),
 $globals.ContextAmberDemoClass1);
 
@@ -206,7 +206,7 @@ var self=this;
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
 var $1;
-$recv(self._class())._installInlined_withLayers_("method1",self._activeLayers());
+$recv($recv($recv(self._class()).__gt_gt("method1"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
 $1=self._perform_withArguments_("method1",[]);
 return $1;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -218,7 +218,7 @@ args: [],
 source: "method1\x0a\x09^ 5",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["installInlined:withLayers:", "class", "activeLayers", "perform:withArguments:"]
+messageSends: ["installInlinedWithLayers:", "inliningStrategy", ">>", "class", "activeLayers", "perform:withArguments:"]
 }),
 $globals.ContextAmberDemoClass1);
 
@@ -268,7 +268,7 @@ var self=this;
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
 var $1;
-$recv(self._class())._installInlined_withLayers_("method5",self._activeLayers());
+$recv($recv($recv(self._class()).__gt_gt("method5"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
 $1=self._perform_withArguments_("method5",[]);
 return $1;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -280,7 +280,7 @@ args: [],
 source: "method5\x0a\x09^ 100",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["installInlined:withLayers:", "class", "activeLayers", "perform:withArguments:"]
+messageSends: ["installInlinedWithLayers:", "inliningStrategy", ">>", "class", "activeLayers", "perform:withArguments:"]
 }),
 $globals.ContextAmberDemoClass1);
 
@@ -294,7 +294,7 @@ var self=this;
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
 var $1;
-$recv(self._class())._installInlined_withLayers_("methodWithBlock:and:",self._activeLayers());
+$recv($recv($recv(self._class()).__gt_gt("methodWithBlock:and:"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
 $1=self._perform_withArguments_("methodWithBlock:and:",[var1,var2]);
 return $1;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -306,7 +306,7 @@ args: ["var1", "var2"],
 source: "methodWithBlock: var1 and: var2\x0a\x09var1 = var2\x0a\x09\x09ifTrue: [ ^ var1 * 2 ].\x0a\x09^ var1 + var2",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["installInlined:withLayers:", "class", "activeLayers", "perform:withArguments:"]
+messageSends: ["installInlinedWithLayers:", "inliningStrategy", ">>", "class", "activeLayers", "perform:withArguments:"]
 }),
 $globals.ContextAmberDemoClass1);
 
@@ -320,7 +320,7 @@ var self=this;
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
 var $1;
-$recv(self._class())._installInlined_withLayers_("multiply:with:",self._activeLayers());
+$recv($recv($recv(self._class()).__gt_gt("multiply:with:"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
 $1=self._perform_withArguments_("multiply:with:",[aNumber,anotherNumber]);
 return $1;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -332,7 +332,7 @@ args: ["aNumber", "anotherNumber"],
 source: "multiply: aNumber with: anotherNumber\x0a\x09^ aNumber * anotherNumber",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["installInlined:withLayers:", "class", "activeLayers", "perform:withArguments:"]
+messageSends: ["installInlinedWithLayers:", "inliningStrategy", ">>", "class", "activeLayers", "perform:withArguments:"]
 }),
 $globals.ContextAmberDemoClass1);
 
@@ -349,7 +349,7 @@ var self=this;
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
 var $1;
-$recv(self._class())._installInlined_withLayers_("add:and:",self._activeLayers());
+$recv($recv($recv(self._class()).__gt_gt("add:and:"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
 $1=self._perform_withArguments_("add:and:",[aNumber,anotherNumber]);
 return $1;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -361,7 +361,7 @@ args: ["aNumber", "anotherNumber"],
 source: "add: aNumber and: anotherNumber\x0a\x09^ aNumber + anotherNumber",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["installInlined:withLayers:", "class", "activeLayers", "perform:withArguments:"]
+messageSends: ["installInlinedWithLayers:", "inliningStrategy", ">>", "class", "activeLayers", "perform:withArguments:"]
 }),
 $globals.ContextAmberDemoClass2);
 
@@ -393,7 +393,7 @@ var self=this;
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
 var $1;
-$recv(self._class())._installInlined_withLayers_("method2",self._activeLayers());
+$recv($recv($recv(self._class()).__gt_gt("method2"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
 $1=self._perform_withArguments_("method2",[]);
 return $1;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -405,7 +405,7 @@ args: [],
 source: "method2",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["installInlined:withLayers:", "class", "activeLayers", "perform:withArguments:"]
+messageSends: ["installInlinedWithLayers:", "inliningStrategy", ">>", "class", "activeLayers", "perform:withArguments:"]
 }),
 $globals.ContextAmberDemoClass2);
 
@@ -813,6 +813,44 @@ source: "testCompositionVersion\x0a\x09| oldVersion |\x0a\x09oldVersion := (Cont
 referencedClasses: ["ContextAmberDemoClass1"],
 //>>excludeEnd("ide");
 messageSends: ["compositionVersion", ">>", "incrementCompositionVersion", "assert:equals:", "+"]
+}),
+$globals.ContextAmberTest);
+
+$core.addMethod(
+$core.method({
+selector: "testContentEquals",
+protocol: 'running',
+fn: function (){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+var $1,$2;
+$1=$recv([(5),(2),(9)])._contentEquals_([(5),(2),(9)]);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["contentEquals:"]=1;
+//>>excludeEnd("ctx");
+self._assert_($1);
+$2=$recv([(4),(5)])._contentEquals_([(4),(6)]);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["contentEquals:"]=2;
+//>>excludeEnd("ctx");
+self._deny_($2);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["deny:"]=1;
+//>>excludeEnd("ctx");
+self._deny_($recv([(4),(5)])._contentEquals_([(4)]));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"testContentEquals",{},$globals.ContextAmberTest)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "testContentEquals\x0a\x09self assert: ({5. 2. 9} contentEquals: {5. 2. 9}).\x0a\x09self deny: ({4. 5} contentEquals: {4. 6}).\x0a\x09self deny: ({4. 5.} contentEquals: {4}).",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["assert:", "contentEquals:", "deny:"]
 }),
 $globals.ContextAmberTest);
 
@@ -2027,6 +2065,48 @@ source: "testMultiLevelInline\x0a\x09| layer1 layer2 obj |\x0a\x09obj := Context
 referencedClasses: ["ContextAmberDemoClass2", "ContextAmberDemoLayer", "ContextAmberDemoLayer2"],
 //>>excludeEnd("ide");
 messageSends: ["new", "assert:equals:", "add:and:", "activate", "withLayer:", "deactivate"]
+}),
+$globals.LayerTest);
+
+$core.addMethod(
+$core.method({
+selector: "testObjectLayer",
+protocol: 'tests',
+fn: function (){
+var self=this;
+var obj,layer;
+function $ContextAmberDemoClass1(){return $globals.ContextAmberDemoClass1||(typeof ContextAmberDemoClass1=="undefined"?nil:ContextAmberDemoClass1)}
+function $ContextAmberDemoLayer(){return $globals.ContextAmberDemoLayer||(typeof ContextAmberDemoLayer=="undefined"?nil:ContextAmberDemoLayer)}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+var $1;
+obj=$recv($ContextAmberDemoClass1())._new();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["new"]=1;
+//>>excludeEnd("ctx");
+layer=$recv($ContextAmberDemoLayer())._new();
+$1=$recv(obj)._method1();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["method1"]=1;
+//>>excludeEnd("ctx");
+self._assert_equals_($1,(5));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["assert:equals:"]=1;
+//>>excludeEnd("ctx");
+$recv(obj)._activateLayer_(layer);
+self._assert_equals_($recv(obj)._method1(),(10));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"testObjectLayer",{obj:obj,layer:layer},$globals.LayerTest)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "testObjectLayer\x0a\x09| obj layer |\x0a\x09obj := ContextAmberDemoClass1 new.\x0a\x09layer := ContextAmberDemoLayer new.\x0a\x09self assert: obj method1 equals: 5.\x0a\x09\x0a\x09obj activateLayer: layer.\x0a\x09self assert: obj method1 equals: 10.\x0a\x09\x0a\x09\x22obj deactivateLayer: layer.\x0a\x09self assert: obj method1 equals: 5.\x22",
+referencedClasses: ["ContextAmberDemoClass1", "ContextAmberDemoLayer"],
+//>>excludeEnd("ide");
+messageSends: ["new", "assert:equals:", "method1", "activateLayer:"]
 }),
 $globals.LayerTest);
 
