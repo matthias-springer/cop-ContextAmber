@@ -43,7 +43,7 @@ curveVia: pt1 to: aPoint
 drawControlPoint: aPoint
 	context2D push.
 	context2D fillStyle: 'rgba(0, 0, 0, 0.5)'.
-	context2D fillRect: (aPoint corner: 5 @ 5).
+	context2D fillRect: (aPoint - (5 @ 5) corner: 10 @ 10).
 	context2D pop.
 !
 

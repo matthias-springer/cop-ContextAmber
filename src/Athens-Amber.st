@@ -1,7 +1,7 @@
-Smalltalk current createPackage: 'Athens-Amber'!
+Smalltalk createPackage: 'Athens-Amber'!
 Object subclass: #CanvasContext2D
-    instanceVariableNames: ''
-    package: 'Athens-Amber'!
+	instanceVariableNames: ''
+	package: 'Athens-Amber'!
 !CanvasContext2D commentStamp!
 I am an HTML Canvas 2D drawing context. I am used internally by Athens-HTML and considered private.!
 
@@ -46,6 +46,10 @@ miterLimit: aNumber
 ! !
 
 !CanvasContext2D methodsFor: 'paths'!
+
+arc: p1 a: p2 a: p3 a: p4 a: p5 a: p6
+	< self.arc(p1, p2, p3, p4, p5, p6); >
+!
 
 beginPath
     < self.beginPath(); >
@@ -196,8 +200,8 @@ translateByX: x Y: y
 ! !
 
 Object subclass: #CanvasGradient
-    instanceVariableNames: ''
-    package: 'Athens-Amber'!
+	instanceVariableNames: ''
+	package: 'Athens-Amber'!
 !CanvasGradient commentStamp!
 I am an HTML Canvas gradient object. I am used internally by Athens-HTML and considered private.!
 
@@ -208,8 +212,8 @@ addColorStopAt: pos color: color
 ! !
 
 Object subclass: #Color
-    instanceVariableNames: 'rgbaString alpha r g b'
-    package: 'Athens-Amber'!
+	instanceVariableNames: 'rgbaString alpha r g b'
+	package: 'Athens-Amber'!
 !Color commentStamp!
 I represent a color.
 
@@ -372,8 +376,8 @@ yellow
 ! !
 
 Object subclass: #Image
-    instanceVariableNames: ''
-    package: 'Athens-Amber'!
+	instanceVariableNames: ''
+	package: 'Athens-Amber'!
 !Image commentStamp!
 I represent a DOM image element. I am loaded asynchronously from a URL.
 
@@ -419,8 +423,8 @@ fromUrl: anUrl
 ! !
 
 Object subclass: #LogicalFont
-    instanceVariableNames: 'familyName size sizeUnit'
-    package: 'Athens-Amber'!
+	instanceVariableNames: 'familyName size sizeUnit'
+	package: 'Athens-Amber'!
 !LogicalFont commentStamp!
 I represent a text font with a specific size.
 
@@ -495,8 +499,8 @@ familyName: aString size: anInteger
 ! !
 
 Object subclass: #Rectangle
-    instanceVariableNames: 'origin corner'
-    package: 'Athens-Amber'!
+	instanceVariableNames: 'origin corner'
+	package: 'Athens-Amber'!
 !Rectangle commentStamp!
 I am a rectangle. I have a point of origin and a corner point.
 
@@ -605,15 +609,11 @@ origin: originPoint corner: cornerPoint
         yourself
 ! !
 
-!SequenceableCollection methodsFor: '*Athens-Amber'!
-
-reverseDo: aBlock
-    <for(var i=self.length-1;-1<i;i--){aBlock._value_(self[i]);}>
-! !
-
 !Date class methodsFor: '*Athens-Amber'!
 
 millisecondClockValue
     < return new Date().getTime(); >
 ! !
+
+!SequenceableCollection methodsFor: '*Athens-Amber'! !
 

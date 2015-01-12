@@ -158,9 +158,17 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
+var $1,$4,$3,$2;
 $recv(self["@context2D"])._push();
 $recv(self["@context2D"])._fillStyle_("rgba(0, 0, 0, 0.5)");
-$recv(self["@context2D"])._fillRect_($recv(aPoint)._corner_((5).__at((5))));
+$1=self["@context2D"];
+$4=(5).__at((5));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["@"]=1;
+//>>excludeEnd("ctx");
+$3=$recv(aPoint).__minus($4);
+$2=$recv($3)._corner_((10).__at((10)));
+$recv($1)._fillRect_($2);
 $recv(self["@context2D"])._pop();
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -169,10 +177,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["aPoint"],
-source: "drawControlPoint: aPoint\x0a\x09context2D push.\x0a\x09context2D fillStyle: 'rgba(0, 0, 0, 0.5)'.\x0a\x09context2D fillRect: (aPoint corner: 5 @ 5).\x0a\x09context2D pop.",
+source: "drawControlPoint: aPoint\x0a\x09context2D push.\x0a\x09context2D fillStyle: 'rgba(0, 0, 0, 0.5)'.\x0a\x09context2D fillRect: (aPoint - (5 @ 5) corner: 10 @ 10).\x0a\x09context2D pop.",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["push", "fillStyle:", "fillRect:", "corner:", "@", "pop"]
+messageSends: ["push", "fillStyle:", "fillRect:", "corner:", "-", "@", "pop"]
 }),
 $globals.ControlPointPath);
 

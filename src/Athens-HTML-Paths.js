@@ -14,34 +14,20 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
- var start = self['@endPoint'];
-    var end = self['@endPoint'] = newEndPoint;
-    var cwAngle = aBool ? angle : -angle;
-    var center = self._calcCenter_end_angle_(start, end, cwAngle);
-    var vX = start._x() - center._x();
-    var vY = start._y() - center._y();
-    var radius = Math.sqrt(vX * vX + vY * vY);
-    
-    var vXAcos = Math.acos(vX / Math.sqrt(vX * vX + vY * vY));
-    var startAngle = vY < 0 ? Math.PI * 2 - vXAcos : vXAcos;
-    
-    var eX = end._x() - center._x();
-    var eY = end._y() - center._y();
-    var eXAcos = Math.acos(eX / Math.sqrt(eX * eX + eY * eY));
-    var endAngle = eY < 0 ? Math.PI * 2 - eXAcos : eXAcos;
-    
-    self['@context2D'].arc(center._x(), center._y(), radius, startAngle, endAngle, !aBool); ;
-return self;
+var $1;
+$recv($recv($recv(self._class()).__gt_gt("arcTo:angle:cw:"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
+$1=self._perform_withArguments_("arcTo:angle:cw:",[newEndPoint,angle,aBool]);
+return $1;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"arcTo:angle:cw:",{newEndPoint:newEndPoint,angle:angle,aBool:aBool},$globals.AthensHTMLPath)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["newEndPoint", "angle", "aBool"],
-source: "arcTo: newEndPoint angle: angle cw: aBool\x0a    < var start = self['@endPoint'];\x0a    var end = self['@endPoint'] = newEndPoint;\x0a    var cwAngle = aBool ? angle : -angle;\x0a    var center = self._calcCenter_end_angle_(start, end, cwAngle);\x0a    var vX = start._x() - center._x();\x0a    var vY = start._y() - center._y();\x0a    var radius = Math.sqrt(vX * vX + vY * vY);\x0a    \x0a    var vXAcos = Math.acos(vX / Math.sqrt(vX * vX + vY * vY));\x0a    var startAngle = vY < 0 ? Math.PI * 2 - vXAcos : vXAcos;\x0a    \x0a    var eX = end._x() - center._x();\x0a    var eY = end._y() - center._y();\x0a    var eXAcos = Math.acos(eX / Math.sqrt(eX * eX + eY * eY));\x0a    var endAngle = eY < 0 ? Math.PI * 2 - eXAcos : eXAcos;\x0a    \x0a    self['@context2D'].arc(center._x(), center._y(), radius, startAngle, endAngle, !aBool); >",
+source: "arcTo: newEndPoint angle: angle cw: aBool\x0a\x09| start end cwAngle center v radius vXAcos startAngle e eXAcos endAngle |\x0a\x09start := endPoint.\x0a\x09end := newEndPoint.\x0a\x09endPoint := newEndPoint.\x0a\x09\x0a\x09cwAngle := aBool ifTrue: [angle] ifFalse: [0 - angle].\x0a\x09center := self calcCenter: start end: end angle: cwAngle.\x0a\x09v := start - center.\x0a\x09radius := (v x * v x + (v y * v y)) sqrt.\x0a\x09vXAcos := (v x /  (v x * v x + (v y * v y)) sqrt) arcCos.\x0a\x09startAngle := v y < 0 ifTrue: [Number pi * 2 - vXAcos] ifFalse: [vXAcos].\x0a\x09e := end - center.\x0a\x09eXAcos := (e x / (e x * e x + (e y * e y)) sqrt) arcCos.\x0a\x09endAngle := e y < 0 ifTrue: [Number pi * 2 - eXAcos] ifFalse: [eXAcos].\x0a\x09\x0a\x09context2D arc: center x a: center y a: radius a: startAngle a: endAngle a: aBool not.",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: []
+messageSends: ["installInlinedWithLayers:", "inliningStrategy", ">>", "class", "activeLayers", "perform:withArguments:"]
 }),
 $globals.AthensHTMLPath);
 
@@ -180,9 +166,10 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-self["@endPoint"]=self["@startPoint"];
-$recv(self["@context2D"])._closePath();
-return self;
+var $1;
+$recv($recv($recv(self._class()).__gt_gt("close"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
+$1=self._perform_withArguments_("close",[]);
+return $1;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"close",{},$globals.AthensHTMLPath)});
 //>>excludeEnd("ctx");
@@ -192,7 +179,7 @@ args: [],
 source: "close\x0a    endPoint := startPoint.\x0a    context2D closePath.",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["closePath"]
+messageSends: ["installInlinedWithLayers:", "inliningStrategy", ">>", "class", "activeLayers", "perform:withArguments:"]
 }),
 $globals.AthensHTMLPath);
 
@@ -205,9 +192,10 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-self["@endPoint"]=aPoint;
-$recv(self["@context2D"])._bezierCurveVia_and_to_(pt1,pt2,aPoint);
-return self;
+var $1;
+$recv($recv($recv(self._class()).__gt_gt("curveVia:and:to:"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
+$1=self._perform_withArguments_("curveVia:and:to:",[pt1,pt2,aPoint]);
+return $1;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"curveVia:and:to:",{pt1:pt1,pt2:pt2,aPoint:aPoint},$globals.AthensHTMLPath)});
 //>>excludeEnd("ctx");
@@ -217,7 +205,7 @@ args: ["pt1", "pt2", "aPoint"],
 source: "curveVia: pt1 and: pt2 to: aPoint\x0a    endPoint := aPoint.\x0a    context2D bezierCurveVia: pt1 and: pt2 to: aPoint.",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["bezierCurveVia:and:to:"]
+messageSends: ["installInlinedWithLayers:", "inliningStrategy", ">>", "class", "activeLayers", "perform:withArguments:"]
 }),
 $globals.AthensHTMLPath);
 
@@ -230,9 +218,10 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-self["@endPoint"]=aPoint;
-$recv(self["@context2D"])._quadraticCurveVia_to_(pt1,aPoint);
-return self;
+var $1;
+$recv($recv($recv(self._class()).__gt_gt("curveVia:to:"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
+$1=self._perform_withArguments_("curveVia:to:",[pt1,aPoint]);
+return $1;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"curveVia:to:",{pt1:pt1,aPoint:aPoint},$globals.AthensHTMLPath)});
 //>>excludeEnd("ctx");
@@ -242,7 +231,7 @@ args: ["pt1", "aPoint"],
 source: "curveVia: pt1 to: aPoint\x0a    endPoint := aPoint.\x0a    context2D quadraticCurveVia: pt1 to: aPoint.",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["quadraticCurveVia:to:"]
+messageSends: ["installInlinedWithLayers:", "inliningStrategy", ">>", "class", "activeLayers", "perform:withArguments:"]
 }),
 $globals.AthensHTMLPath);
 
@@ -381,9 +370,10 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-self["@endPoint"]=aPoint;
-$recv(self["@context2D"])._lineTo_(aPoint);
-return self;
+var $1;
+$recv($recv($recv(self._class()).__gt_gt("lineTo:"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
+$1=self._perform_withArguments_("lineTo:",[aPoint]);
+return $1;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"lineTo:",{aPoint:aPoint},$globals.AthensHTMLPath)});
 //>>excludeEnd("ctx");
@@ -393,7 +383,7 @@ args: ["aPoint"],
 source: "lineTo: aPoint\x0a    endPoint := aPoint.\x0a    context2D lineTo: aPoint.",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["lineTo:"]
+messageSends: ["installInlinedWithLayers:", "inliningStrategy", ">>", "class", "activeLayers", "perform:withArguments:"]
 }),
 $globals.AthensHTMLPath);
 
@@ -430,9 +420,10 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-self["@endPoint"]=aPoint;
-$recv(self["@context2D"])._moveTo_(aPoint);
-return self;
+var $1;
+$recv($recv($recv(self._class()).__gt_gt("moveTo:"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
+$1=self._perform_withArguments_("moveTo:",[aPoint]);
+return $1;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"moveTo:",{aPoint:aPoint},$globals.AthensHTMLPath)});
 //>>excludeEnd("ctx");
@@ -442,7 +433,7 @@ args: ["aPoint"],
 source: "moveTo: aPoint\x0a    endPoint := aPoint.\x0a    context2D moveTo: aPoint.",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["moveTo:"]
+messageSends: ["installInlinedWithLayers:", "inliningStrategy", ">>", "class", "activeLayers", "perform:withArguments:"]
 }),
 $globals.AthensHTMLPath);
 
@@ -479,11 +470,10 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-self["@startPoint"]=(0).__at((0));
-self["@endPoint"]=self["@startPoint"];
-$recv(self["@context2D"])._beginPath();
-self._moveTo_(self["@startPoint"]);
-return self;
+var $1;
+$recv($recv($recv(self._class()).__gt_gt("newPath"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
+$1=self._perform_withArguments_("newPath",[]);
+return $1;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"newPath",{},$globals.AthensHTMLPath)});
 //>>excludeEnd("ctx");
@@ -493,7 +483,7 @@ args: [],
 source: "newPath\x0a    endPoint := startPoint := 0 @ 0.\x0a    context2D beginPath.\x0a    self moveTo: startPoint.",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["@", "beginPath", "moveTo:"]
+messageSends: ["installInlinedWithLayers:", "inliningStrategy", ">>", "class", "activeLayers", "perform:withArguments:"]
 }),
 $globals.AthensHTMLPath);
 

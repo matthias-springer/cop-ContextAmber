@@ -1607,8 +1607,6 @@ selector: "updateMethodTemplate",
 protocol: 'inlining',
 fn: function (){
 var self=this;
-function $Transcript(){return $globals.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
-function $String(){return $globals.String||(typeof String=="undefined"?nil:String)}
 function $ACTIVELAYERS(){return $globals.ACTIVELAYERS||(typeof ACTIVELAYERS=="undefined"?nil:ACTIVELAYERS)}
 function $SELECTOR(){return $globals.SELECTOR||(typeof SELECTOR=="undefined"?nil:SELECTOR)}
 function $ARGUMENTS(){return $globals.ARGUMENTS||(typeof ARGUMENTS=="undefined"?nil:ARGUMENTS)}
@@ -1616,7 +1614,6 @@ function $ARGUMENTS(){return $globals.ARGUMENTS||(typeof ARGUMENTS=="undefined"?
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
 var $1,$2;
-$recv($Transcript())._show_("performing version check!".__comma($recv($String())._lf()));
 $1=$recv(self._activeLayerIDs())._contentEquals_($ACTIVELAYERS());
 if(!$core.assert($1)){
 $recv($recv($recv(self._class()).__gt_gt($SELECTOR()))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
@@ -1630,10 +1627,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "updateMethodTemplate\x0a\x09Transcript show: 'performing version check!', String lf.\x0a\x09(self activeLayerIDs contentEquals: ACTIVELAYERS) ifFalse: [ \x0a\x09\x09(self class >> SELECTOR) inliningStrategy installInlinedWithLayers: self activeLayers.\x0a\x09\x09^ self perform: SELECTOR withArguments: ARGUMENTS ]",
-referencedClasses: ["Transcript", "String", "ACTIVELAYERS", "SELECTOR", "ARGUMENTS"],
+source: "updateMethodTemplate\x0a\x09(self activeLayerIDs contentEquals: ACTIVELAYERS) ifFalse: [ \x0a\x09\x09(self class >> SELECTOR) inliningStrategy installInlinedWithLayers: self activeLayers.\x0a\x09\x09^ self perform: SELECTOR withArguments: ARGUMENTS ]",
+referencedClasses: ["ACTIVELAYERS", "SELECTOR", "ARGUMENTS"],
 //>>excludeEnd("ide");
-messageSends: ["show:", ",", "lf", "ifFalse:", "contentEquals:", "activeLayerIDs", "installInlinedWithLayers:", "inliningStrategy", ">>", "class", "activeLayers", "perform:withArguments:"]
+messageSends: ["ifFalse:", "contentEquals:", "activeLayerIDs", "installInlinedWithLayers:", "inliningStrategy", ">>", "class", "activeLayers", "perform:withArguments:"]
 }),
 $globals.ClassWideInliningStrategy);
 
@@ -2149,8 +2146,8 @@ var self=this;
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
 var $1;
-self["@nextId"]=$recv(self["@nextId"]).__star((2));
-$1=$recv(self["@nextId"]).__slash((2));
+self["@nextId"]=$recv(self["@nextId"]).__plus((1));
+$1=self["@nextId"];
 return $1;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"nextId",{},$globals.Layer.klass)});
@@ -2158,10 +2155,10 @@ return $1;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "nextId\x0a\x09nextId := nextId * 2.\x0a\x09^ nextId / 2",
+source: "nextId\x0a\x09nextId := nextId + 1.\x0a\x09^ nextId",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["*", "/"]
+messageSends: ["+"]
 }),
 $globals.Layer.klass);
 

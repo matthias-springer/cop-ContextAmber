@@ -114,7 +114,7 @@ strokeWidth: w
 ! !
 
 Object subclass: #AthensTutorial
-	instanceVariableNames: 'surface'
+	instanceVariableNames: 'surface layer'
 	package: 'Athens-HTML-Tutorial'!
 
 !AthensTutorial methodsFor: 'initialize-release'!
@@ -554,6 +554,9 @@ step2
     surface := AthensHTMLSurface extent: 500@400.
     surface appendToJQuery: '#canvas-container' asJQuery.
 
+    "ContextAmber init"
+	layer := ControlPointLayer new.
+	
     "Render border around canvas."
     surface canvasTag asJQuery 
         css: 'border' with: '1px #aaa solid'.
@@ -887,27 +890,48 @@ step29
 !
 
 step3
-    "Step 3: Start drawing.
+    "Step 3: ContextAmber Demo."
+    | time |
 
-    Any drawing operations on surface is performed within #drawDuring: block.
-    There is no other (valid) way of obtaining canvas instance."
+    time := Date millisecondsToRun: [ | path1 path2 |
+    
+		path1 := surface createPath: [ :builder |
+			builder 
+				absolute;      
+				lineTo: -50@ -50;          
+				cwArcTo: 50@100 angle: 45; 
+				ccwArcTo: -150@100 angle: 45;
+				close ].
 
-    surface drawDuring: [ :canvas |
-    
-        "First, we clear the surface"
-        surface clear. 
-    
-        "We can use 
-        surface clear: Color black.  
-        as well. A #clear is equivalent to: (surface clear: Color transparent)."
-    
-        "Let's draw a simple green rectangle"
-        canvas setPaint: Color green.
-        canvas setShape: (40 @ 40 corner: 100 @ 100).
-        canvas draw ]
 
-    "Important to note:
-    - canvas instance should be used only within #drawDuring: scope"
+		path2 := surface createPath: [ :builder |
+			builder 
+				absolute;  
+				lineTo: -200@ -150;          
+				curveVia: 0@ -80 to: 50@ -50;           
+				curveVia: 100@ -20 and: -50@20 to: 50@ 50;
+				close ].
+
+		"path1 activateLayer: layer."
+		"path2 activateLayer: layer."
+
+		10 timesRepeat: [
+			surface drawDuring: [ :canvas |
+				surface clear: Color gray.
+				canvas pathTransform
+					translateByX: surface width/2.0 Y: surface height/2.0.
+
+				canvas setShape: path1.
+				(canvas setStrokePaint: Color yellow) width: 4.
+				canvas draw.
+
+				canvas pathTransform translateByX: 125 Y: 0.
+				canvas setShape: path2.
+				(canvas setStrokePaint: Color blue) width: 4.
+				canvas draw ]]].
+
+
+    Transcript show: time asString, ' ms', String lf.
 !
 
 step30

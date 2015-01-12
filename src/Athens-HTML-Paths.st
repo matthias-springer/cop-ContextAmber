@@ -1,7 +1,7 @@
-Smalltalk current createPackage: 'Athens-HTML-Paths'!
+Smalltalk createPackage: 'Athens-HTML-Paths'!
 Object subclass: #AthensHTMLPath
-    instanceVariableNames: 'segment context2D startPoint endPoint'
-    package: 'Athens-HTML-Paths'!
+	instanceVariableNames: 'segment context2D startPoint endPoint'
+	package: 'Athens-HTML-Paths'!
 
 !AthensHTMLPath methodsFor: 'accessing'!
 
@@ -42,23 +42,22 @@ paintFillsUsing: aPaint on: anAthensCanvas
 !AthensHTMLPath methodsFor: 'path commands'!
 
 arcTo: newEndPoint angle: angle cw: aBool
-    < var start = self['@endPoint'];
-    var end = self['@endPoint'] = newEndPoint;
-    var cwAngle = aBool ? angle : -angle;
-    var center = self._calcCenter_end_angle_(start, end, cwAngle);
-    var vX = start._x() - center._x();
-    var vY = start._y() - center._y();
-    var radius = Math.sqrt(vX * vX + vY * vY);
-    
-    var vXAcos = Math.acos(vX / Math.sqrt(vX * vX + vY * vY));
-    var startAngle = vY < 0 ? Math.PI * 2 - vXAcos : vXAcos;
-    
-    var eX = end._x() - center._x();
-    var eY = end._y() - center._y();
-    var eXAcos = Math.acos(eX / Math.sqrt(eX * eX + eY * eY));
-    var endAngle = eY < 0 ? Math.PI * 2 - eXAcos : eXAcos;
-    
-    self['@context2D'].arc(center._x(), center._y(), radius, startAngle, endAngle, !!aBool); >
+	| start end cwAngle center v radius vXAcos startAngle e eXAcos endAngle |
+	start := endPoint.
+	end := newEndPoint.
+	endPoint := newEndPoint.
+	
+	cwAngle := aBool ifTrue: [angle] ifFalse: [0 - angle].
+	center := self calcCenter: start end: end angle: cwAngle.
+	v := start - center.
+	radius := (v x * v x + (v y * v y)) sqrt.
+	vXAcos := (v x /  (v x * v x + (v y * v y)) sqrt) arcCos.
+	startAngle := v y < 0 ifTrue: [Number pi * 2 - vXAcos] ifFalse: [vXAcos].
+	e := end - center.
+	eXAcos := (e x / (e x * e x + (e y * e y)) sqrt) arcCos.
+	endAngle := e y < 0 ifTrue: [Number pi * 2 - eXAcos] ifFalse: [eXAcos].
+	
+	context2D arc: center x a: center y a: radius a: startAngle a: endAngle a: aBool not.
 !
 
 calcCenter: start end: end angle: angle

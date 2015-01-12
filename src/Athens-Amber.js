@@ -10,6 +10,30 @@ $globals.CanvasContext2D.comment="I am an HTML Canvas 2D drawing context. I am u
 //>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
+selector: "arc:a:a:a:a:a:",
+protocol: 'paths',
+fn: function (p1,p2,p3,p4,p5,p6){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+ self.arc(p1, p2, p3, p4, p5, p6); ;
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"arc:a:a:a:a:a:",{p1:p1,p2:p2,p3:p3,p4:p4,p5:p5,p6:p6},$globals.CanvasContext2D)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["p1", "p2", "p3", "p4", "p5", "p6"],
+source: "arc: p1 a: p2 a: p3 a: p4 a: p5 a: p6\x0a\x09< self.arc(p1, p2, p3, p4, p5, p6); >",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.CanvasContext2D);
+
+$core.addMethod(
+$core.method({
 selector: "beginPath",
 protocol: 'paths',
 fn: function (){
@@ -2776,29 +2800,5 @@ referencedClasses: [],
 messageSends: []
 }),
 $globals.Date.klass);
-
-$core.addMethod(
-$core.method({
-selector: "reverseDo:",
-protocol: '*Athens-Amber',
-fn: function (aBlock){
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) { 
-//>>excludeEnd("ctx");
-for(var i=self.length-1;-1<i;i--){aBlock._value_(self[i]);};
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"reverseDo:",{aBlock:aBlock},$globals.SequenceableCollection)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["aBlock"],
-source: "reverseDo: aBlock\x0a    <for(var i=self.length-1;-1<i;i--){aBlock._value_(self[i]);}>",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: []
-}),
-$globals.SequenceableCollection);
 
 });

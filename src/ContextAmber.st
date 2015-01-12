@@ -368,7 +368,6 @@ updateMethodAST: activeLayers
 !
 
 updateMethodTemplate
-	Transcript show: 'performing version check!!', String lf.
 	(self activeLayerIDs contentEquals: ACTIVELAYERS) ifFalse: [ 
 		(self class >> SELECTOR) inliningStrategy installInlinedWithLayers: self activeLayers.
 		^ self perform: SELECTOR withArguments: ARGUMENTS ]
@@ -447,8 +446,8 @@ at: base ifPresent: block
 !
 
 nextId
-	nextId := nextId * 2.
-	^ nextId / 2
+	nextId := nextId + 1.
+	^ nextId
 !
 
 partialFor: base
