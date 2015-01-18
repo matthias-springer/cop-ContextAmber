@@ -124,8 +124,40 @@ initialize
 
 !AthensTutorial methodsFor: 'steps'!
 
+initializeAthens
+    "Step 2: Creating a surface.
+
+    Protocol: <SurfaceClass> extent: x@y will create a surface using specific class.
+    All surfaces are conformant to AthensSurface protocol."
+
+    |container|
+    container := '#canvas-container' asJQuery.
+
+    "Clear previous canvases"
+    container empty.
+
+    surface := AthensHTMLSurface extent: 500@400.
+    surface appendToJQuery: '#canvas-container' asJQuery.
+	
+    "Render border around canvas."
+    surface canvasTag asJQuery 
+        css: 'border' with: '1px #aaa solid'.
+    
+    "IMPORTANT NOTE:
+        the surface which we will create at this step will be used in later steps.
+        This means that if you resize the window (changing the view size), you may need to recreate surface.
+        Also, since surface uses external resources, quitting an image and restarting it, will also require to 
+        create a new surface, because the one from previous session will be no longer accessible."
+!
+
 step1
-    "Step 1: Get Athens into your image. Does not apply for Athens-HTML."
+    "Step 1: This is the ContextAmber tutorial. 
+	
+	The Athens vector graphics library will serve as a running example.
+	Some steps of this tutorial are based on the Athens tutorial.
+	
+	This tutorial will be adapted gradually, as soon as new
+	features are available."
 !
 
 step10
@@ -540,32 +572,11 @@ step19
 !
 
 step2
-    "Step 2: Creating a surface.
 
-    Protocol: <SurfaceClass> extent: x@y will create a surface using specific class.
-    All surfaces are conformant to AthensSurface protocol."
-
-    |container|
-    container := '#canvas-container' asJQuery.
-
-    "Clear previous canvases"
-    container empty.
-
-    surface := AthensHTMLSurface extent: 500@400.
-    surface appendToJQuery: '#canvas-container' asJQuery.
-
+	self initializeAthens.
+	
     "ContextAmber init"
 	layer := ControlPointLayer new.
-	
-    "Render border around canvas."
-    surface canvasTag asJQuery 
-        css: 'border' with: '1px #aaa solid'.
-    
-    "IMPORTANT NOTE:
-        the surface which we will create at this step will be used in later steps.
-        This means that if you resize the window (changing the view size), you may need to recreate surface.
-        Also, since surface uses external resources, quitting an image and restarting it, will also require to 
-        create a new surface, because the one from previous session will be no longer accessible."
 !
 
 step20
@@ -1153,7 +1164,7 @@ open
 ! !
 
 Widget subclass: #AthensTutorialWidget
-	instanceVariableNames: 'canvasContainer step codeArea tutorial'
+	instanceVariableNames: 'canvasContainer step codeArea codeMirror tutorial'
 	package: 'Athens-HTML-Tutorial'!
 
 !AthensTutorialWidget methodsFor: 'initialize-release'!
@@ -1182,14 +1193,13 @@ previousStep
 showStep: anInteger
     |selector|
     selector := ('step', anInteger asString) asSymbol.
-    codeArea asJQuery
-        val: (AthensTutorial methodAt: selector) source.
+    codeMirror getDoc setValue: (AthensTutorial methodAt: selector) source.
 !
 
 stepDoIt
     |selector|
     selector := ('doItstep', step asString) asSymbol.
-    AthensTutorial compile: 'doIt', codeArea asJQuery val.
+    AthensTutorial compile: 'doIt', codeMirror getDoc getValue.
     tutorial perform: selector.
     AthensTutorial removeCompiledMethod: (AthensTutorial methodAt: selector)
 ! !
@@ -1204,7 +1214,9 @@ renderOn: html
         style: 'height: 100%;; margin: 50px; display: inline-block;';
         with: [
             codeArea := html textarea
-                style: 'width: 100%; height: 350px;'.
+                style: 'width: 100%; height: 360px;'.
+			codeMirror := (CodeMirror basicAt: #fromTextArea) value: codeArea element.
+			codeMirror setSize: 600 a: 360.
             html input
                 type: 'button';
                 class: 'btn btn-primary';
@@ -1222,6 +1234,10 @@ renderOn: html
                 class: 'btn btn-primary';
                 onClick: [self nextStep];
                 value: 'Next step'].
+				
+	(('.CodeMirror' asJQuery at: 0) at: #style) at: #border put: '1px solid rgb(161, 161, 161)'.
+	(('.CodeMirror' asJQuery at: 0) at: #style) at: 'margin-bottom' put: '10px'.
+
     self showStep: 1.
 ! !
 

@@ -430,6 +430,45 @@ $globals.AthensTutorial);
 
 $core.addMethod(
 $core.method({
+selector: "initializeAthens",
+protocol: 'steps',
+fn: function (){
+var self=this;
+var container;
+function $AthensHTMLSurface(){return $globals.AthensHTMLSurface||(typeof AthensHTMLSurface=="undefined"?nil:AthensHTMLSurface)}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+var $1,$2;
+container="#canvas-container"._asJQuery();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["asJQuery"]=1;
+//>>excludeEnd("ctx");
+$recv(container)._empty();
+self["@surface"]=$recv($AthensHTMLSurface())._extent_((500).__at((400)));
+$1=self["@surface"];
+$2="#canvas-container"._asJQuery();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["asJQuery"]=2;
+//>>excludeEnd("ctx");
+$recv($1)._appendToJQuery_($2);
+$recv($recv($recv(self["@surface"])._canvasTag())._asJQuery())._css_with_("border","1px #aaa solid");
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"initializeAthens",{container:container},$globals.AthensTutorial)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "initializeAthens\x0a    \x22Step 2: Creating a surface.\x0a\x0a    Protocol: <SurfaceClass> extent: x@y will create a surface using specific class.\x0a    All surfaces are conformant to AthensSurface protocol.\x22\x0a\x0a    |container|\x0a    container := '#canvas-container' asJQuery.\x0a\x0a    \x22Clear previous canvases\x22\x0a    container empty.\x0a\x0a    surface := AthensHTMLSurface extent: 500@400.\x0a    surface appendToJQuery: '#canvas-container' asJQuery.\x0a\x09\x0a    \x22Render border around canvas.\x22\x0a    surface canvasTag asJQuery \x0a        css: 'border' with: '1px #aaa solid'.\x0a    \x0a    \x22IMPORTANT NOTE:\x0a        the surface which we will create at this step will be used in later steps.\x0a        This means that if you resize the window (changing the view size), you may need to recreate surface.\x0a        Also, since surface uses external resources, quitting an image and restarting it, will also require to \x0a        create a new surface, because the one from previous session will be no longer accessible.\x22",
+referencedClasses: ["AthensHTMLSurface"],
+//>>excludeEnd("ide");
+messageSends: ["asJQuery", "empty", "extent:", "@", "appendToJQuery:", "css:with:", "canvasTag"]
+}),
+$globals.AthensTutorial);
+
+$core.addMethod(
+$core.method({
 selector: "step1",
 protocol: 'steps',
 fn: function (){
@@ -439,7 +478,7 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "step1\x0a    \x22Step 1: Get Athens into your image. Does not apply for Athens-HTML.\x22",
+source: "step1\x0a    \x22Step 1: This is the ContextAmber tutorial. \x0a\x09\x0a\x09The Athens vector graphics library will serve as a running example.\x0a\x09Some steps of this tutorial are based on the Athens tutorial.\x0a\x09\x0a\x09This tutorial will be adapted gradually, as soon as new\x0a\x09features are available.\x22",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: []
@@ -1344,38 +1383,23 @@ selector: "step2",
 protocol: 'steps',
 fn: function (){
 var self=this;
-var container;
-function $AthensHTMLSurface(){return $globals.AthensHTMLSurface||(typeof AthensHTMLSurface=="undefined"?nil:AthensHTMLSurface)}
 function $ControlPointLayer(){return $globals.ControlPointLayer||(typeof ControlPointLayer=="undefined"?nil:ControlPointLayer)}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1,$2;
-container="#canvas-container"._asJQuery();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["asJQuery"]=1;
-//>>excludeEnd("ctx");
-$recv(container)._empty();
-self["@surface"]=$recv($AthensHTMLSurface())._extent_((500).__at((400)));
-$1=self["@surface"];
-$2="#canvas-container"._asJQuery();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["asJQuery"]=2;
-//>>excludeEnd("ctx");
-$recv($1)._appendToJQuery_($2);
+self._initializeAthens();
 self["@layer"]=$recv($ControlPointLayer())._new();
-$recv($recv($recv(self["@surface"])._canvasTag())._asJQuery())._css_with_("border","1px #aaa solid");
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"step2",{container:container},$globals.AthensTutorial)});
+}, function($ctx1) {$ctx1.fill(self,"step2",{},$globals.AthensTutorial)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "step2\x0a    \x22Step 2: Creating a surface.\x0a\x0a    Protocol: <SurfaceClass> extent: x@y will create a surface using specific class.\x0a    All surfaces are conformant to AthensSurface protocol.\x22\x0a\x0a    |container|\x0a    container := '#canvas-container' asJQuery.\x0a\x0a    \x22Clear previous canvases\x22\x0a    container empty.\x0a\x0a    surface := AthensHTMLSurface extent: 500@400.\x0a    surface appendToJQuery: '#canvas-container' asJQuery.\x0a\x0a    \x22ContextAmber init\x22\x0a\x09layer := ControlPointLayer new.\x0a\x09\x0a    \x22Render border around canvas.\x22\x0a    surface canvasTag asJQuery \x0a        css: 'border' with: '1px #aaa solid'.\x0a    \x0a    \x22IMPORTANT NOTE:\x0a        the surface which we will create at this step will be used in later steps.\x0a        This means that if you resize the window (changing the view size), you may need to recreate surface.\x0a        Also, since surface uses external resources, quitting an image and restarting it, will also require to \x0a        create a new surface, because the one from previous session will be no longer accessible.\x22",
-referencedClasses: ["AthensHTMLSurface", "ControlPointLayer"],
+source: "step2\x0a\x0a\x09self initializeAthens.\x0a\x09\x0a    \x22ContextAmber init\x22\x0a\x09layer := ControlPointLayer new.",
+referencedClasses: ["ControlPointLayer"],
 //>>excludeEnd("ide");
-messageSends: ["asJQuery", "empty", "extent:", "@", "appendToJQuery:", "new", "css:with:", "canvasTag"]
+messageSends: ["initializeAthens", "new"]
 }),
 $globals.AthensTutorial);
 
@@ -2846,7 +2870,7 @@ messageSends: ["onJQuery:", "asJQuery", "with:", "new"]
 $globals.AthensTutorial.klass);
 
 
-$core.addClass('AthensTutorialWidget', $globals.Widget, ['canvasContainer', 'step', 'codeArea', 'tutorial'], 'Athens-HTML-Tutorial');
+$core.addClass('AthensTutorialWidget', $globals.Widget, ['canvasContainer', 'step', 'codeArea', 'codeMirror', 'tutorial'], 'Athens-HTML-Tutorial');
 $core.addMethod(
 $core.method({
 selector: "initialize",
@@ -2941,10 +2965,11 @@ selector: "renderOn:",
 protocol: 'rendering',
 fn: function (html){
 var self=this;
+function $CodeMirror(){return $globals.CodeMirror||(typeof CodeMirror=="undefined"?nil:CodeMirror)}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1,$2,$3,$5,$6,$7,$8,$9,$10,$4;
+var $1,$2,$3,$5,$6,$7,$8,$9,$10,$4,$13,$12,$11,$14;
 $1=$recv(html)._div();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["div"]=1;
@@ -2964,11 +2989,17 @@ $4=$recv($3)._with_((function(){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
-self["@codeArea"]=$recv($recv(html)._textarea())._style_("width: 100%; height: 350px;");
+self["@codeArea"]=$recv($recv(html)._textarea())._style_("width: 100%; height: 360px;");
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx2.sendIdx["style:"]=3;
 //>>excludeEnd("ctx");
 self["@codeArea"];
+self["@codeMirror"]=$recv($recv($CodeMirror())._basicAt_("fromTextArea"))._value_($recv(self["@codeArea"])._element());
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["value:"]=1;
+//>>excludeEnd("ctx");
+self["@codeMirror"];
+$recv(self["@codeMirror"])._setSize_a_((600),(360));
 $5=$recv(html)._input();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx2.sendIdx["input"]=1;
@@ -2999,7 +3030,7 @@ $ctx2.sendIdx["onClick:"]=1;
 //>>excludeEnd("ctx");
 $6=$recv($5)._value_("Do it");
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx["value:"]=1;
+$ctx2.sendIdx["value:"]=2;
 //>>excludeEnd("ctx");
 $6;
 $7=$recv(html)._input();
@@ -3029,7 +3060,7 @@ $ctx2.sendIdx["onClick:"]=2;
 //>>excludeEnd("ctx");
 $8=$recv($7)._value_("Previous step");
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx["value:"]=2;
+$ctx2.sendIdx["value:"]=3;
 //>>excludeEnd("ctx");
 $8;
 $9=$recv(html)._input();
@@ -3050,6 +3081,27 @@ return $10;
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)});
 //>>excludeEnd("ctx");
 }));
+$13=".CodeMirror"._asJQuery();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["asJQuery"]=1;
+//>>excludeEnd("ctx");
+$12=$recv($13)._at_((0));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["at:"]=2;
+//>>excludeEnd("ctx");
+$11=$recv($12)._at_("style");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["at:"]=1;
+//>>excludeEnd("ctx");
+$recv($11)._at_put_("border","1px solid rgb(161, 161, 161)");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["at:put:"]=1;
+//>>excludeEnd("ctx");
+$14=$recv($recv(".CodeMirror"._asJQuery())._at_((0)))._at_("style");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["at:"]=3;
+//>>excludeEnd("ctx");
+$recv($14)._at_put_("margin-bottom","10px");
 self._showStep_((1));
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -3058,10 +3110,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["html"],
-source: "renderOn: html\x0a    canvasContainer := html div\x0a        style: 'height: 100%; float: left; margin: 50px;';\x0a        id: 'canvas-container'.\x0a    html div\x0a        style: 'height: 100%;; margin: 50px; display: inline-block;';\x0a        with: [\x0a            codeArea := html textarea\x0a                style: 'width: 100%; height: 350px;'.\x0a            html input\x0a                type: 'button';\x0a                class: 'btn btn-primary';\x0a                style: 'margin-right: 10px;';\x0a                onClick: [self stepDoIt];\x0a                value: 'Do it'.\x0a            html input\x0a                type: 'button';\x0a                class: 'btn btn-primary';\x0a                style: 'margin-right: 10px;';\x0a                onClick: [self previousStep];\x0a                value: 'Previous step'.\x0a            html input\x0a                type: 'button';\x0a                class: 'btn btn-primary';\x0a                onClick: [self nextStep];\x0a                value: 'Next step'].\x0a    self showStep: 1.",
-referencedClasses: [],
+source: "renderOn: html\x0a    canvasContainer := html div\x0a        style: 'height: 100%; float: left; margin: 50px;';\x0a        id: 'canvas-container'.\x0a    html div\x0a        style: 'height: 100%;; margin: 50px; display: inline-block;';\x0a        with: [\x0a            codeArea := html textarea\x0a                style: 'width: 100%; height: 360px;'.\x0a\x09\x09\x09codeMirror := (CodeMirror basicAt: #fromTextArea) value: codeArea element.\x0a\x09\x09\x09codeMirror setSize: 600 a: 360.\x0a            html input\x0a                type: 'button';\x0a                class: 'btn btn-primary';\x0a                style: 'margin-right: 10px;';\x0a                onClick: [self stepDoIt];\x0a                value: 'Do it'.\x0a            html input\x0a                type: 'button';\x0a                class: 'btn btn-primary';\x0a                style: 'margin-right: 10px;';\x0a                onClick: [self previousStep];\x0a                value: 'Previous step'.\x0a            html input\x0a                type: 'button';\x0a                class: 'btn btn-primary';\x0a                onClick: [self nextStep];\x0a                value: 'Next step'].\x0a\x09\x09\x09\x09\x0a\x09(('.CodeMirror' asJQuery at: 0) at: #style) at: #border put: '1px solid rgb(161, 161, 161)'.\x0a\x09(('.CodeMirror' asJQuery at: 0) at: #style) at: 'margin-bottom' put: '10px'.\x0a\x0a    self showStep: 1.",
+referencedClasses: ["CodeMirror"],
 //>>excludeEnd("ide");
-messageSends: ["style:", "div", "id:", "with:", "textarea", "type:", "input", "class:", "onClick:", "stepDoIt", "value:", "previousStep", "nextStep", "showStep:"]
+messageSends: ["style:", "div", "id:", "with:", "textarea", "value:", "basicAt:", "element", "setSize:a:", "type:", "input", "class:", "onClick:", "stepDoIt", "previousStep", "nextStep", "at:put:", "at:", "asJQuery", "showStep:"]
 }),
 $globals.AthensTutorialWidget);
 
@@ -3077,7 +3129,7 @@ function $AthensTutorial(){return $globals.AthensTutorial||(typeof AthensTutoria
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
 selector=$recv("step".__comma($recv(anInteger)._asString()))._asSymbol();
-$recv($recv(self["@codeArea"])._asJQuery())._val_($recv($recv($AthensTutorial())._methodAt_(selector))._source());
+$recv($recv(self["@codeMirror"])._getDoc())._setValue_($recv($recv($AthensTutorial())._methodAt_(selector))._source());
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"showStep:",{anInteger:anInteger,selector:selector},$globals.AthensTutorialWidget)});
@@ -3085,10 +3137,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["anInteger"],
-source: "showStep: anInteger\x0a    |selector|\x0a    selector := ('step', anInteger asString) asSymbol.\x0a    codeArea asJQuery\x0a        val: (AthensTutorial methodAt: selector) source.",
+source: "showStep: anInteger\x0a    |selector|\x0a    selector := ('step', anInteger asString) asSymbol.\x0a    codeMirror getDoc setValue: (AthensTutorial methodAt: selector) source.",
 referencedClasses: ["AthensTutorial"],
 //>>excludeEnd("ide");
-messageSends: ["asSymbol", ",", "asString", "val:", "asJQuery", "source", "methodAt:"]
+messageSends: ["asSymbol", ",", "asString", "setValue:", "getDoc", "source", "methodAt:"]
 }),
 $globals.AthensTutorialWidget);
 
@@ -3109,7 +3161,7 @@ $1="doItstep".__comma($recv(self["@step"])._asString());
 $ctx1.sendIdx[","]=1;
 //>>excludeEnd("ctx");
 selector=$recv($1)._asSymbol();
-$recv($AthensTutorial())._compile_("doIt".__comma($recv($recv(self["@codeArea"])._asJQuery())._val()));
+$recv($AthensTutorial())._compile_("doIt".__comma($recv($recv(self["@codeMirror"])._getDoc())._getValue()));
 $recv(self["@tutorial"])._perform_(selector);
 $recv($AthensTutorial())._removeCompiledMethod_($recv($AthensTutorial())._methodAt_(selector));
 return self;
@@ -3119,10 +3171,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "stepDoIt\x0a    |selector|\x0a    selector := ('doItstep', step asString) asSymbol.\x0a    AthensTutorial compile: 'doIt', codeArea asJQuery val.\x0a    tutorial perform: selector.\x0a    AthensTutorial removeCompiledMethod: (AthensTutorial methodAt: selector)",
+source: "stepDoIt\x0a    |selector|\x0a    selector := ('doItstep', step asString) asSymbol.\x0a    AthensTutorial compile: 'doIt', codeMirror getDoc getValue.\x0a    tutorial perform: selector.\x0a    AthensTutorial removeCompiledMethod: (AthensTutorial methodAt: selector)",
 referencedClasses: ["AthensTutorial"],
 //>>excludeEnd("ide");
-messageSends: ["asSymbol", ",", "asString", "compile:", "val", "asJQuery", "perform:", "removeCompiledMethod:", "methodAt:"]
+messageSends: ["asSymbol", ",", "asString", "compile:", "getValue", "getDoc", "perform:", "removeCompiledMethod:", "methodAt:"]
 }),
 $globals.AthensTutorialWidget);
 
