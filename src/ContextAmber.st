@@ -329,6 +329,41 @@ selector
 	^ self method selector
 ! !
 
+!InliningStrategy methodsFor: 'wrapper'!
+
+installWrapper
+	Transcript show: '[LOG] installing wrapper for ', method methodClass asString, '>>', method selector, String lf.
+	ClassBuilder new installMethod: self wrapper forClass: self base protocol: self protocol.
+!
+
+updateMethodAST: activeLayers
+	| source |
+	source := (self class >> #updateMethodTemplate) source.
+	source := source replace: 'SELECTOR' with: '#', self selector.
+	source := source replace: 'ACTIVELAYERS' with: '{ ', ((activeLayers collect: [ :layer | layer id ]) join: '. '), ' }'.
+	source := source replace: 'ARGUMENTS' with: '{ ', ((self base >> self selector) arguments join: '. '), ' }'.
+	^ Smalltalk parse: source
+!
+
+wrapper
+	| wrapper wrapperTemplate methodSignature |
+	methodSignature := ''.
+	(method selector tokenize: ':') allButLast with: method arguments do: [ :sel :arg | methodSignature := methodSignature, sel, ': ', arg, ' ' ].
+	methodSignature = '' ifTrue: [ methodSignature := method selector ].
+	wrapperTemplate := (self class >> #wrapperTemplate) source.
+	wrapperTemplate := wrapperTemplate replace: 'wrapperTemplate' with: methodSignature.
+	wrapperTemplate := wrapperTemplate replace: 'SELECTOR' with: '#', method selector.
+	wrapperTemplate := wrapperTemplate replace: 'ARGUMENTS' with: '{ ', (method arguments join: '. '), ' }'.
+	wrapper := self compiler eval: (self compiler compile: wrapperTemplate forClass: self base).
+	wrapper fn basicAt: #selector put: method selector.
+	wrapper fn basicAt: #original put: method.
+	wrapper fn basicAt: #compiledSource put: method fn compiledSource.
+	wrapper basicAt: #args put: method arguments.
+	wrapper selector: method selector.
+	wrapper source: method source.
+	^ wrapper
+! !
+
 InliningStrategy class instanceVariableNames: 'instance'!
 
 !InliningStrategy class methodsFor: 'singleton'!
@@ -358,15 +393,6 @@ installInlinedWithLayers: activeLayers
 	ClassBuilder new installMethod: self method forClass: self base protocol: self protocol.
 !
 
-updateMethodAST: activeLayers
-	| source |
-	source := (self class >> #updateMethodTemplate) source.
-	source := source replace: 'SELECTOR' with: '#', self selector.
-	source := source replace: 'ACTIVELAYERS' with: '{ ', ((activeLayers collect: [ :layer | layer id ]) join: '. '), ' }'.
-	source := source replace: 'ARGUMENTS' with: '{ ', ((self base >> self selector) arguments join: '. '), ' }'.
-	^ Smalltalk parse: source
-!
-
 updateMethodTemplate
 	(self activeLayerIDs contentEquals: ACTIVELAYERS) ifFalse: [ 
 		(self class >> SELECTOR) inliningStrategy installInlinedWithLayers: self activeLayers.
@@ -374,30 +400,6 @@ updateMethodTemplate
 ! !
 
 !ClassWideInliningStrategy methodsFor: 'wrapper'!
-
-installWrapper
-	Transcript show: '[LOG] installing wrapper for ', method methodClass asString, '>>', method selector, String lf.
-	ClassBuilder new installMethod: self wrapper forClass: self base protocol: self protocol.
-!
-
-wrapper
-	| wrapper wrapperTemplate methodSignature |
-	methodSignature := ''.
-	(method selector tokenize: ':') allButLast with: method arguments do: [ :sel :arg | methodSignature := methodSignature, sel, ': ', arg, ' ' ].
-	methodSignature = '' ifTrue: [ methodSignature := method selector ].
-	wrapperTemplate := (self class >> #wrapperTemplate) source.
-	wrapperTemplate := wrapperTemplate replace: 'wrapperTemplate' with: methodSignature.
-	wrapperTemplate := wrapperTemplate replace: 'SELECTOR' with: '#', method selector.
-	wrapperTemplate := wrapperTemplate replace: 'ARGUMENTS' with: '{ ', (method arguments join: '. '), ' }'.
-	wrapper := self compiler eval: (self compiler compile: wrapperTemplate forClass: self base).
-	wrapper fn basicAt: #selector put: method selector.
-	wrapper fn basicAt: #original put: method.
-	wrapper fn basicAt: #compiledSource put: method fn compiledSource.
-	wrapper basicAt: #args put: method arguments.
-	wrapper selector: method selector.
-	wrapper source: method source.
-	^ wrapper
-!
 
 wrapperTemplate
 	(self class >> SELECTOR) inliningStrategy installInlinedWithLayers: self activeLayers.
@@ -407,6 +409,32 @@ wrapperTemplate
 InliningStrategy subclass: #ObjectWideInliningStrategy
 	instanceVariableNames: ''
 	package: 'ContextAmber'!
+
+!ObjectWideInliningStrategy methodsFor: 'wrapper'!
+
+updateMethodTemplate
+	self activeLayersDirty | (self activeLayersVersion ~= self class layerCompositionVersion) ifTrue: [ | inlined |
+		Transcript show: '[LOG] installing object-wide inlined method class ', self base asString, ' selector ', self method selector, ' activeLayers: ', self activeLayers asString, String lf.
+		inlined := ASTProceedInliner new
+			selector: self selector;
+			base: self base;
+			activeLayers: self activeLayers;
+			inlinedCompiledMethod.
+		self basicAt: SELECTOR asJavaScriptSelector put: inlined fn.
+		^ self perform: SELECTOR withArguments: ARGUMENTS ].
+!
+
+wrapperTemplate
+	| inlined |
+	Transcript show: '[LOG] installing object-wide inlined method class ', self base asString, ' selector ', self method selector, ' activeLayers: ', self activeLayers asString, String lf.
+	inlined := ASTProceedInliner new
+		selector: self selector;
+		base: self base;
+		activeLayers: self activeLayers;
+		inlinedCompiledMethod.
+	self basicAt: SELECTOR asJavaScriptSelector put: inlined fn.
+	^ self perform: SELECTOR withArguments: ARGUMENTS
+! !
 
 Object subclass: #Layer
 	instanceVariableNames: 'id'
