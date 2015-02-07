@@ -114,7 +114,7 @@ strokeWidth: w
 ! !
 
 Object subclass: #AthensTutorial
-	instanceVariableNames: 'surface layer'
+	instanceVariableNames: 'surface layer path1 path2'
 	package: 'Athens-HTML-Tutorial'!
 
 !AthensTutorial methodsFor: 'initialize-release'!
@@ -577,6 +577,23 @@ step2
 	
     "ContextAmber init"
 	layer := ControlPointLayer new.
+	
+	path1 := surface createPath: [ :builder |
+		builder 
+			absolute;      
+			lineTo: -50@ -50;          
+			cwArcTo: 50@100 angle: 45; 
+			ccwArcTo: -150@100 angle: 45;
+			close ].
+
+
+	path2 := surface createPath: [ :builder |
+		builder 
+			absolute;  
+			lineTo: -200@ -150;          
+			curveVia: 0@ -80 to: 50@ -50;           
+			curveVia: 100@ -20 and: -50@20 to: 50@ 50;
+			close ].
 !
 
 step20
@@ -904,24 +921,7 @@ step3
     "Step 3: ContextAmber Demo."
     | time |
 
-    time := Date millisecondsToRun: [ | path1 path2 |
-    
-		path1 := surface createPath: [ :builder |
-			builder 
-				absolute;      
-				lineTo: -50@ -50;          
-				cwArcTo: 50@100 angle: 45; 
-				ccwArcTo: -150@100 angle: 45;
-				close ].
-
-
-		path2 := surface createPath: [ :builder |
-			builder 
-				absolute;  
-				lineTo: -200@ -150;          
-				curveVia: 0@ -80 to: 50@ -50;           
-				curveVia: 100@ -20 and: -50@20 to: 50@ 50;
-				close ].
+    time := Date millisecondsToRun: [ 
 
 		"path1 activateLayer: layer."
 		"path2 activateLayer: layer."

@@ -336,15 +336,6 @@ installWrapper
 	ClassBuilder new installMethod: self wrapper forClass: self base protocol: self protocol.
 !
 
-updateMethodAST: activeLayers
-	| source |
-	source := (self class >> #updateMethodTemplate) source.
-	source := source replace: 'SELECTOR' with: '#', self selector.
-	source := source replace: 'ACTIVELAYERS' with: '{ ', ((activeLayers collect: [ :layer | layer id ]) join: '. '), ' }'.
-	source := source replace: 'ARGUMENTS' with: '{ ', ((self base >> self selector) arguments join: '. '), ' }'.
-	^ Smalltalk parse: source
-!
-
 wrapper
 	| wrapper wrapperTemplate methodSignature |
 	methodSignature := ''.
@@ -391,6 +382,15 @@ installInlinedWithLayers: activeLayers
 		inlinedCompiledMethod.
 	self method fn: inlined fn.
 	ClassBuilder new installMethod: self method forClass: self base protocol: self protocol.
+!
+
+updateMethodAST: activeLayers
+	| source |
+	source := (self class >> #updateMethodTemplate) source.
+	source := source replace: 'SELECTOR' with: '#', self selector.
+	source := source replace: 'ACTIVELAYERS' with: '{ ', ((activeLayers collect: [ :layer | layer id ]) join: '. '), ' }'.
+	source := source replace: 'ARGUMENTS' with: '{ ', ((self base >> self selector) arguments join: '. '), ' }'.
+	^ Smalltalk parse: source
 !
 
 updateMethodTemplate

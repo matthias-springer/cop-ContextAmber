@@ -409,7 +409,7 @@ $globals.AthensTigerShape);
 
 
 
-$core.addClass('AthensTutorial', $globals.Object, ['surface', 'layer'], 'Athens-HTML-Tutorial');
+$core.addClass('AthensTutorial', $globals.Object, ['surface', 'layer', 'path1', 'path2'], 'Athens-HTML-Tutorial');
 $core.addMethod(
 $core.method({
 selector: "initialize",
@@ -1387,8 +1387,81 @@ function $ControlPointLayer(){return $globals.ControlPointLayer||(typeof Control
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
+var $1,$2,$3,$4,$5,$6,$7,$8,$9,$10;
 self._initializeAthens();
 self["@layer"]=$recv($ControlPointLayer())._new();
+self["@path1"]=$recv(self["@surface"])._createPath_((function(builder){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+$recv(builder)._absolute();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["absolute"]=1;
+//>>excludeEnd("ctx");
+$1=(-50).__at((-50));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["@"]=1;
+//>>excludeEnd("ctx");
+$recv(builder)._lineTo_($1);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["lineTo:"]=1;
+//>>excludeEnd("ctx");
+$2=(50).__at((100));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["@"]=2;
+//>>excludeEnd("ctx");
+$recv(builder)._cwArcTo_angle_($2,(45));
+$3=(-150).__at((100));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["@"]=3;
+//>>excludeEnd("ctx");
+$recv(builder)._ccwArcTo_angle_($3,(45));
+$4=$recv(builder)._close();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["close"]=1;
+//>>excludeEnd("ctx");
+return $4;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({builder:builder},$ctx1,1)});
+//>>excludeEnd("ctx");
+}));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["createPath:"]=1;
+//>>excludeEnd("ctx");
+self["@path2"]=$recv(self["@surface"])._createPath_((function(builder){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+$recv(builder)._absolute();
+$5=(-200).__at((-150));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["@"]=4;
+//>>excludeEnd("ctx");
+$recv(builder)._lineTo_($5);
+$6=(0).__at((-80));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["@"]=5;
+//>>excludeEnd("ctx");
+$7=(50).__at((-50));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["@"]=6;
+//>>excludeEnd("ctx");
+$recv(builder)._curveVia_to_($6,$7);
+$8=(100).__at((-20));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["@"]=7;
+//>>excludeEnd("ctx");
+$9=(-50).__at((20));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["@"]=8;
+//>>excludeEnd("ctx");
+$recv(builder)._curveVia_and_to_($8,$9,(50).__at((50)));
+$10=$recv(builder)._close();
+return $10;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({builder:builder},$ctx1,2)});
+//>>excludeEnd("ctx");
+}));
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"step2",{},$globals.AthensTutorial)});
@@ -1396,10 +1469,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "step2\x0a\x0a\x09self initializeAthens.\x0a\x09\x0a    \x22ContextAmber init\x22\x0a\x09layer := ControlPointLayer new.",
+source: "step2\x0a\x0a\x09self initializeAthens.\x0a\x09\x0a    \x22ContextAmber init\x22\x0a\x09layer := ControlPointLayer new.\x0a\x09\x0a\x09path1 := surface createPath: [ :builder |\x0a\x09\x09builder \x0a\x09\x09\x09absolute;      \x0a\x09\x09\x09lineTo: -50@ -50;          \x0a\x09\x09\x09cwArcTo: 50@100 angle: 45; \x0a\x09\x09\x09ccwArcTo: -150@100 angle: 45;\x0a\x09\x09\x09close ].\x0a\x0a\x0a\x09path2 := surface createPath: [ :builder |\x0a\x09\x09builder \x0a\x09\x09\x09absolute;  \x0a\x09\x09\x09lineTo: -200@ -150;          \x0a\x09\x09\x09curveVia: 0@ -80 to: 50@ -50;           \x0a\x09\x09\x09curveVia: 100@ -20 and: -50@20 to: 50@ 50;\x0a\x09\x09\x09close ].",
 referencedClasses: ["ControlPointLayer"],
 //>>excludeEnd("ide");
-messageSends: ["initializeAthens", "new"]
+messageSends: ["initializeAthens", "new", "createPath:", "absolute", "lineTo:", "@", "cwArcTo:angle:", "ccwArcTo:angle:", "close", "curveVia:to:", "curveVia:and:to:"]
 }),
 $globals.AthensTutorial);
 
@@ -2193,86 +2266,11 @@ function $String(){return $globals.String||(typeof String=="undefined"?nil:Strin
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14;
+var $1,$2,$3,$4;
 time=$recv($Date())._millisecondsToRun_((function(){
-var path1,path2;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
-path1=$recv(self["@surface"])._createPath_((function(builder){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx3) {
-//>>excludeEnd("ctx");
-$recv(builder)._absolute();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx3.sendIdx["absolute"]=1;
-//>>excludeEnd("ctx");
-$1=(-50).__at((-50));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx3.sendIdx["@"]=1;
-//>>excludeEnd("ctx");
-$recv(builder)._lineTo_($1);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx3.sendIdx["lineTo:"]=1;
-//>>excludeEnd("ctx");
-$2=(50).__at((100));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx3.sendIdx["@"]=2;
-//>>excludeEnd("ctx");
-$recv(builder)._cwArcTo_angle_($2,(45));
-$3=(-150).__at((100));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx3.sendIdx["@"]=3;
-//>>excludeEnd("ctx");
-$recv(builder)._ccwArcTo_angle_($3,(45));
-$4=$recv(builder)._close();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx3.sendIdx["close"]=1;
-//>>excludeEnd("ctx");
-return $4;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx3) {$ctx3.fillBlock({builder:builder},$ctx2,2)});
-//>>excludeEnd("ctx");
-}));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx["createPath:"]=1;
-//>>excludeEnd("ctx");
-path1;
-path2=$recv(self["@surface"])._createPath_((function(builder){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx3) {
-//>>excludeEnd("ctx");
-$recv(builder)._absolute();
-$5=(-200).__at((-150));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx3.sendIdx["@"]=4;
-//>>excludeEnd("ctx");
-$recv(builder)._lineTo_($5);
-$6=(0).__at((-80));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx3.sendIdx["@"]=5;
-//>>excludeEnd("ctx");
-$7=(50).__at((-50));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx3.sendIdx["@"]=6;
-//>>excludeEnd("ctx");
-$recv(builder)._curveVia_to_($6,$7);
-$8=(100).__at((-20));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx3.sendIdx["@"]=7;
-//>>excludeEnd("ctx");
-$9=(-50).__at((20));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx3.sendIdx["@"]=8;
-//>>excludeEnd("ctx");
-$recv(builder)._curveVia_and_to_($8,$9,(50).__at((50)));
-$10=$recv(builder)._close();
-return $10;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx3) {$ctx3.fillBlock({builder:builder},$ctx2,3)});
-//>>excludeEnd("ctx");
-}));
-path2;
 return (10)._timesRepeat_((function(){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx3) {
@@ -2282,27 +2280,27 @@ return $recv(self["@surface"])._drawDuring_((function(canvas){
 return $core.withContext(function($ctx4) {
 //>>excludeEnd("ctx");
 $recv(self["@surface"])._clear_($recv($Color())._gray());
-$11=$recv(canvas)._pathTransform();
+$1=$recv(canvas)._pathTransform();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx4.sendIdx["pathTransform"]=1;
 //>>excludeEnd("ctx");
-$12=$recv($recv(self["@surface"])._width()).__slash((2));
+$2=$recv($recv(self["@surface"])._width()).__slash((2));
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx4.sendIdx["/"]=1;
 //>>excludeEnd("ctx");
-$recv($11)._translateByX_Y_($12,$recv($recv(self["@surface"])._height()).__slash((2)));
+$recv($1)._translateByX_Y_($2,$recv($recv(self["@surface"])._height()).__slash((2)));
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx4.sendIdx["translateByX:Y:"]=1;
 //>>excludeEnd("ctx");
-$recv(canvas)._setShape_(path1);
+$recv(canvas)._setShape_(self["@path1"]);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx4.sendIdx["setShape:"]=1;
 //>>excludeEnd("ctx");
-$13=$recv(canvas)._setStrokePaint_($recv($Color())._yellow());
+$3=$recv(canvas)._setStrokePaint_($recv($Color())._yellow());
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx4.sendIdx["setStrokePaint:"]=1;
 //>>excludeEnd("ctx");
-$recv($13)._width_((4));
+$recv($3)._width_((4));
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx4.sendIdx["width:"]=1;
 //>>excludeEnd("ctx");
@@ -2311,26 +2309,26 @@ $recv(canvas)._draw();
 $ctx4.sendIdx["draw"]=1;
 //>>excludeEnd("ctx");
 $recv($recv(canvas)._pathTransform())._translateByX_Y_((125),(0));
-$recv(canvas)._setShape_(path2);
+$recv(canvas)._setShape_(self["@path2"]);
 $recv($recv(canvas)._setStrokePaint_($recv($Color())._blue()))._width_((4));
 return $recv(canvas)._draw();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx4) {$ctx4.fillBlock({canvas:canvas},$ctx3,5)});
+}, function($ctx4) {$ctx4.fillBlock({canvas:canvas},$ctx3,3)});
 //>>excludeEnd("ctx");
 }));
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx3) {$ctx3.fillBlock({},$ctx2,4)});
+}, function($ctx3) {$ctx3.fillBlock({},$ctx2,2)});
 //>>excludeEnd("ctx");
 }));
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({path1:path1,path2:path2},$ctx1,1)});
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)});
 //>>excludeEnd("ctx");
 }));
-$14=$recv($recv($recv(time)._asString()).__comma(" ms")).__comma($recv($String())._lf());
+$4=$recv($recv($recv(time)._asString()).__comma(" ms")).__comma($recv($String())._lf());
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx[","]=1;
 //>>excludeEnd("ctx");
-$recv($Transcript())._show_($14);
+$recv($Transcript())._show_($4);
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"step3",{time:time},$globals.AthensTutorial)});
@@ -2338,10 +2336,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "step3\x0a    \x22Step 3: ContextAmber Demo.\x22\x0a    | time |\x0a\x0a    time := Date millisecondsToRun: [ | path1 path2 |\x0a    \x0a\x09\x09path1 := surface createPath: [ :builder |\x0a\x09\x09\x09builder \x0a\x09\x09\x09\x09absolute;      \x0a\x09\x09\x09\x09lineTo: -50@ -50;          \x0a\x09\x09\x09\x09cwArcTo: 50@100 angle: 45; \x0a\x09\x09\x09\x09ccwArcTo: -150@100 angle: 45;\x0a\x09\x09\x09\x09close ].\x0a\x0a\x0a\x09\x09path2 := surface createPath: [ :builder |\x0a\x09\x09\x09builder \x0a\x09\x09\x09\x09absolute;  \x0a\x09\x09\x09\x09lineTo: -200@ -150;          \x0a\x09\x09\x09\x09curveVia: 0@ -80 to: 50@ -50;           \x0a\x09\x09\x09\x09curveVia: 100@ -20 and: -50@20 to: 50@ 50;\x0a\x09\x09\x09\x09close ].\x0a\x0a\x09\x09\x22path1 activateLayer: layer.\x22\x0a\x09\x09\x22path2 activateLayer: layer.\x22\x0a\x0a\x09\x0910 timesRepeat: [\x0a\x09\x09\x09surface drawDuring: [ :canvas |\x0a\x09\x09\x09\x09surface clear: Color gray.\x0a\x09\x09\x09\x09canvas pathTransform\x0a\x09\x09\x09\x09\x09translateByX: surface width/2.0 Y: surface height/2.0.\x0a\x0a\x09\x09\x09\x09canvas setShape: path1.\x0a\x09\x09\x09\x09(canvas setStrokePaint: Color yellow) width: 4.\x0a\x09\x09\x09\x09canvas draw.\x0a\x0a\x09\x09\x09\x09canvas pathTransform translateByX: 125 Y: 0.\x0a\x09\x09\x09\x09canvas setShape: path2.\x0a\x09\x09\x09\x09(canvas setStrokePaint: Color blue) width: 4.\x0a\x09\x09\x09\x09canvas draw ]]].\x0a\x0a\x0a    Transcript show: time asString, ' ms', String lf.",
+source: "step3\x0a    \x22Step 3: ContextAmber Demo.\x22\x0a    | time |\x0a\x0a    time := Date millisecondsToRun: [ \x0a\x0a\x09\x09\x22path1 activateLayer: layer.\x22\x0a\x09\x09\x22path2 activateLayer: layer.\x22\x0a\x0a\x09\x0910 timesRepeat: [\x0a\x09\x09\x09surface drawDuring: [ :canvas |\x0a\x09\x09\x09\x09surface clear: Color gray.\x0a\x09\x09\x09\x09canvas pathTransform\x0a\x09\x09\x09\x09\x09translateByX: surface width/2.0 Y: surface height/2.0.\x0a\x0a\x09\x09\x09\x09canvas setShape: path1.\x0a\x09\x09\x09\x09(canvas setStrokePaint: Color yellow) width: 4.\x0a\x09\x09\x09\x09canvas draw.\x0a\x0a\x09\x09\x09\x09canvas pathTransform translateByX: 125 Y: 0.\x0a\x09\x09\x09\x09canvas setShape: path2.\x0a\x09\x09\x09\x09(canvas setStrokePaint: Color blue) width: 4.\x0a\x09\x09\x09\x09canvas draw ]]].\x0a\x0a\x0a    Transcript show: time asString, ' ms', String lf.",
 referencedClasses: ["Date", "Color", "Transcript", "String"],
 //>>excludeEnd("ide");
-messageSends: ["millisecondsToRun:", "createPath:", "absolute", "lineTo:", "@", "cwArcTo:angle:", "ccwArcTo:angle:", "close", "curveVia:to:", "curveVia:and:to:", "timesRepeat:", "drawDuring:", "clear:", "gray", "translateByX:Y:", "pathTransform", "/", "width", "height", "setShape:", "width:", "setStrokePaint:", "yellow", "draw", "blue", "show:", ",", "asString", "lf"]
+messageSends: ["millisecondsToRun:", "timesRepeat:", "drawDuring:", "clear:", "gray", "translateByX:Y:", "pathTransform", "/", "width", "height", "setShape:", "width:", "setStrokePaint:", "yellow", "draw", "blue", "show:", ",", "asString", "lf"]
 }),
 $globals.AthensTutorial);
 

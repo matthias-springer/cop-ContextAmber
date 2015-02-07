@@ -1405,82 +1405,6 @@ $globals.InliningStrategy);
 
 $core.addMethod(
 $core.method({
-selector: "updateMethodAST:",
-protocol: 'wrapper',
-fn: function (activeLayers){
-var self=this;
-var source;
-function $Smalltalk(){return $globals.Smalltalk||(typeof Smalltalk=="undefined"?nil:Smalltalk)}
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) { 
-//>>excludeEnd("ctx");
-var $1,$2,$4,$3,$5,$8,$7,$6,$9,$10,$11;
-$1=$recv(self._class()).__gt_gt("updateMethodTemplate");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx[">>"]=1;
-//>>excludeEnd("ctx");
-source=$recv($1)._source();
-$2=source;
-$4=self._selector();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["selector"]=1;
-//>>excludeEnd("ctx");
-$3="#".__comma($4);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx[","]=1;
-//>>excludeEnd("ctx");
-source=$recv($2)._replace_with_("SELECTOR",$3);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["replace:with:"]=1;
-//>>excludeEnd("ctx");
-$5=source;
-$8=$recv($recv(activeLayers)._collect_((function(layer){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx2) {
-//>>excludeEnd("ctx");
-return $recv(layer)._id();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({layer:layer},$ctx1,1)});
-//>>excludeEnd("ctx");
-})))._join_(". ");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["join:"]=1;
-//>>excludeEnd("ctx");
-$7="{ ".__comma($8);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx[","]=3;
-//>>excludeEnd("ctx");
-$6=$recv($7).__comma(" }");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx[","]=2;
-//>>excludeEnd("ctx");
-source=$recv($5)._replace_with_("ACTIVELAYERS",$6);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["replace:with:"]=2;
-//>>excludeEnd("ctx");
-$9=source;
-$10=$recv("{ ".__comma($recv($recv($recv(self._base()).__gt_gt(self._selector()))._arguments())._join_(". "))).__comma(" }");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx[","]=4;
-//>>excludeEnd("ctx");
-source=$recv($9)._replace_with_("ARGUMENTS",$10);
-$11=$recv($Smalltalk())._parse_(source);
-return $11;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"updateMethodAST:",{activeLayers:activeLayers,source:source},$globals.InliningStrategy)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["activeLayers"],
-source: "updateMethodAST: activeLayers\x0a\x09| source |\x0a\x09source := (self class >> #updateMethodTemplate) source.\x0a\x09source := source replace: 'SELECTOR' with: '#', self selector.\x0a\x09source := source replace: 'ACTIVELAYERS' with: '{ ', ((activeLayers collect: [ :layer | layer id ]) join: '. '), ' }'.\x0a\x09source := source replace: 'ARGUMENTS' with: '{ ', ((self base >> self selector) arguments join: '. '), ' }'.\x0a\x09^ Smalltalk parse: source",
-referencedClasses: ["Smalltalk"],
-//>>excludeEnd("ide");
-messageSends: ["source", ">>", "class", "replace:with:", ",", "selector", "join:", "collect:", "id", "arguments", "base", "parse:"]
-}),
-$globals.InliningStrategy);
-
-$core.addMethod(
-$core.method({
 selector: "wrapper",
 protocol: 'wrapper',
 fn: function (){
@@ -1785,6 +1709,82 @@ source: "installInlinedWithLayers: activeLayers\x0a\x09| inlined |\x0a\x09Transc
 referencedClasses: ["Transcript", "String", "ASTProceedInliner", "ClassBuilder"],
 //>>excludeEnd("ide");
 messageSends: ["show:", ",", "asString", "base", "selector", "method", "lf", "selector:", "new", "base:", "activeLayers:", "inlinedCompiledMethod", "fn:", "fn", "installMethod:forClass:protocol:", "protocol"]
+}),
+$globals.ClassWideInliningStrategy);
+
+$core.addMethod(
+$core.method({
+selector: "updateMethodAST:",
+protocol: 'inlining',
+fn: function (activeLayers){
+var self=this;
+var source;
+function $Smalltalk(){return $globals.Smalltalk||(typeof Smalltalk=="undefined"?nil:Smalltalk)}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+var $1,$2,$4,$3,$5,$8,$7,$6,$9,$10,$11;
+$1=$recv(self._class()).__gt_gt("updateMethodTemplate");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[">>"]=1;
+//>>excludeEnd("ctx");
+source=$recv($1)._source();
+$2=source;
+$4=self._selector();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["selector"]=1;
+//>>excludeEnd("ctx");
+$3="#".__comma($4);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=1;
+//>>excludeEnd("ctx");
+source=$recv($2)._replace_with_("SELECTOR",$3);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["replace:with:"]=1;
+//>>excludeEnd("ctx");
+$5=source;
+$8=$recv($recv(activeLayers)._collect_((function(layer){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $recv(layer)._id();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({layer:layer},$ctx1,1)});
+//>>excludeEnd("ctx");
+})))._join_(". ");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["join:"]=1;
+//>>excludeEnd("ctx");
+$7="{ ".__comma($8);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=3;
+//>>excludeEnd("ctx");
+$6=$recv($7).__comma(" }");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=2;
+//>>excludeEnd("ctx");
+source=$recv($5)._replace_with_("ACTIVELAYERS",$6);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["replace:with:"]=2;
+//>>excludeEnd("ctx");
+$9=source;
+$10=$recv("{ ".__comma($recv($recv($recv(self._base()).__gt_gt(self._selector()))._arguments())._join_(". "))).__comma(" }");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=4;
+//>>excludeEnd("ctx");
+source=$recv($9)._replace_with_("ARGUMENTS",$10);
+$11=$recv($Smalltalk())._parse_(source);
+return $11;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"updateMethodAST:",{activeLayers:activeLayers,source:source},$globals.ClassWideInliningStrategy)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["activeLayers"],
+source: "updateMethodAST: activeLayers\x0a\x09| source |\x0a\x09source := (self class >> #updateMethodTemplate) source.\x0a\x09source := source replace: 'SELECTOR' with: '#', self selector.\x0a\x09source := source replace: 'ACTIVELAYERS' with: '{ ', ((activeLayers collect: [ :layer | layer id ]) join: '. '), ' }'.\x0a\x09source := source replace: 'ARGUMENTS' with: '{ ', ((self base >> self selector) arguments join: '. '), ' }'.\x0a\x09^ Smalltalk parse: source",
+referencedClasses: ["Smalltalk"],
+//>>excludeEnd("ide");
+messageSends: ["source", ">>", "class", "replace:with:", ",", "selector", "join:", "collect:", "id", "arguments", "base", "parse:"]
 }),
 $globals.ClassWideInliningStrategy);
 
