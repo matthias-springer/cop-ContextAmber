@@ -399,6 +399,16 @@ updateMethodTemplate
 		^ self perform: SELECTOR withArguments: ARGUMENTS ]
 ! !
 
+!ClassWideInliningStrategy methodsFor: 'layer composition'!
+
+compositionChangeForObject: anObject
+	anObject activeLayersDirty: true.
+!
+
+incrementCompositionVersion
+	self base incrementLayerCompositionVersion.
+! !
+
 !ClassWideInliningStrategy methodsFor: 'wrapper'!
 
 wrapperTemplate
@@ -410,29 +420,51 @@ InliningStrategy subclass: #ObjectWideInliningStrategy
 	instanceVariableNames: ''
 	package: 'ContextAmber'!
 
-!ObjectWideInliningStrategy methodsFor: 'wrapper'!
+!ObjectWideInliningStrategy methodsFor: 'inlining'!
+
+updateMethodAST: activeLayers
+	| source |
+	source := (self class >> #updateMethodTemplate) source.
+	source := source replace: 'SELECTOR' with: '#', self selector.
+	source := source replace: 'ACTIVELAYERS' with: '{ ', ((activeLayers collect: [ :layer | layer id ]) join: '. '), ' }'.
+	source := source replace: 'ARGUMENTS' with: '{ ', ((self base >> self selector) arguments join: '. '), ' }'.
+	source := source replace: 'VERSION' with: (self base >> self selector) compositionVersion.
+	^ Smalltalk parse: source
+!
 
 updateMethodTemplate
-	self activeLayersDirty | (self activeLayersVersion ~= self class layerCompositionVersion) ifTrue: [ | inlined |
-		Transcript show: '[LOG] installing object-wide inlined method class ', self base asString, ' selector ', self method selector, ' activeLayers: ', self activeLayers asString, String lf.
+	VERSION ~= (self class >> SELECTOR) compositionVersion ifTrue: [ | inlined |
+		Transcript show: '[LOG] installing object-wide inlined method class ', self class asString, ' selector ', SELECTOR, ' activeLayers: ', self activeLayers asString, String lf.
 		inlined := ASTProceedInliner new
-			selector: self selector;
-			base: self base;
+			selector: SELECTOR;
+			base: self class;
 			activeLayers: self activeLayers;
 			inlinedCompiledMethod.
-		self basicAt: SELECTOR asJavaScriptSelector put: inlined fn.
+		self basicAt: SELECTOR asJavaScriptMethodName put: inlined fn.
 		^ self perform: SELECTOR withArguments: ARGUMENTS ].
+! !
+
+!ObjectWideInliningStrategy methodsFor: 'layer composition'!
+
+compositionChangeForObject: anObject
+	anObject basicDelete: self selector asJavaScriptMethodName.
 !
+
+incrementCompositionVersion
+	(self base >> self selector) incrementCompositionVersion.
+! !
+
+!ObjectWideInliningStrategy methodsFor: 'wrapper'!
 
 wrapperTemplate
 	| inlined |
-	Transcript show: '[LOG] installing object-wide inlined method class ', self base asString, ' selector ', self method selector, ' activeLayers: ', self activeLayers asString, String lf.
+	Transcript show: '[LOG] installing object-wide inlined method class ', self class asString, ' selector ', SELECTOR, ' activeLayers: ', self activeLayers asString, String lf.
 	inlined := ASTProceedInliner new
-		selector: self selector;
-		base: self base;
+		selector: SELECTOR;
+		base: self class;
 		activeLayers: self activeLayers;
 		inlinedCompiledMethod.
-	self basicAt: SELECTOR asJavaScriptSelector put: inlined fn.
+	self basicAt: SELECTOR asJavaScriptMethodName put: inlined fn.
 	^ self perform: SELECTOR withArguments: ARGUMENTS
 ! !
 
@@ -482,14 +514,6 @@ partialFor: base
 	^ partialClasses at: base ifAbsent: [ self error: 'no partial class for base in this layer' ].
 ! !
 
-!Layer class methodsFor: 'composition'!
-
-incrementCompositionVersion
-	"TODO: get list of partial selectors here, so that we do not increment a version number more than once"
-	self partialClasses do: [ :partial |
-		partial incrementCompositionVersion ].
-! !
-
 !Layer class methodsFor: 'error handling'!
 
 error: aString
@@ -511,6 +535,19 @@ initialize
 
 partialClasses
 	self error: 'no partial classes defined for layer'.
+! !
+
+!Layer class methodsFor: 'layer composition'!
+
+compositionChangeForObject: anObject
+	self partialClasses do: [ :partial |
+		partial compositionChangeForObject: anObject ].
+!
+
+incrementCompositionVersion
+	"TODO: get list of partial selectors here, so that we do not increment a version number more than once"
+	self partialClasses do: [ :partial |
+		partial incrementCompositionVersion ].
 ! !
 
 !Layer class methodsFor: 'testing'!
@@ -647,12 +684,6 @@ subclass: aString instanceVariableNames: aString2 package: aString3
 	self signalSubclassNotAllowed.
 ! !
 
-!PartialClass class methodsFor: 'composition'!
-
-incrementCompositionVersion
-	self base incrementLayerCompositionVersion.
-! !
-
 !PartialClass class methodsFor: 'error handling'!
 
 error: aString
@@ -672,6 +703,16 @@ initialize
 		self base isClass ifFalse: [ self error: 'object is not a class' ].
 		self base addPartial: self.
 		self methods do: [ :method | self handleMethodAdded: method ] ].
+! !
+
+!PartialClass class methodsFor: 'layer composition'!
+
+compositionChangeForObject: anObject
+	self methods do: [ :method | (self base >> method selector) inliningStrategy compositionChangeForObject: anObject ].
+!
+
+incrementCompositionVersion
+	self methods do: [ :method | (self base >> method selector) inliningStrategy incrementCompositionVersion ].
 ! !
 
 !PartialClass class methodsFor: 'partial methods'!
@@ -935,7 +976,7 @@ incrementCompositionVersion
 !
 
 inliningStrategy
-	^ ClassWideInliningStrategy on: self
+	^ ObjectWideInliningStrategy on: self
 !
 
 isPartial
@@ -1049,7 +1090,7 @@ visitPartialBlockNode: aNode
 activateLayer: aLayer
 	self initializeLayers.
 	self layerStack add: aLayer.
-	self activeLayersDirty: true.
+	aLayer class compositionChangeForObject: self.
 !
 
 activeLayerIDs
@@ -1113,7 +1154,7 @@ basicActiveLayersIDs: anOrderedCollection
 deactivateLayer: aLayer
 	self initializeLayers.
 	self layerStack remove: aLayer.
-	self activeLayersDirty: true.
+	aLayer class compositionChangeForObject: self.
 !
 
 initializeLayers
@@ -1131,7 +1172,7 @@ layerStack: aStack
 resetLayer: aLayer
 	self initializeLayers.
 	self layerStack reset: aLayer.
-	self activeLayersDirty: true.
+	aLayer class compositionChangeForObject: self.
 ! !
 
 !ReturnNode methodsFor: '*ContextAmber'!

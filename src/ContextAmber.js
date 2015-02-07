@@ -1655,6 +1655,54 @@ $globals.InliningStrategy.klass);
 $core.addClass('ClassWideInliningStrategy', $globals.InliningStrategy, [], 'ContextAmber');
 $core.addMethod(
 $core.method({
+selector: "compositionChangeForObject:",
+protocol: 'layer composition',
+fn: function (anObject){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+$recv(anObject)._activeLayersDirty_(true);
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"compositionChangeForObject:",{anObject:anObject},$globals.ClassWideInliningStrategy)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["anObject"],
+source: "compositionChangeForObject: anObject\x0a\x09anObject activeLayersDirty: true.",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["activeLayersDirty:"]
+}),
+$globals.ClassWideInliningStrategy);
+
+$core.addMethod(
+$core.method({
+selector: "incrementCompositionVersion",
+protocol: 'layer composition',
+fn: function (){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+$recv(self._base())._incrementLayerCompositionVersion();
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"incrementCompositionVersion",{},$globals.ClassWideInliningStrategy)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "incrementCompositionVersion\x0a\x09self base incrementLayerCompositionVersion.",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["incrementLayerCompositionVersion", "base"]
+}),
+$globals.ClassWideInliningStrategy);
+
+$core.addMethod(
+$core.method({
 selector: "installInlinedWithLayers:",
 protocol: 'inlining',
 fn: function (activeLayers){
@@ -1806,71 +1854,217 @@ $globals.ClassWideInliningStrategy);
 $core.addClass('ObjectWideInliningStrategy', $globals.InliningStrategy, [], 'ContextAmber');
 $core.addMethod(
 $core.method({
-selector: "updateMethodTemplate",
-protocol: 'wrapper',
+selector: "compositionChangeForObject:",
+protocol: 'layer composition',
+fn: function (anObject){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+$recv(anObject)._basicDelete_($recv(self._selector())._asJavaScriptMethodName());
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"compositionChangeForObject:",{anObject:anObject},$globals.ObjectWideInliningStrategy)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["anObject"],
+source: "compositionChangeForObject: anObject\x0a\x09anObject basicDelete: self selector asJavaScriptMethodName.",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["basicDelete:", "asJavaScriptMethodName", "selector"]
+}),
+$globals.ObjectWideInliningStrategy);
+
+$core.addMethod(
+$core.method({
+selector: "incrementCompositionVersion",
+protocol: 'layer composition',
 fn: function (){
 var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+$recv($recv(self._base()).__gt_gt(self._selector()))._incrementCompositionVersion();
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"incrementCompositionVersion",{},$globals.ObjectWideInliningStrategy)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "incrementCompositionVersion\x0a\x09(self base >> self selector) incrementCompositionVersion.",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["incrementCompositionVersion", ">>", "base", "selector"]
+}),
+$globals.ObjectWideInliningStrategy);
+
+$core.addMethod(
+$core.method({
+selector: "updateMethodAST:",
+protocol: 'inlining',
+fn: function (activeLayers){
+var self=this;
+var source;
+function $Smalltalk(){return $globals.Smalltalk||(typeof Smalltalk=="undefined"?nil:Smalltalk)}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+var $1,$2,$4,$3,$5,$8,$7,$6,$9,$15,$16,$14,$13,$12,$11,$10,$17;
+$1=$recv(self._class()).__gt_gt("updateMethodTemplate");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[">>"]=1;
+//>>excludeEnd("ctx");
+source=$recv($1)._source();
+$2=source;
+$4=self._selector();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["selector"]=1;
+//>>excludeEnd("ctx");
+$3="#".__comma($4);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=1;
+//>>excludeEnd("ctx");
+source=$recv($2)._replace_with_("SELECTOR",$3);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["replace:with:"]=1;
+//>>excludeEnd("ctx");
+$5=source;
+$8=$recv($recv(activeLayers)._collect_((function(layer){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $recv(layer)._id();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({layer:layer},$ctx1,1)});
+//>>excludeEnd("ctx");
+})))._join_(". ");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["join:"]=1;
+//>>excludeEnd("ctx");
+$7="{ ".__comma($8);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=3;
+//>>excludeEnd("ctx");
+$6=$recv($7).__comma(" }");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=2;
+//>>excludeEnd("ctx");
+source=$recv($5)._replace_with_("ACTIVELAYERS",$6);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["replace:with:"]=2;
+//>>excludeEnd("ctx");
+$9=source;
+$15=self._base();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["base"]=1;
+//>>excludeEnd("ctx");
+$16=self._selector();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["selector"]=2;
+//>>excludeEnd("ctx");
+$14=$recv($15).__gt_gt($16);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[">>"]=2;
+//>>excludeEnd("ctx");
+$13=$recv($14)._arguments();
+$12=$recv($13)._join_(". ");
+$11="{ ".__comma($12);
+$10=$recv($11).__comma(" }");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=4;
+//>>excludeEnd("ctx");
+source=$recv($9)._replace_with_("ARGUMENTS",$10);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["replace:with:"]=3;
+//>>excludeEnd("ctx");
+source=$recv(source)._replace_with_("VERSION",$recv($recv(self._base()).__gt_gt(self._selector()))._compositionVersion());
+$17=$recv($Smalltalk())._parse_(source);
+return $17;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"updateMethodAST:",{activeLayers:activeLayers,source:source},$globals.ObjectWideInliningStrategy)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["activeLayers"],
+source: "updateMethodAST: activeLayers\x0a\x09| source |\x0a\x09source := (self class >> #updateMethodTemplate) source.\x0a\x09source := source replace: 'SELECTOR' with: '#', self selector.\x0a\x09source := source replace: 'ACTIVELAYERS' with: '{ ', ((activeLayers collect: [ :layer | layer id ]) join: '. '), ' }'.\x0a\x09source := source replace: 'ARGUMENTS' with: '{ ', ((self base >> self selector) arguments join: '. '), ' }'.\x0a\x09source := source replace: 'VERSION' with: (self base >> self selector) compositionVersion.\x0a\x09^ Smalltalk parse: source",
+referencedClasses: ["Smalltalk"],
+//>>excludeEnd("ide");
+messageSends: ["source", ">>", "class", "replace:with:", ",", "selector", "join:", "collect:", "id", "arguments", "base", "compositionVersion", "parse:"]
+}),
+$globals.ObjectWideInliningStrategy);
+
+$core.addMethod(
+$core.method({
+selector: "updateMethodTemplate",
+protocol: 'inlining',
+fn: function (){
+var self=this;
+function $VERSION(){return $globals.VERSION||(typeof VERSION=="undefined"?nil:VERSION)}
+function $SELECTOR(){return $globals.SELECTOR||(typeof SELECTOR=="undefined"?nil:SELECTOR)}
 function $Transcript(){return $globals.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
 function $String(){return $globals.String||(typeof String=="undefined"?nil:String)}
 function $ASTProceedInliner(){return $globals.ASTProceedInliner||(typeof ASTProceedInliner=="undefined"?nil:ASTProceedInliner)}
-function $SELECTOR(){return $globals.SELECTOR||(typeof SELECTOR=="undefined"?nil:SELECTOR)}
 function $ARGUMENTS(){return $globals.ARGUMENTS||(typeof ARGUMENTS=="undefined"?nil:ARGUMENTS)}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1,$9,$8,$7,$6,$10,$5,$4,$12,$11,$3,$2,$13,$14,$15;
-$1=$recv(self._activeLayersDirty()).__or($recv(self._activeLayersVersion()).__tild_eq($recv(self._class())._layerCompositionVersion()));
+var $4,$3,$2,$1,$12,$11,$10,$9,$8,$7,$14,$13,$6,$5,$15,$16,$17;
+$4=self._class();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["class"]=1;
+//>>excludeEnd("ctx");
+$3=$recv($4).__gt_gt($SELECTOR());
+$2=$recv($3)._compositionVersion();
+$1=$recv($VERSION()).__tild_eq($2);
 if($core.assert($1)){
 var inlined;
-$9=self._base();
+$12=self._class();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["base"]=1;
+$ctx1.sendIdx["class"]=2;
 //>>excludeEnd("ctx");
-$8=$recv($9)._asString();
+$11=$recv($12)._asString();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["asString"]=1;
 //>>excludeEnd("ctx");
-$7="[LOG] installing object-wide inlined method class ".__comma($8);
-$6=$recv($7).__comma(" selector ");
+$10="[LOG] installing object-wide inlined method class ".__comma($11);
+$9=$recv($10).__comma(" selector ");
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx[","]=5;
 //>>excludeEnd("ctx");
-$10=$recv(self._method())._selector();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["selector"]=1;
-//>>excludeEnd("ctx");
-$5=$recv($6).__comma($10);
+$8=$recv($9).__comma($SELECTOR());
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx[","]=4;
 //>>excludeEnd("ctx");
-$4=$recv($5).__comma(" activeLayers: ");
+$7=$recv($8).__comma(" activeLayers: ");
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx[","]=3;
 //>>excludeEnd("ctx");
-$12=self._activeLayers();
+$14=self._activeLayers();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["activeLayers"]=1;
 //>>excludeEnd("ctx");
-$11=$recv($12)._asString();
-$3=$recv($4).__comma($11);
+$13=$recv($14)._asString();
+$6=$recv($7).__comma($13);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx[","]=2;
 //>>excludeEnd("ctx");
-$2=$recv($3).__comma($recv($String())._lf());
+$5=$recv($6).__comma($recv($String())._lf());
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx[","]=1;
 //>>excludeEnd("ctx");
-$recv($Transcript())._show_($2);
-$13=$recv($ASTProceedInliner())._new();
-$recv($13)._selector_(self._selector());
-$recv($13)._base_(self._base());
-$recv($13)._activeLayers_(self._activeLayers());
-$14=$recv($13)._inlinedCompiledMethod();
-inlined=$14;
+$recv($Transcript())._show_($5);
+$15=$recv($ASTProceedInliner())._new();
+$recv($15)._selector_($SELECTOR());
+$recv($15)._base_(self._class());
+$recv($15)._activeLayers_(self._activeLayers());
+$16=$recv($15)._inlinedCompiledMethod();
+inlined=$16;
 inlined;
-self._basicAt_put_($recv($SELECTOR())._asJavaScriptSelector(),$recv(inlined)._fn());
-$15=self._perform_withArguments_($SELECTOR(),$ARGUMENTS());
-return $15;
+self._basicAt_put_($recv($SELECTOR())._asJavaScriptMethodName(),$recv(inlined)._fn());
+$17=self._perform_withArguments_($SELECTOR(),$ARGUMENTS());
+return $17;
 };
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -1879,10 +2073,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "updateMethodTemplate\x0a\x09self activeLayersDirty | (self activeLayersVersion ~= self class layerCompositionVersion) ifTrue: [ | inlined |\x0a\x09\x09Transcript show: '[LOG] installing object-wide inlined method class ', self base asString, ' selector ', self method selector, ' activeLayers: ', self activeLayers asString, String lf.\x0a\x09\x09inlined := ASTProceedInliner new\x0a\x09\x09\x09selector: self selector;\x0a\x09\x09\x09base: self base;\x0a\x09\x09\x09activeLayers: self activeLayers;\x0a\x09\x09\x09inlinedCompiledMethod.\x0a\x09\x09self basicAt: SELECTOR asJavaScriptSelector put: inlined fn.\x0a\x09\x09^ self perform: SELECTOR withArguments: ARGUMENTS ].",
-referencedClasses: ["Transcript", "String", "ASTProceedInliner", "SELECTOR", "ARGUMENTS"],
+source: "updateMethodTemplate\x0a\x09VERSION ~= (self class >> SELECTOR) compositionVersion ifTrue: [ | inlined |\x0a\x09\x09Transcript show: '[LOG] installing object-wide inlined method class ', self class asString, ' selector ', SELECTOR, ' activeLayers: ', self activeLayers asString, String lf.\x0a\x09\x09inlined := ASTProceedInliner new\x0a\x09\x09\x09selector: SELECTOR;\x0a\x09\x09\x09base: self class;\x0a\x09\x09\x09activeLayers: self activeLayers;\x0a\x09\x09\x09inlinedCompiledMethod.\x0a\x09\x09self basicAt: SELECTOR asJavaScriptMethodName put: inlined fn.\x0a\x09\x09^ self perform: SELECTOR withArguments: ARGUMENTS ].",
+referencedClasses: ["VERSION", "SELECTOR", "Transcript", "String", "ASTProceedInliner", "ARGUMENTS"],
 //>>excludeEnd("ide");
-messageSends: ["ifTrue:", "|", "activeLayersDirty", "~=", "activeLayersVersion", "layerCompositionVersion", "class", "show:", ",", "asString", "base", "selector", "method", "activeLayers", "lf", "selector:", "new", "base:", "activeLayers:", "inlinedCompiledMethod", "basicAt:put:", "asJavaScriptSelector", "fn", "perform:withArguments:"]
+messageSends: ["ifTrue:", "~=", "compositionVersion", ">>", "class", "show:", ",", "asString", "activeLayers", "lf", "selector:", "new", "base:", "activeLayers:", "inlinedCompiledMethod", "basicAt:put:", "asJavaScriptMethodName", "fn", "perform:withArguments:"]
 }),
 $globals.ObjectWideInliningStrategy);
 
@@ -1894,17 +2088,17 @@ fn: function (){
 var self=this;
 var inlined;
 function $Transcript(){return $globals.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
+function $SELECTOR(){return $globals.SELECTOR||(typeof SELECTOR=="undefined"?nil:SELECTOR)}
 function $String(){return $globals.String||(typeof String=="undefined"?nil:String)}
 function $ASTProceedInliner(){return $globals.ASTProceedInliner||(typeof ASTProceedInliner=="undefined"?nil:ASTProceedInliner)}
-function $SELECTOR(){return $globals.SELECTOR||(typeof SELECTOR=="undefined"?nil:SELECTOR)}
 function $ARGUMENTS(){return $globals.ARGUMENTS||(typeof ARGUMENTS=="undefined"?nil:ARGUMENTS)}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $8,$7,$6,$5,$9,$4,$3,$11,$10,$2,$1,$12,$13,$14;
-$8=self._base();
+var $8,$7,$6,$5,$4,$3,$10,$9,$2,$1,$11,$12,$13;
+$8=self._class();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["base"]=1;
+$ctx1.sendIdx["class"]=1;
 //>>excludeEnd("ctx");
 $7=$recv($8)._asString();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -1915,11 +2109,7 @@ $5=$recv($6).__comma(" selector ");
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx[","]=5;
 //>>excludeEnd("ctx");
-$9=$recv(self._method())._selector();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["selector"]=1;
-//>>excludeEnd("ctx");
-$4=$recv($5).__comma($9);
+$4=$recv($5).__comma($SELECTOR());
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx[","]=4;
 //>>excludeEnd("ctx");
@@ -1927,12 +2117,12 @@ $3=$recv($4).__comma(" activeLayers: ");
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx[","]=3;
 //>>excludeEnd("ctx");
-$11=self._activeLayers();
+$10=self._activeLayers();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["activeLayers"]=1;
 //>>excludeEnd("ctx");
-$10=$recv($11)._asString();
-$2=$recv($3).__comma($10);
+$9=$recv($10)._asString();
+$2=$recv($3).__comma($9);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx[","]=2;
 //>>excludeEnd("ctx");
@@ -1941,25 +2131,25 @@ $1=$recv($2).__comma($recv($String())._lf());
 $ctx1.sendIdx[","]=1;
 //>>excludeEnd("ctx");
 $recv($Transcript())._show_($1);
-$12=$recv($ASTProceedInliner())._new();
-$recv($12)._selector_(self._selector());
-$recv($12)._base_(self._base());
-$recv($12)._activeLayers_(self._activeLayers());
-$13=$recv($12)._inlinedCompiledMethod();
-inlined=$13;
-self._basicAt_put_($recv($SELECTOR())._asJavaScriptSelector(),$recv(inlined)._fn());
-$14=self._perform_withArguments_($SELECTOR(),$ARGUMENTS());
-return $14;
+$11=$recv($ASTProceedInliner())._new();
+$recv($11)._selector_($SELECTOR());
+$recv($11)._base_(self._class());
+$recv($11)._activeLayers_(self._activeLayers());
+$12=$recv($11)._inlinedCompiledMethod();
+inlined=$12;
+self._basicAt_put_($recv($SELECTOR())._asJavaScriptMethodName(),$recv(inlined)._fn());
+$13=self._perform_withArguments_($SELECTOR(),$ARGUMENTS());
+return $13;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"wrapperTemplate",{inlined:inlined},$globals.ObjectWideInliningStrategy)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "wrapperTemplate\x0a\x09| inlined |\x0a\x09Transcript show: '[LOG] installing object-wide inlined method class ', self base asString, ' selector ', self method selector, ' activeLayers: ', self activeLayers asString, String lf.\x0a\x09inlined := ASTProceedInliner new\x0a\x09\x09selector: self selector;\x0a\x09\x09base: self base;\x0a\x09\x09activeLayers: self activeLayers;\x0a\x09\x09inlinedCompiledMethod.\x0a\x09self basicAt: SELECTOR asJavaScriptSelector put: inlined fn.\x0a\x09^ self perform: SELECTOR withArguments: ARGUMENTS",
-referencedClasses: ["Transcript", "String", "ASTProceedInliner", "SELECTOR", "ARGUMENTS"],
+source: "wrapperTemplate\x0a\x09| inlined |\x0a\x09Transcript show: '[LOG] installing object-wide inlined method class ', self class asString, ' selector ', SELECTOR, ' activeLayers: ', self activeLayers asString, String lf.\x0a\x09inlined := ASTProceedInliner new\x0a\x09\x09selector: SELECTOR;\x0a\x09\x09base: self class;\x0a\x09\x09activeLayers: self activeLayers;\x0a\x09\x09inlinedCompiledMethod.\x0a\x09self basicAt: SELECTOR asJavaScriptMethodName put: inlined fn.\x0a\x09^ self perform: SELECTOR withArguments: ARGUMENTS",
+referencedClasses: ["Transcript", "SELECTOR", "String", "ASTProceedInliner", "ARGUMENTS"],
 //>>excludeEnd("ide");
-messageSends: ["show:", ",", "asString", "base", "selector", "method", "activeLayers", "lf", "selector:", "new", "base:", "activeLayers:", "inlinedCompiledMethod", "basicAt:put:", "asJavaScriptSelector", "fn", "perform:withArguments:"]
+messageSends: ["show:", ",", "asString", "class", "activeLayers", "lf", "selector:", "new", "base:", "activeLayers:", "inlinedCompiledMethod", "basicAt:put:", "asJavaScriptMethodName", "fn", "perform:withArguments:"]
 }),
 $globals.ObjectWideInliningStrategy);
 
@@ -2111,6 +2301,38 @@ $globals.Layer.klass);
 
 $core.addMethod(
 $core.method({
+selector: "compositionChangeForObject:",
+protocol: 'layer composition',
+fn: function (anObject){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+$recv(self._partialClasses())._do_((function(partial){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $recv(partial)._compositionChangeForObject_(anObject);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({partial:partial},$ctx1,1)});
+//>>excludeEnd("ctx");
+}));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"compositionChangeForObject:",{anObject:anObject},$globals.Layer.klass)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["anObject"],
+source: "compositionChangeForObject: anObject\x0a\x09self partialClasses do: [ :partial |\x0a\x09\x09partial compositionChangeForObject: anObject ].",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["do:", "partialClasses", "compositionChangeForObject:"]
+}),
+$globals.Layer.klass);
+
+$core.addMethod(
+$core.method({
 selector: "error:",
 protocol: 'error handling',
 fn: function (aString){
@@ -2185,7 +2407,7 @@ $globals.Layer.klass);
 $core.addMethod(
 $core.method({
 selector: "incrementCompositionVersion",
-protocol: 'composition',
+protocol: 'layer composition',
 fn: function (){
 var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -2734,6 +2956,38 @@ $globals.PartialClass.klass);
 
 $core.addMethod(
 $core.method({
+selector: "compositionChangeForObject:",
+protocol: 'layer composition',
+fn: function (anObject){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+$recv(self._methods())._do_((function(method){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $recv($recv($recv(self._base()).__gt_gt($recv(method)._selector()))._inliningStrategy())._compositionChangeForObject_(anObject);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({method:method},$ctx1,1)});
+//>>excludeEnd("ctx");
+}));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"compositionChangeForObject:",{anObject:anObject},$globals.PartialClass.klass)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["anObject"],
+source: "compositionChangeForObject: anObject\x0a\x09self methods do: [ :method | (self base >> method selector) inliningStrategy compositionChangeForObject: anObject ].",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["do:", "methods", "compositionChangeForObject:", "inliningStrategy", ">>", "base", "selector"]
+}),
+$globals.PartialClass.klass);
+
+$core.addMethod(
+$core.method({
 selector: "error:",
 protocol: 'error handling',
 fn: function (aString){
@@ -2867,13 +3121,21 @@ $globals.PartialClass.klass);
 $core.addMethod(
 $core.method({
 selector: "incrementCompositionVersion",
-protocol: 'composition',
+protocol: 'layer composition',
 fn: function (){
 var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-$recv(self._base())._incrementLayerCompositionVersion();
+$recv(self._methods())._do_((function(method){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $recv($recv($recv(self._base()).__gt_gt($recv(method)._selector()))._inliningStrategy())._incrementCompositionVersion();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({method:method},$ctx1,1)});
+//>>excludeEnd("ctx");
+}));
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"incrementCompositionVersion",{},$globals.PartialClass.klass)});
@@ -2881,10 +3143,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "incrementCompositionVersion\x0a\x09self base incrementLayerCompositionVersion.",
+source: "incrementCompositionVersion\x0a\x09self methods do: [ :method | (self base >> method selector) inliningStrategy incrementCompositionVersion ].",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["incrementLayerCompositionVersion", "base"]
+messageSends: ["do:", "methods", "incrementCompositionVersion", "inliningStrategy", ">>", "base", "selector"]
 }),
 $globals.PartialClass.klass);
 
@@ -4227,12 +4489,12 @@ selector: "inliningStrategy",
 protocol: '*ContextAmber',
 fn: function (){
 var self=this;
-function $ClassWideInliningStrategy(){return $globals.ClassWideInliningStrategy||(typeof ClassWideInliningStrategy=="undefined"?nil:ClassWideInliningStrategy)}
+function $ObjectWideInliningStrategy(){return $globals.ObjectWideInliningStrategy||(typeof ObjectWideInliningStrategy=="undefined"?nil:ObjectWideInliningStrategy)}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
 var $1;
-$1=$recv($ClassWideInliningStrategy())._on_(self);
+$1=$recv($ObjectWideInliningStrategy())._on_(self);
 return $1;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"inliningStrategy",{},$globals.CompiledMethod)});
@@ -4240,8 +4502,8 @@ return $1;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "inliningStrategy\x0a\x09^ ClassWideInliningStrategy on: self",
-referencedClasses: ["ClassWideInliningStrategy"],
+source: "inliningStrategy\x0a\x09^ ObjectWideInliningStrategy on: self",
+referencedClasses: ["ObjectWideInliningStrategy"],
 //>>excludeEnd("ide");
 messageSends: ["on:"]
 }),
@@ -4710,7 +4972,7 @@ return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
 self._initializeLayers();
 $recv(self._layerStack())._add_(aLayer);
-self._activeLayersDirty_(true);
+$recv($recv(aLayer)._class())._compositionChangeForObject_(self);
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"activateLayer:",{aLayer:aLayer},$globals.Object)});
@@ -4718,10 +4980,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["aLayer"],
-source: "activateLayer: aLayer\x0a\x09self initializeLayers.\x0a\x09self layerStack add: aLayer.\x0a\x09self activeLayersDirty: true.",
+source: "activateLayer: aLayer\x0a\x09self initializeLayers.\x0a\x09self layerStack add: aLayer.\x0a\x09aLayer class compositionChangeForObject: self.",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["initializeLayers", "add:", "layerStack", "activeLayersDirty:"]
+messageSends: ["initializeLayers", "add:", "layerStack", "compositionChangeForObject:", "class"]
 }),
 $globals.Object);
 
@@ -5026,7 +5288,7 @@ return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
 self._initializeLayers();
 $recv(self._layerStack())._remove_(aLayer);
-self._activeLayersDirty_(true);
+$recv($recv(aLayer)._class())._compositionChangeForObject_(self);
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"deactivateLayer:",{aLayer:aLayer},$globals.Object)});
@@ -5034,10 +5296,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["aLayer"],
-source: "deactivateLayer: aLayer\x0a\x09self initializeLayers.\x0a\x09self layerStack remove: aLayer.\x0a\x09self activeLayersDirty: true.",
+source: "deactivateLayer: aLayer\x0a\x09self initializeLayers.\x0a\x09self layerStack remove: aLayer.\x0a\x09aLayer class compositionChangeForObject: self.",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["initializeLayers", "remove:", "layerStack", "activeLayersDirty:"]
+messageSends: ["initializeLayers", "remove:", "layerStack", "compositionChangeForObject:", "class"]
 }),
 $globals.Object);
 
@@ -5131,7 +5393,7 @@ return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
 self._initializeLayers();
 $recv(self._layerStack())._reset_(aLayer);
-self._activeLayersDirty_(true);
+$recv($recv(aLayer)._class())._compositionChangeForObject_(self);
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"resetLayer:",{aLayer:aLayer},$globals.Object)});
@@ -5139,10 +5401,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["aLayer"],
-source: "resetLayer: aLayer\x0a\x09self initializeLayers.\x0a\x09self layerStack reset: aLayer.\x0a\x09self activeLayersDirty: true.",
+source: "resetLayer: aLayer\x0a\x09self initializeLayers.\x0a\x09self layerStack reset: aLayer.\x0a\x09aLayer class compositionChangeForObject: self.",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["initializeLayers", "reset:", "layerStack", "activeLayersDirty:"]
+messageSends: ["initializeLayers", "reset:", "layerStack", "compositionChangeForObject:", "class"]
 }),
 $globals.Object);
 
