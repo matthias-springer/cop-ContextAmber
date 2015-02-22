@@ -348,10 +348,36 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1;
+var $1,$2,$4,$3;
+var $early={};
+try {
+$1=$recv(self._activeLayerIDs()).__eq("10-27");
+if(!$core.assert($1)){
 $recv($recv($recv(self._class()).__gt_gt("add:and:"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
-$1=self._perform_withArguments_("add:and:",[aNumber,anotherNumber]);
-return $1;
+$2=self._perform_withArguments_("add:and:",[aNumber,anotherNumber]);
+return $2;
+};
+;
+$3=$recv($recv((function(aNumber,anotherNumber){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+var $early={};
+try {
+$4=$recv(aNumber).__plus(anotherNumber);
+return $4;
+}
+catch(e) {if(e===$early)return e[0]; throw e}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({aNumber:aNumber,anotherNumber:anotherNumber},$ctx1,2)});
+//>>excludeEnd("ctx");
+}))._value_value_($recv(aNumber).__star((2)),anotherNumber)).__plus((5));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["+"]=1;
+//>>excludeEnd("ctx");
+return $3;
+}
+catch(e) {if(e===$early)return e[0]; throw e}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"add:and:",{aNumber:aNumber,anotherNumber:anotherNumber},$globals.ContextAmberDemoClass2)});
 //>>excludeEnd("ctx");
@@ -813,44 +839,6 @@ source: "testCompositionVersion\x0a\x09| oldVersion |\x0a\x09oldVersion := (Cont
 referencedClasses: ["ContextAmberDemoClass1"],
 //>>excludeEnd("ide");
 messageSends: ["compositionVersion", ">>", "incrementCompositionVersion", "assert:equals:", "+"]
-}),
-$globals.ContextAmberTest);
-
-$core.addMethod(
-$core.method({
-selector: "testContentEquals",
-protocol: 'running',
-fn: function (){
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) { 
-//>>excludeEnd("ctx");
-var $1,$2;
-$1=$recv([(5),(2),(9)])._contentEquals_([(5),(2),(9)]);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["contentEquals:"]=1;
-//>>excludeEnd("ctx");
-self._assert_($1);
-$2=$recv([(4),(5)])._contentEquals_([(4),(6)]);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["contentEquals:"]=2;
-//>>excludeEnd("ctx");
-self._deny_($2);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["deny:"]=1;
-//>>excludeEnd("ctx");
-self._deny_($recv([(4),(5)])._contentEquals_([(4)]));
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"testContentEquals",{},$globals.ContextAmberTest)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "testContentEquals\x0a\x09self assert: ({5. 2. 9} contentEquals: {5. 2. 9}).\x0a\x09self deny: ({4. 5} contentEquals: {4. 6}).\x0a\x09self deny: ({4. 5.} contentEquals: {4}).",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["assert:", "contentEquals:", "deny:"]
 }),
 $globals.ContextAmberTest);
 

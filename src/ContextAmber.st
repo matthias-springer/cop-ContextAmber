@@ -29,6 +29,12 @@ selector: aString
 	selector := aString.
 ! !
 
+!ASTProceedInliner methodsFor: 'initializing'!
+
+reset
+	inlinedSend := nil.
+! !
+
 !ASTProceedInliner methodsFor: 'inlining'!
 
 inlinedCompiledMethod
@@ -375,12 +381,13 @@ InliningStrategy subclass: #ClassWideInliningStrategy
 installInlinedWithLayers: activeLayers
 	| inlined |
 	Transcript show: '[LOG] installing inlined method class ', self base asString, ' selector ', self method selector, ' activeLayers: ', activeLayers asString, String lf.
-	inlined := ASTProceedInliner new
+	inlined := (self base >> self selector) methodCache at: activeLayers.
+	"inlined := ASTProceedInliner new
 		selector: self selector;
 		base: self base;
 		activeLayers: activeLayers;
-		inlinedCompiledMethod.
-	self method fn: inlined fn.
+		inlinedCompiledMethod."
+	self method fn: inlined.
 	ClassBuilder new installMethod: self method forClass: self base protocol: self protocol.
 !
 
@@ -388,13 +395,13 @@ updateMethodAST: activeLayers
 	| source |
 	source := (self class >> #updateMethodTemplate) source.
 	source := source replace: 'SELECTOR' with: '#', self selector.
-	source := source replace: 'ACTIVELAYERS' with: '{ ', ((activeLayers collect: [ :layer | layer id ]) join: '. '), ' }'.
+	source := source replace: 'ACTIVELAYERS' with: '''', activeLayers asCompositionSignature, ''''.
 	source := source replace: 'ARGUMENTS' with: '{ ', ((self base >> self selector) arguments join: '. '), ' }'.
 	^ Smalltalk parse: source
 !
 
 updateMethodTemplate
-	(self activeLayerIDs contentEquals: ACTIVELAYERS) ifFalse: [ 
+	(self compositionSignature = ACTIVELAYERS) ifFalse: [ 
 		(self class >> SELECTOR) inliningStrategy installInlinedWithLayers: self activeLayers.
 		^ self perform: SELECTOR withArguments: ARGUMENTS ]
 ! !
@@ -422,6 +429,17 @@ InliningStrategy subclass: #ObjectWideInliningStrategy
 
 !ObjectWideInliningStrategy methodsFor: 'inlining'!
 
+installInlinedWithLayers: layerComposition on: object
+	| inlined |
+	Transcript show: '[LOG] installing object-wide inlined method class ', self base asString, ' selector ', self selector, ' activeLayers: ', layerComposition asString, String lf.
+	inlined := ASTProceedInliner new
+		selector: self selector;
+		base: self base;
+		activeLayers: layerComposition;
+		inlinedCompiledMethod.
+	object basicAt: self selector asJavaScriptMethodName put: inlined fn.
+!
+
 updateMethodAST: activeLayers
 	| source |
 	source := (self class >> #updateMethodTemplate) source.
@@ -433,14 +451,8 @@ updateMethodAST: activeLayers
 !
 
 updateMethodTemplate
-	VERSION ~= (self class >> SELECTOR) compositionVersion ifTrue: [ | inlined |
-		Transcript show: '[LOG] installing object-wide inlined method class ', self class asString, ' selector ', SELECTOR, ' activeLayers: ', self activeLayers asString, String lf.
-		inlined := ASTProceedInliner new
-			selector: SELECTOR;
-			base: self class;
-			activeLayers: self activeLayers;
-			inlinedCompiledMethod.
-		self basicAt: SELECTOR asJavaScriptMethodName put: inlined fn.
+	VERSION ~= (self class >> SELECTOR) compositionVersion ifTrue: [
+		(self class >> SELECTOR) inliningStrategy installInlinedWithLayers: self activeLayers on: self.
 		^ self perform: SELECTOR withArguments: ARGUMENTS ].
 ! !
 
@@ -473,6 +485,10 @@ Object subclass: #Layer
 	package: 'ContextAmber'!
 
 !Layer methodsFor: 'accessing'!
+
+asString
+	^ self id asString
+!
 
 id
 	^ id
@@ -631,6 +647,66 @@ size
 	^ addStack size
 ! !
 
+Object subclass: #MethodCache
+	instanceVariableNames: 'keys values proceedInliner'
+	package: 'ContextAmber'!
+
+!MethodCache methodsFor: 'accessing'!
+
+at: layerComposition
+	| inlinedMethod compositionKey |
+	compositionKey := layerComposition asCompositionSignature.
+	
+	keys withIndexDo: [ :key :index |
+		(key = compositionKey) ifTrue: [ ^ values at: index ] ].
+	
+	proceedInliner reset.
+	inlinedMethod := (proceedInliner
+		activeLayers: layerComposition;
+		inlinedCompiledMethod) fn.
+		
+	keys addFirst: compositionKey.
+	values addFirst: inlinedMethod.
+	
+	keys size > self maxSize ifTrue: [
+		keys removeLast.
+		values removeLast ].
+	
+	^ inlinedMethod
+!
+
+maxSize
+	^ 3
+!
+
+proceedInliner
+	^ proceedInliner
+!
+
+proceedInliner: anInliner
+	proceedInliner := anInliner.
+! !
+
+!MethodCache methodsFor: 'initializing'!
+
+initialize
+	keys := OrderedCollection new.
+	values := OrderedCollection new.
+! !
+
+!MethodCache class methodsFor: 'instance creation'!
+
+on: aCompiledMethod
+	| inliner |
+	inliner := ASTProceedInliner new
+		selector: aCompiledMethod selector;
+		base: aCompiledMethod methodClass;
+		yourself.
+	^ self new
+		proceedInliner: inliner;
+		yourself
+! !
+
 BlockNode subclass: #PartialBlockNode
 	instanceVariableNames: ''
 	package: 'ContextAmber'!
@@ -736,18 +812,6 @@ hasPartial: selector
 
 isPartial
 	^ self ~= PartialClass
-! !
-
-!Array methodsFor: '*ContextAmber'!
-
-contentEquals: anArray
-	self size ~= anArray size
-		ifTrue: [ ^ false ].
-	
-	self withIndexDo: [ :obj :idx | 
-		(anArray at: idx) ~= obj ifTrue: [ ^ false ] ].
-	
-	^ true
 ! !
 
 !AssignmentNode methodsFor: '*ContextAmber'!
@@ -977,10 +1041,19 @@ incrementCompositionVersion
 
 inliningStrategy
 	^ ObjectWideInliningStrategy on: self
+	"^ ClassWideInliningStrategy on: self"
 !
 
 isPartial
 	^ (self fn basicAt: #original) isNil not
+!
+
+methodCache
+	< if (typeof(self['methodCache']) === 'undefined') {
+		self['methodCache'] = smalltalk.MethodCache._on_(self);
+	} 
+	return self['methodCache'];
+	>
 ! !
 
 !Compiler methodsFor: '*ContextAmber'!
@@ -1093,13 +1166,6 @@ activateLayer: aLayer
 	aLayer class compositionChangeForObject: self.
 !
 
-activeLayerIDs
-	self activeLayersDirty | (self activeLayersVersion ~= self class layerCompositionVersion)
-		ifTrue: [ self basicActiveLayersIDs: (self activeLayers collect: [ :layer | layer id ]) ].
-	
-	^ self basicActiveLayersIDs
-!
-
 activeLayers
 	| layers |
 	layers := OrderedCollection new.
@@ -1143,12 +1209,19 @@ activeLayersVersion: anInteger
 	< self['activeLayersVersion']  = anInteger; >
 !
 
-basicActiveLayersIDs
-	< return self['activeLayersIDs']; >
+basicCompositionSignature
+	< return self['compositionSignature']; >
 !
 
-basicActiveLayersIDs: anOrderedCollection
-	< self['activeLayersIDs']  = anOrderedCollection; >
+basicCompositionSignature: anOrderedCollection
+	< self['compositionSignature']  = anOrderedCollection; >
+!
+
+compositionSignature
+	self activeLayersDirty | (self activeLayersVersion ~= self class layerCompositionVersion)
+		ifTrue: [ self basicCompositionSignature: self activeLayers asCompositionSignature ].
+	
+	^ self basicCompositionSignature
 !
 
 deactivateLayer: aLayer
@@ -1201,17 +1274,8 @@ replace: aNode with: anotherNode
 
 !SequenceableCollection methodsFor: '*ContextAmber'!
 
-compositionSignature
-	| last nextIndex |
-	self isEmpty ifTrue: [ ^ 0 ].
-	last := self first id.
-	nextIndex := 2.
-	
-	(2 to: self size) do: [ :index | | next |
-		next := (self at: index) id.
-		last := (last + next) * (last + next + 1) * next / 2 ].
-	
-	^ (last + self size) * (last + self size + 1) * self size / 2
+asCompositionSignature
+	^ (self collect: [ :layer | layer asString ]) join: '-'
 !
 
 reverseDo: aBlock

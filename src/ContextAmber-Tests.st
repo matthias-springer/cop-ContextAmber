@@ -212,12 +212,6 @@ testCompositionVersion
 	self assert: (ContextAmberDemoClass1>>#method1) compositionVersion equals: oldVersion + 1.
 !
 
-testContentEquals
-	self assert: ({5. 2. 9} contentEquals: {5. 2. 9}).
-	self deny: ({4. 5} contentEquals: {4. 6}).
-	self deny: ({4. 5.} contentEquals: {4}).
-!
-
 testDefaultLayers
 	| layers |
 	self assert: self activeLayers size equals: 0.
