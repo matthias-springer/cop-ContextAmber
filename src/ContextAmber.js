@@ -5473,23 +5473,23 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1,$2;
-$1=$recv(self._activeLayersDirty()).__or($recv(self._activeLayersVersion()).__tild_eq($recv(self._class())._layerCompositionVersion()));
-if($core.assert($1)){
-self._basicCompositionSignature_($recv(self._activeLayers())._asCompositionSignature());
-};
-$2=self._basicCompositionSignature();
-return $2;
+ if (self['activeLayersDirty'] === true || self['activeLayersDirty'] === undefined || self['activeLayersVersion'] != self.klass._layerCompositionVersion()) {
+		self._basicCompositionSignature_(self._activeLayers()._asCompositionSignature());
+		self['activeLayersDirty'] = false;
+		self['activeLayersVersion'] = self._class()._layerCompositionVersion();
+	}
+	return self['compositionSignature']; ;
+return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"compositionSignature",{},$globals.Object)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "compositionSignature\x0a\x09self activeLayersDirty | (self activeLayersVersion ~= self class layerCompositionVersion)\x0a\x09\x09ifTrue: [ self basicCompositionSignature: self activeLayers asCompositionSignature ].\x0a\x09\x0a\x09^ self basicCompositionSignature",
+source: "compositionSignature\x0a\x09< if (self['activeLayersDirty'] === true || self['activeLayersDirty'] === undefined || self['activeLayersVersion'] != self.klass._layerCompositionVersion()) {\x0a\x09\x09self._basicCompositionSignature_(self._activeLayers()._asCompositionSignature());\x0a\x09\x09self['activeLayersDirty'] = false;\x0a\x09\x09self['activeLayersVersion'] = self._class()._layerCompositionVersion();\x0a\x09}\x0a\x09return self['compositionSignature']; >",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["ifTrue:", "|", "activeLayersDirty", "~=", "activeLayersVersion", "layerCompositionVersion", "class", "basicCompositionSignature:", "asCompositionSignature", "activeLayers", "basicCompositionSignature"]
+messageSends: []
 }),
 $globals.Object);
 

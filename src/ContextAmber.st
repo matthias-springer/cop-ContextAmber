@@ -1218,10 +1218,12 @@ basicCompositionSignature: anOrderedCollection
 !
 
 compositionSignature
-	self activeLayersDirty | (self activeLayersVersion ~= self class layerCompositionVersion)
-		ifTrue: [ self basicCompositionSignature: self activeLayers asCompositionSignature ].
-	
-	^ self basicCompositionSignature
+	< if (self['activeLayersDirty'] === true || self['activeLayersDirty'] === undefined || self['activeLayersVersion'] !!= self.klass._layerCompositionVersion()) {
+		self._basicCompositionSignature_(self._activeLayers()._asCompositionSignature());
+		self['activeLayersDirty'] = false;
+		self['activeLayersVersion'] = self._class()._layerCompositionVersion();
+	}
+	return self['compositionSignature']; >
 !
 
 deactivateLayer: aLayer
