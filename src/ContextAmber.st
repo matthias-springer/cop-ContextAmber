@@ -197,9 +197,7 @@ handleMethodModified: announcement
 	newMethod := announcement method.
 	oldMethod isPartial & newMethod isPartial not ifTrue: [
 		"not a partial method"
-		oldMethod incrementCompositionVersion.
-		oldMethod source: newMethod source.
-		"increase version number to cause recompilation"
+		"TODO: install wrapper"
 		ClassBuilder new installMethod: oldMethod forClass: oldMethod methodClass protocol: oldMethod protocol.
 		^ self ].
 	newMethod methodClass isPartial ifTrue: [ newMethod methodClass handleMethodAdded: newMethod ].
@@ -377,7 +375,6 @@ wrapper
 	wrapper basicAt: #args put: method arguments.
 	wrapper selector: method selector.
 	wrapper source: method source.
-	wrapper resetCompositionVersion.
 	^ wrapper
 ! !
 
@@ -432,7 +429,7 @@ compositionChangeForObject: anObject
 	anObject activeLayersDirty: true.
 !
 
-incrementCompositionVersion
+globalLayerCompositionChanged
 	self base incrementLayerCompositionVersion.
 ! !
 
@@ -466,12 +463,12 @@ updateMethodAST: activeLayers
 	source := source replace: 'SELECTOR' with: '#', self selector.
 	source := source replace: 'ACTIVELAYERS' with: '{ ', ((activeLayers collect: [ :layer | layer id ]) join: '. '), ' }'.
 	source := source replace: 'ARGUMENTS' with: '{ ', ((self base >> self selector) arguments join: '. '), ' }'.
-	source := source replace: 'VERSION' with: (self base >> self selector) compositionVersion.
+	source := source replace: 'GLOBALSIGNATURE' with: '''', (self base >> self selector) globalCompositionSignature, ''''.
 	^ Smalltalk parse: source
 !
 
 updateMethodTemplate
-	VERSION ~= (self compositionVersionFor: SELECTOR) ifTrue: [
+	GLOBALSIGNATURE ~= (self globalCompositionSignatureFor: SELECTOR) ifTrue: [
 		(self class >> SELECTOR) inliningStrategy installInlinedWithLayers: self activeLayers on: self.
 		^ self perform: SELECTOR withArguments: ARGUMENTS ].
 ! !
@@ -482,8 +479,8 @@ compositionChangeForObject: anObject
 	anObject basicDelete: self selector asJavaScriptMethodName.
 !
 
-incrementCompositionVersion
-	(self base >> self selector) incrementCompositionVersion.
+globalLayerCompositionChanged
+	(self base >> self selector) globalLayerCompositionChanged.
 ! !
 
 !ObjectWideInliningStrategy methodsFor: 'wrapper'!
@@ -519,12 +516,12 @@ id
 activate
 	ContextAmber defaultActive indexOf: self ifAbsent: [ 
 		ContextAmber defaultActive add: self.
-		self class incrementCompositionVersion ].
+		self class globalLayerCompositionChanged ].
 !
 
 deactivate
 	ContextAmber defaultActive remove: self ifAbsent: [ ^ self ].
-	self class incrementCompositionVersion.
+	self class globalLayerCompositionChanged.
 ! !
 
 !Layer methodsFor: 'initializing'!
@@ -580,10 +577,10 @@ compositionChangeForObject: anObject
 		partial compositionChangeForObject: anObject ].
 !
 
-incrementCompositionVersion
+globalLayerCompositionChanged
 	"TODO: get list of partial selectors here, so that we do not increment a version number more than once"
 	self partialClasses do: [ :partial |
-		partial incrementCompositionVersion ].
+		partial globalLayerCompositionChanged ].
 ! !
 
 !Layer class methodsFor: 'testing'!
@@ -811,8 +808,8 @@ compositionChangeForObject: anObject
 	self methods do: [ :method | (self base >> method selector) inliningStrategy compositionChangeForObject: anObject ].
 !
 
-incrementCompositionVersion
-	self methods do: [ :method | (self base >> method selector) inliningStrategy incrementCompositionVersion ].
+globalLayerCompositionChanged
+	self methods do: [ :method | (self base >> method selector) inliningStrategy globalLayerCompositionChanged ].
 ! !
 
 !PartialClass class methodsFor: 'partial methods'!
@@ -857,6 +854,10 @@ ensurePartialsCollectionInitialized
 	< if (typeof(self['partials']) === 'undefined') {
 		self['partials'] = $core.Set._new();
 	} >
+!
+
+globalLayerComposition
+	^ ContextAmber globalLayerComposition select: [ :layer | layer class affectsClass: self ]
 !
 
 incrementLayerCompositionVersion
@@ -925,20 +926,20 @@ value: firstArg value: secondArg value: thirdArg value: forthArg value: fifthArg
 withLayer: layer
 	| result |
 	ContextAmber scopedStack add: layer.
-	layer class incrementCompositionVersion.
+	layer class globalLayerCompositionChanged.
 	result := self value.
 	ContextAmber scopedStack pop.
-	layer class incrementCompositionVersion.
+	layer class globalLayerCompositionChanged.
 	^ result
 !
 
 withoutLayer: layer
 	| result |
 	ContextAmber scopedStack remove: layer.
-	layer class incrementCompositionVersion.
+	layer class globalLayerCompositionChanged.
 	result := self value.
 	ContextAmber scopedStack pop.
-	layer class incrementCompositionVersion.
+	layer class globalLayerCompositionChanged.
 	^ result
 ! !
 
@@ -1043,29 +1044,26 @@ isPartial
 
 !CompiledMethod methodsFor: '*ContextAmber'!
 
-compositionVersion
-	< if (typeof(self['compositionVersion']) === 'undefined') {
-		return 0;
-	} else {
-		return self['compositionVersion'];
-	} >
+globalCompositionSignature
+	| signature |
+	signature := self basicAt: 'globalSignature'.
+	signature ifNil: [ self globalLayerCompositionChanged ].
+	^ self basicAt: 'globalSignature'
+!
+
+globalLayerCompositionChanged
+	| composition |
+	composition := self methodClass globalLayerComposition select: [ :layer | layer class hasPartial: self selector for: self methodClass ].
+	self basicAt: 'globalSignature' put: composition asCompositionSignature.
 !
 
 hasPartial
 	^ self methodClass partials anySatisfy: [ :partial | partial hasPartial: self selector ].
 !
 
-incrementCompositionVersion
-	< if (typeof(self['compositionVersion']) === 'undefined') {
-		self['compositionVersion'] = 1;
-	} else {
-		self['compositionVersion'] = self['compositionVersion'] + 1;
-	} >
-!
-
 inliningStrategy
-	"^ ObjectWideInliningStrategy on: self"
-	^ ClassWideInliningStrategy on: self
+	^ ObjectWideInliningStrategy on: self
+	"^ ClassWideInliningStrategy on: self"
 !
 
 isPartial
@@ -1078,10 +1076,6 @@ methodCache
 	} 
 	return self['methodCache'];
 	>
-!
-
-resetCompositionVersion
-	< self['compositionVersion'] = 0; >
 ! !
 
 !Compiler methodsFor: '*ContextAmber'!
@@ -1248,14 +1242,18 @@ compositionSignature
 	return self['compositionSignature']; >
 !
 
-compositionVersionFor: selector
-	<return self.klass.methods[selector]['compositionVersion'];>
-!
-
 deactivateLayer: aLayer
 	self initializeLayers.
 	self layerStack remove: aLayer.
 	aLayer class compositionChangeForObject: self.
+!
+
+globalCompositionSignatureFor: selector
+	< if (self.klass.methods[selector]['globalSignature'] === undefined) {
+		return '';
+	} else {
+		return self.klass.methods[selector]['globalSignature'];
+	} >
 !
 
 initializeLayers

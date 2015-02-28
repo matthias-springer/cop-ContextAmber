@@ -153,16 +153,10 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1,$2,$3;
-$1=$recv(self._compositionSignature()).__eq("11");
-if(!$core.assert($1)){
+var $1;
 $recv($recv($recv(self._class()).__gt_gt("callMethod1"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
-$2=self._perform_withArguments_("callMethod1",[]);
-return $2;
-};
-;
-$3=self._method1();
-return $3;
+$1=self._perform_withArguments_("callMethod1",[]);
+return $1;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"callMethod1",{},$globals.ContextAmberDemoClass1)});
 //>>excludeEnd("ctx");
@@ -185,16 +179,10 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1,$2,$3;
-$1=$recv(self._compositionSignature()).__eq("11");
-if(!$core.assert($1)){
+var $1;
 $recv($recv($recv(self._class()).__gt_gt("callMethod4"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
-$2=self._perform_withArguments_("callMethod4",[]);
-return $2;
-};
-;
-$3=self._method4();
-return $3;
+$1=self._perform_withArguments_("callMethod4",[]);
+return $1;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"callMethod4",{},$globals.ContextAmberDemoClass1)});
 //>>excludeEnd("ctx");
@@ -217,15 +205,10 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1,$2;
-$1=$recv(self._compositionSignature()).__eq("11");
-if(!$core.assert($1)){
+var $1;
 $recv($recv($recv(self._class()).__gt_gt("method1"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
-$2=self._perform_withArguments_("method1",[]);
-return $2;
-};
-;
-return (10);
+$1=self._perform_withArguments_("method1",[]);
+return $1;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"method1",{},$globals.ContextAmberDemoClass1)});
 //>>excludeEnd("ctx");
@@ -292,15 +275,10 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1,$2;
-$1=$recv(self._compositionSignature()).__eq("");
-if(!$core.assert($1)){
+var $1;
 $recv($recv($recv(self._class()).__gt_gt("method5"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
-$2=self._perform_withArguments_("method5",[]);
-return $2;
-};
-;
-return (100);
+$1=self._perform_withArguments_("method5",[]);
+return $1;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"method5",{},$globals.ContextAmberDemoClass1)});
 //>>excludeEnd("ctx");
@@ -323,49 +301,10 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1,$2,$5,$6,$7,$4,$8,$3;
-var $early={};
-try {
-$1=$recv(self._compositionSignature()).__eq("4");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["="]=1;
-//>>excludeEnd("ctx");
-if(!$core.assert($1)){
+var $1;
 $recv($recv($recv(self._class()).__gt_gt("methodWithBlock:and:"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
-$2=self._perform_withArguments_("methodWithBlock:and:",[var1,var2]);
-return $2;
-};
-;
-$4=(function(var1,var2){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx2) {
-//>>excludeEnd("ctx");
-var $early={};
-try {
-$5=$recv(var1).__eq(var2);
-if($core.assert($5)){
-$6=$recv(var1).__star((2));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx["*"]=1;
-//>>excludeEnd("ctx");
-throw $early=[$6];
-};
-$7=$recv(var1).__plus(var2);
-return $7;
-}
-catch(e) {if(e===$early)return e[0]; throw e}
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({var1:var1,var2:var2},$ctx1,2)});
-//>>excludeEnd("ctx");
-});
-$8=(2).__star(var1);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["*"]=2;
-//>>excludeEnd("ctx");
-$3=$recv($4)._value_value_($8,(3).__star(var2));
-return $3;
-}
-catch(e) {if(e===$early)return e[0]; throw e}
+$1=self._perform_withArguments_("methodWithBlock:and:",[var1,var2]);
+return $1;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"methodWithBlock:and:",{var1:var1,var2:var2},$globals.ContextAmberDemoClass1)});
 //>>excludeEnd("ctx");
@@ -388,19 +327,10 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1,$2,$3;
-$1=$recv(self._compositionSignature()).__eq("5");
-if(!$core.assert($1)){
+var $1;
 $recv($recv($recv(self._class()).__gt_gt("multiply:with:"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
-$2=self._perform_withArguments_("multiply:with:",[aNumber,anotherNumber]);
-return $2;
-};
-;
-$3=$recv($recv(aNumber).__star(anotherNumber)).__star((10));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["*"]=1;
-//>>excludeEnd("ctx");
-return $3;
+$1=self._perform_withArguments_("multiply:with:",[aNumber,anotherNumber]);
+return $1;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"multiply:with:",{aNumber:aNumber,anotherNumber:anotherNumber},$globals.ContextAmberDemoClass1)});
 //>>excludeEnd("ctx");
@@ -426,59 +356,10 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1,$2,$6,$5,$4,$3;
-var $early={};
-try {
-$1=$recv(self._compositionSignature()).__eq("7-8");
-if(!$core.assert($1)){
+var $1;
 $recv($recv($recv(self._class()).__gt_gt("add:and:"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
-$2=self._perform_withArguments_("add:and:",[aNumber,anotherNumber]);
-return $2;
-};
-;
-$4=$recv((function(aNumber,anotherNumber){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx2) {
-//>>excludeEnd("ctx");
-var $early={};
-try {
-$5=$recv($recv((function(aNumber,anotherNumber){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx3) {
-//>>excludeEnd("ctx");
-var $early={};
-try {
-$6=$recv(aNumber).__plus(anotherNumber);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx3.sendIdx["+"]=2;
-//>>excludeEnd("ctx");
-return $6;
-}
-catch(e) {if(e===$early)return e[0]; throw e}
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx3) {$ctx3.fillBlock({aNumber:aNumber,anotherNumber:anotherNumber},$ctx2,3)});
-//>>excludeEnd("ctx");
-}))._value_value_($recv(aNumber).__plus((1)),anotherNumber)).__star((10));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx["*"]=1;
-//>>excludeEnd("ctx");
-return $5;
-}
-catch(e) {if(e===$early)return e[0]; throw e}
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({aNumber:aNumber,anotherNumber:anotherNumber},$ctx1,2)});
-//>>excludeEnd("ctx");
-}))._value_value_($recv(aNumber).__star((2)),anotherNumber);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["value:value:"]=1;
-//>>excludeEnd("ctx");
-$3=$recv($4).__plus((5));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["+"]=1;
-//>>excludeEnd("ctx");
-return $3;
-}
-catch(e) {if(e===$early)return e[0]; throw e}
+$1=self._perform_withArguments_("add:and:",[aNumber,anotherNumber]);
+return $1;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"add:and:",{aNumber:aNumber,anotherNumber:anotherNumber},$globals.ContextAmberDemoClass2)});
 //>>excludeEnd("ctx");
@@ -964,46 +845,6 @@ source: "testClassWideLayerCompositionVersion\x0a\x09| version |\x0a\x09version 
 referencedClasses: ["DemoClass"],
 //>>excludeEnd("ide");
 messageSends: ["layerCompositionVersion", "incrementLayerCompositionVersion", "assert:equals:", "+"]
-}),
-$globals.ContextAmberTest);
-
-$core.addMethod(
-$core.method({
-selector: "testCompositionVersion",
-protocol: 'running',
-fn: function (){
-var self=this;
-var oldVersion;
-function $ContextAmberDemoClass1(){return $globals.ContextAmberDemoClass1||(typeof ContextAmberDemoClass1=="undefined"?nil:ContextAmberDemoClass1)}
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) { 
-//>>excludeEnd("ctx");
-var $1,$2;
-$1=$recv($ContextAmberDemoClass1()).__gt_gt("method1");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx[">>"]=1;
-//>>excludeEnd("ctx");
-oldVersion=$recv($1)._compositionVersion();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["compositionVersion"]=1;
-//>>excludeEnd("ctx");
-$2=$recv($ContextAmberDemoClass1()).__gt_gt("method1");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx[">>"]=2;
-//>>excludeEnd("ctx");
-$recv($2)._incrementCompositionVersion();
-self._assert_equals_($recv($recv($ContextAmberDemoClass1()).__gt_gt("method1"))._compositionVersion(),$recv(oldVersion).__plus((1)));
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"testCompositionVersion",{oldVersion:oldVersion},$globals.ContextAmberTest)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "testCompositionVersion\x0a\x09| oldVersion |\x0a\x09oldVersion := (ContextAmberDemoClass1>>#method1) compositionVersion.\x0a\x09(ContextAmberDemoClass1>>#method1) incrementCompositionVersion.\x0a\x09self assert: (ContextAmberDemoClass1>>#method1) compositionVersion equals: oldVersion + 1.",
-referencedClasses: ["ContextAmberDemoClass1"],
-//>>excludeEnd("ide");
-messageSends: ["compositionVersion", ">>", "incrementCompositionVersion", "assert:equals:", "+"]
 }),
 $globals.ContextAmberTest);
 

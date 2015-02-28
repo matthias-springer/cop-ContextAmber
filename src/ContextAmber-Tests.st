@@ -216,13 +216,6 @@ testClassWideLayerCompositionVersion
 	self assert: DemoClass layerCompositionVersion equals: version + 1.
 !
 
-testCompositionVersion
-	| oldVersion |
-	oldVersion := (ContextAmberDemoClass1>>#method1) compositionVersion.
-	(ContextAmberDemoClass1>>#method1) incrementCompositionVersion.
-	self assert: (ContextAmberDemoClass1>>#method1) compositionVersion equals: oldVersion + 1.
-!
-
 testDefaultLayers
 	| layers |
 	self assert: self activeLayers size equals: 0.
