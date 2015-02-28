@@ -1335,17 +1335,19 @@ convertPathData2
                 ]
         ).
 
-        paths add: pathData.
+		ctr \\ self maxPaths = 1 ifTrue: [
+        paths add: pathData].
         ctr := ctr + 1.
         cmdStream atEnd
-    ] whileFalse.
+    ] whileFalse. "whileTrue: [ ctr < 305 ]."
+Transcript show: ctr.
 
     paths do: [:ea |
-        self assert: ea fillRule = #VGNONZERO.  
+       " self assert: ea fillRule = #VGNONZERO.  "
         ea prepareFor: surface
         ].
     
-    self assert: (ptStream atEnd).
+    "self assert: (ptStream atEnd)."
     
     ^ paths
 ! !
@@ -1354,6 +1356,10 @@ convertPathData2
 
 clearLoop
     < clearInterval(self['@renderInterval']); >
+!
+
+maxPaths
+	^ 10
 !
 
 runDemo

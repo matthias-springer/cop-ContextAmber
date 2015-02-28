@@ -153,10 +153,16 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1;
+var $1,$2,$3;
+$1=$recv(self._compositionSignature()).__eq("11");
+if(!$core.assert($1)){
 $recv($recv($recv(self._class()).__gt_gt("callMethod1"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
-$1=self._perform_withArguments_("callMethod1",[]);
-return $1;
+$2=self._perform_withArguments_("callMethod1",[]);
+return $2;
+};
+;
+$3=self._method1();
+return $3;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"callMethod1",{},$globals.ContextAmberDemoClass1)});
 //>>excludeEnd("ctx");
@@ -179,10 +185,16 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1;
+var $1,$2,$3;
+$1=$recv(self._compositionSignature()).__eq("11");
+if(!$core.assert($1)){
 $recv($recv($recv(self._class()).__gt_gt("callMethod4"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
-$1=self._perform_withArguments_("callMethod4",[]);
-return $1;
+$2=self._perform_withArguments_("callMethod4",[]);
+return $2;
+};
+;
+$3=self._method4();
+return $3;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"callMethod4",{},$globals.ContextAmberDemoClass1)});
 //>>excludeEnd("ctx");
@@ -205,17 +217,22 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1;
+var $1,$2;
+$1=$recv(self._compositionSignature()).__eq("11");
+if(!$core.assert($1)){
 $recv($recv($recv(self._class()).__gt_gt("method1"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
-$1=self._perform_withArguments_("method1",[]);
-return $1;
+$2=self._perform_withArguments_("method1",[]);
+return $2;
+};
+;
+return (10);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"method1",{},$globals.ContextAmberDemoClass1)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "method1\x0a\x09^ 5",
+source: "method1 ^ 5",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["installInlinedWithLayers:", "inliningStrategy", ">>", "class", "activeLayers", "perform:withArguments:"]
@@ -228,15 +245,23 @@ selector: "method3",
 protocol: 'not yet classified',
 fn: function (){
 var self=this;
-return (90);
-
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+var $1;
+$recv($recv($recv(self._class()).__gt_gt("method3"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
+$1=self._perform_withArguments_("method3",[]);
+return $1;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"method3",{},$globals.ContextAmberDemoClass1)});
+//>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
 source: "method3\x0a\x09^ 90",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: []
+messageSends: ["installInlinedWithLayers:", "inliningStrategy", ">>", "class", "activeLayers", "perform:withArguments:"]
 }),
 $globals.ContextAmberDemoClass1);
 
@@ -267,10 +292,15 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1;
+var $1,$2;
+$1=$recv(self._compositionSignature()).__eq("");
+if(!$core.assert($1)){
 $recv($recv($recv(self._class()).__gt_gt("method5"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
-$1=self._perform_withArguments_("method5",[]);
-return $1;
+$2=self._perform_withArguments_("method5",[]);
+return $2;
+};
+;
+return (100);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"method5",{},$globals.ContextAmberDemoClass1)});
 //>>excludeEnd("ctx");
@@ -293,10 +323,49 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1;
+var $1,$2,$5,$6,$7,$4,$8,$3;
+var $early={};
+try {
+$1=$recv(self._compositionSignature()).__eq("4");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["="]=1;
+//>>excludeEnd("ctx");
+if(!$core.assert($1)){
 $recv($recv($recv(self._class()).__gt_gt("methodWithBlock:and:"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
-$1=self._perform_withArguments_("methodWithBlock:and:",[var1,var2]);
-return $1;
+$2=self._perform_withArguments_("methodWithBlock:and:",[var1,var2]);
+return $2;
+};
+;
+$4=(function(var1,var2){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+var $early={};
+try {
+$5=$recv(var1).__eq(var2);
+if($core.assert($5)){
+$6=$recv(var1).__star((2));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["*"]=1;
+//>>excludeEnd("ctx");
+throw $early=[$6];
+};
+$7=$recv(var1).__plus(var2);
+return $7;
+}
+catch(e) {if(e===$early)return e[0]; throw e}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({var1:var1,var2:var2},$ctx1,2)});
+//>>excludeEnd("ctx");
+});
+$8=(2).__star(var1);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["*"]=2;
+//>>excludeEnd("ctx");
+$3=$recv($4)._value_value_($8,(3).__star(var2));
+return $3;
+}
+catch(e) {if(e===$early)return e[0]; throw e}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"methodWithBlock:and:",{var1:var1,var2:var2},$globals.ContextAmberDemoClass1)});
 //>>excludeEnd("ctx");
@@ -319,10 +388,19 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1;
+var $1,$2,$3;
+$1=$recv(self._compositionSignature()).__eq("5");
+if(!$core.assert($1)){
 $recv($recv($recv(self._class()).__gt_gt("multiply:with:"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
-$1=self._perform_withArguments_("multiply:with:",[aNumber,anotherNumber]);
-return $1;
+$2=self._perform_withArguments_("multiply:with:",[aNumber,anotherNumber]);
+return $2;
+};
+;
+$3=$recv($recv(aNumber).__star(anotherNumber)).__star((10));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["*"]=1;
+//>>excludeEnd("ctx");
+return $3;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"multiply:with:",{aNumber:aNumber,anotherNumber:anotherNumber},$globals.ContextAmberDemoClass1)});
 //>>excludeEnd("ctx");
@@ -348,30 +426,53 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1,$2,$4,$3;
+var $1,$2,$6,$5,$4,$3;
 var $early={};
 try {
-$1=$recv(self._activeLayerIDs()).__eq("10-27");
+$1=$recv(self._compositionSignature()).__eq("7-8");
 if(!$core.assert($1)){
 $recv($recv($recv(self._class()).__gt_gt("add:and:"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
 $2=self._perform_withArguments_("add:and:",[aNumber,anotherNumber]);
 return $2;
 };
 ;
-$3=$recv($recv((function(aNumber,anotherNumber){
+$4=$recv((function(aNumber,anotherNumber){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
 var $early={};
 try {
-$4=$recv(aNumber).__plus(anotherNumber);
-return $4;
+$5=$recv($recv((function(aNumber,anotherNumber){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx3) {
+//>>excludeEnd("ctx");
+var $early={};
+try {
+$6=$recv(aNumber).__plus(anotherNumber);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx3.sendIdx["+"]=2;
+//>>excludeEnd("ctx");
+return $6;
+}
+catch(e) {if(e===$early)return e[0]; throw e}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx3) {$ctx3.fillBlock({aNumber:aNumber,anotherNumber:anotherNumber},$ctx2,3)});
+//>>excludeEnd("ctx");
+}))._value_value_($recv(aNumber).__plus((1)),anotherNumber)).__star((10));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["*"]=1;
+//>>excludeEnd("ctx");
+return $5;
 }
 catch(e) {if(e===$early)return e[0]; throw e}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx2) {$ctx2.fillBlock({aNumber:aNumber,anotherNumber:anotherNumber},$ctx1,2)});
 //>>excludeEnd("ctx");
-}))._value_value_($recv(aNumber).__star((2)),anotherNumber)).__plus((5));
+}))._value_value_($recv(aNumber).__star((2)),anotherNumber);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["value:value:"]=1;
+//>>excludeEnd("ctx");
+$3=$recv($4).__plus((5));
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["+"]=1;
 //>>excludeEnd("ctx");
@@ -804,6 +905,70 @@ $globals.ContextAmberTest);
 
 $core.addMethod(
 $core.method({
+selector: "testAffectsClass",
+protocol: 'running',
+fn: function (){
+var self=this;
+function $ContextAmberDemoLayer2(){return $globals.ContextAmberDemoLayer2||(typeof ContextAmberDemoLayer2=="undefined"?nil:ContextAmberDemoLayer2)}
+function $ContextAmberDemoClass2(){return $globals.ContextAmberDemoClass2||(typeof ContextAmberDemoClass2=="undefined"?nil:ContextAmberDemoClass2)}
+function $ContextAmberDemoClass1(){return $globals.ContextAmberDemoClass1||(typeof ContextAmberDemoClass1=="undefined"?nil:ContextAmberDemoClass1)}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+var $1;
+$1=$recv($ContextAmberDemoLayer2())._affectsClass_($ContextAmberDemoClass2());
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["affectsClass:"]=1;
+//>>excludeEnd("ctx");
+self._assert_($1);
+self._deny_($recv($ContextAmberDemoLayer2())._affectsClass_($ContextAmberDemoClass1()));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"testAffectsClass",{},$globals.ContextAmberTest)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "testAffectsClass\x0a\x09self assert: (ContextAmberDemoLayer2 affectsClass: ContextAmberDemoClass2).\x0a\x09self deny: (ContextAmberDemoLayer2 affectsClass: ContextAmberDemoClass1).",
+referencedClasses: ["ContextAmberDemoLayer2", "ContextAmberDemoClass2", "ContextAmberDemoClass1"],
+//>>excludeEnd("ide");
+messageSends: ["assert:", "affectsClass:", "deny:"]
+}),
+$globals.ContextAmberTest);
+
+$core.addMethod(
+$core.method({
+selector: "testClassWideLayerCompositionVersion",
+protocol: 'running',
+fn: function (){
+var self=this;
+var version;
+function $DemoClass(){return $globals.DemoClass||(typeof DemoClass=="undefined"?nil:DemoClass)}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+version=$recv($DemoClass())._layerCompositionVersion();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["layerCompositionVersion"]=1;
+//>>excludeEnd("ctx");
+$recv($DemoClass())._incrementLayerCompositionVersion();
+self._assert_equals_($recv($DemoClass())._layerCompositionVersion(),$recv(version).__plus((1)));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"testClassWideLayerCompositionVersion",{version:version},$globals.ContextAmberTest)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "testClassWideLayerCompositionVersion\x0a\x09| version |\x0a\x09version := DemoClass layerCompositionVersion.\x0a\x09DemoClass incrementLayerCompositionVersion.\x0a\x09self assert: DemoClass layerCompositionVersion equals: version + 1.",
+referencedClasses: ["DemoClass"],
+//>>excludeEnd("ide");
+messageSends: ["layerCompositionVersion", "incrementLayerCompositionVersion", "assert:equals:", "+"]
+}),
+$globals.ContextAmberTest);
+
+$core.addMethod(
+$core.method({
 selector: "testCompositionVersion",
 protocol: 'running',
 fn: function (){
@@ -895,6 +1060,275 @@ source: "testDefaultLayers\x0a\x09| layers |\x0a\x09self assert: self activeLaye
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["assert:equals:", "size", "activeLayers", "activate", "first", "deactivate"]
+}),
+$globals.ContextAmberTest);
+
+$core.addMethod(
+$core.method({
+selector: "testGlobalLayerComposition",
+protocol: 'running',
+fn: function (){
+var self=this;
+function $ContextAmber(){return $globals.ContextAmber||(typeof ContextAmber=="undefined"?nil:ContextAmber)}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+var $2,$1,$4,$3,$6,$5,$8,$7,$10,$9,$12,$11,$14,$13,$16,$15;
+$2=$recv($ContextAmber())._globalLayerComposition();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["globalLayerComposition"]=1;
+//>>excludeEnd("ctx");
+$1=$recv($2)._size();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["size"]=1;
+//>>excludeEnd("ctx");
+self._assert_equals_($1,(0));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["assert:equals:"]=1;
+//>>excludeEnd("ctx");
+$recv(self["@layer1"])._activate();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["activate"]=1;
+//>>excludeEnd("ctx");
+$4=$recv($ContextAmber())._globalLayerComposition();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["globalLayerComposition"]=2;
+//>>excludeEnd("ctx");
+$3=$recv($4)._size();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["size"]=2;
+//>>excludeEnd("ctx");
+self._assert_equals_($3,(1));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["assert:equals:"]=2;
+//>>excludeEnd("ctx");
+$6=$recv($ContextAmber())._globalLayerComposition();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["globalLayerComposition"]=3;
+//>>excludeEnd("ctx");
+$5=$recv($6)._at_((1));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["at:"]=1;
+//>>excludeEnd("ctx");
+self._assert_equals_($5,self["@layer1"]);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["assert:equals:"]=3;
+//>>excludeEnd("ctx");
+$recv(self["@layer2"])._activate();
+$8=$recv($ContextAmber())._globalLayerComposition();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["globalLayerComposition"]=4;
+//>>excludeEnd("ctx");
+$7=$recv($8)._size();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["size"]=3;
+//>>excludeEnd("ctx");
+self._assert_equals_($7,(2));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["assert:equals:"]=4;
+//>>excludeEnd("ctx");
+$10=$recv($ContextAmber())._globalLayerComposition();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["globalLayerComposition"]=5;
+//>>excludeEnd("ctx");
+$9=$recv($10)._at_((1));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["at:"]=2;
+//>>excludeEnd("ctx");
+self._assert_equals_($9,self["@layer1"]);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["assert:equals:"]=5;
+//>>excludeEnd("ctx");
+$12=$recv($ContextAmber())._globalLayerComposition();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["globalLayerComposition"]=6;
+//>>excludeEnd("ctx");
+$11=$recv($12)._at_((2));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["at:"]=3;
+//>>excludeEnd("ctx");
+self._assert_equals_($11,self["@layer2"]);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["assert:equals:"]=6;
+//>>excludeEnd("ctx");
+$recv(self["@layer1"])._deactivate();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["deactivate"]=1;
+//>>excludeEnd("ctx");
+$14=$recv($ContextAmber())._globalLayerComposition();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["globalLayerComposition"]=7;
+//>>excludeEnd("ctx");
+$13=$recv($14)._size();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["size"]=4;
+//>>excludeEnd("ctx");
+self._assert_equals_($13,(1));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["assert:equals:"]=7;
+//>>excludeEnd("ctx");
+$16=$recv($ContextAmber())._globalLayerComposition();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["globalLayerComposition"]=8;
+//>>excludeEnd("ctx");
+$15=$recv($16)._at_((1));
+self._assert_equals_($15,self["@layer2"]);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["assert:equals:"]=8;
+//>>excludeEnd("ctx");
+$recv(self["@layer2"])._deactivate();
+self._assert_equals_($recv($recv($ContextAmber())._globalLayerComposition())._size(),(0));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"testGlobalLayerComposition",{},$globals.ContextAmberTest)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "testGlobalLayerComposition\x0a\x09self assert: ContextAmber globalLayerComposition size equals: 0.\x0a\x09\x0a\x09layer1 activate.\x0a\x09self assert: ContextAmber globalLayerComposition size equals: 1.\x0a\x09self assert: (ContextAmber globalLayerComposition at: 1) equals: layer1.\x0a\x09\x0a\x09layer2 activate.\x0a\x09self assert: ContextAmber globalLayerComposition size equals: 2.\x0a\x09self assert: (ContextAmber globalLayerComposition at: 1) equals: layer1.\x0a\x09self assert: (ContextAmber globalLayerComposition at: 2) equals: layer2.\x0a\x09\x0a\x09layer1 deactivate.\x0a\x09self assert: ContextAmber globalLayerComposition size equals: 1.\x0a\x09self assert: (ContextAmber globalLayerComposition at: 1) equals: layer2.\x0a\x09\x0a\x09layer2 deactivate.\x0a\x09self assert: ContextAmber globalLayerComposition size equals: 0.",
+referencedClasses: ["ContextAmber"],
+//>>excludeEnd("ide");
+messageSends: ["assert:equals:", "size", "globalLayerComposition", "activate", "at:", "deactivate"]
+}),
+$globals.ContextAmberTest);
+
+$core.addMethod(
+$core.method({
+selector: "testGlobalLayerCompositionWithScoped",
+protocol: 'running',
+fn: function (){
+var self=this;
+var comp;
+function $ContextAmber(){return $globals.ContextAmber||(typeof ContextAmber=="undefined"?nil:ContextAmber)}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+var $2,$1,$4,$3,$6,$5,$7,$8,$9,$11,$10,$12;
+$2=$recv($ContextAmber())._globalLayerComposition();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["globalLayerComposition"]=1;
+//>>excludeEnd("ctx");
+$1=$recv($2)._size();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["size"]=1;
+//>>excludeEnd("ctx");
+self._assert_equals_($1,(0));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["assert:equals:"]=1;
+//>>excludeEnd("ctx");
+$recv(self["@layer1"])._activate();
+$4=$recv($ContextAmber())._globalLayerComposition();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["globalLayerComposition"]=2;
+//>>excludeEnd("ctx");
+$3=$recv($4)._size();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["size"]=2;
+//>>excludeEnd("ctx");
+self._assert_equals_($3,(1));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["assert:equals:"]=2;
+//>>excludeEnd("ctx");
+$6=$recv($ContextAmber())._globalLayerComposition();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["globalLayerComposition"]=3;
+//>>excludeEnd("ctx");
+$5=$recv($6)._at_((1));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["at:"]=1;
+//>>excludeEnd("ctx");
+self._assert_equals_($5,self["@layer1"]);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["assert:equals:"]=3;
+//>>excludeEnd("ctx");
+comp=$recv((function(){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $recv($ContextAmber())._globalLayerComposition();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["globalLayerComposition"]=4;
+//>>excludeEnd("ctx");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)});
+//>>excludeEnd("ctx");
+}))._withLayer_(self["@layer2"]);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["withLayer:"]=1;
+//>>excludeEnd("ctx");
+$7=$recv(comp)._size();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["size"]=3;
+//>>excludeEnd("ctx");
+self._assert_equals_($7,(2));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["assert:equals:"]=4;
+//>>excludeEnd("ctx");
+$8=$recv(comp)._at_((1));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["at:"]=2;
+//>>excludeEnd("ctx");
+self._assert_equals_($8,self["@layer1"]);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["assert:equals:"]=5;
+//>>excludeEnd("ctx");
+$9=$recv(comp)._at_((2));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["at:"]=3;
+//>>excludeEnd("ctx");
+self._assert_equals_($9,self["@layer2"]);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["assert:equals:"]=6;
+//>>excludeEnd("ctx");
+$recv(self["@layer1"])._deactivate();
+$11=$recv($ContextAmber())._globalLayerComposition();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["globalLayerComposition"]=5;
+//>>excludeEnd("ctx");
+$10=$recv($11)._size();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["size"]=4;
+//>>excludeEnd("ctx");
+self._assert_equals_($10,(0));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["assert:equals:"]=7;
+//>>excludeEnd("ctx");
+comp=$recv((function(){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $recv($ContextAmber())._globalLayerComposition();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["globalLayerComposition"]=6;
+//>>excludeEnd("ctx");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,2)});
+//>>excludeEnd("ctx");
+}))._withLayer_(self["@layer1"]);
+$12=$recv(comp)._size();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["size"]=5;
+//>>excludeEnd("ctx");
+self._assert_equals_($12,(1));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["assert:equals:"]=8;
+//>>excludeEnd("ctx");
+self._assert_equals_($recv(comp)._at_((1)),self["@layer1"]);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["assert:equals:"]=9;
+//>>excludeEnd("ctx");
+self._assert_equals_($recv($recv($ContextAmber())._globalLayerComposition())._size(),(0));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"testGlobalLayerCompositionWithScoped",{comp:comp},$globals.ContextAmberTest)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "testGlobalLayerCompositionWithScoped\x0a\x09| comp |\x0a\x09self assert: ContextAmber globalLayerComposition size equals: 0.\x0a\x09\x0a\x09layer1 activate.\x0a\x09self assert: ContextAmber globalLayerComposition size equals: 1.\x0a\x09self assert: (ContextAmber globalLayerComposition at: 1) equals: layer1.\x0a\x09\x0a\x09comp := [ ContextAmber globalLayerComposition ] withLayer: layer2.\x0a\x09self assert: comp size equals: 2.\x0a\x09self assert: (comp at: 1) equals: layer1.\x0a\x09self assert: (comp at: 2) equals: layer2.\x0a\x09\x0a\x09layer1 deactivate.\x0a\x09self assert: ContextAmber globalLayerComposition size equals: 0.\x0a\x09\x0a\x09comp := [ ContextAmber globalLayerComposition ] withLayer: layer1.\x0a\x09self assert: comp size equals: 1.\x0a\x09self assert: (comp at: 1) equals: layer1.\x0a\x0a\x09self assert: ContextAmber globalLayerComposition size equals: 0.",
+referencedClasses: ["ContextAmber"],
+//>>excludeEnd("ide");
+messageSends: ["assert:equals:", "size", "globalLayerComposition", "activate", "at:", "withLayer:", "deactivate"]
 }),
 $globals.ContextAmberTest);
 

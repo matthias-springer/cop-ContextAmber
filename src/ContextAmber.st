@@ -152,6 +152,25 @@ defaultActive
 	^ defaultActive
 !
 
+globalLayerComposition
+	| layers |
+	layers := OrderedCollection new.
+	layers addAll: ContextAmber defaultActive.
+
+	ContextAmber scopedStack do: [ :operation :layer |
+		operation = #add
+			ifTrue: [ layers indexOf: layer ifAbsent: [ layers add: layer ] ]
+			ifFalse: [ layers remove: layer ifAbsent: [ ] ] ].
+
+	self layerStack ifNotNil: [
+		self layerStack do: [ :operation :layer | 
+			operation = #add
+				ifTrue: [ layers indexOf: layer ifAbsent: [ layers add: layer ] ]
+				ifFalse: [ layers remove: layer ifAbsent: [ ] ] ] ].
+				
+	^ layers
+!
+
 scopedStack
 	^ scopedStack
 ! !
@@ -358,6 +377,7 @@ wrapper
 	wrapper basicAt: #args put: method arguments.
 	wrapper selector: method selector.
 	wrapper source: method source.
+	wrapper resetCompositionVersion.
 	^ wrapper
 ! !
 
@@ -451,7 +471,7 @@ updateMethodAST: activeLayers
 !
 
 updateMethodTemplate
-	VERSION ~= (self class >> SELECTOR) compositionVersion ifTrue: [
+	VERSION ~= (self compositionVersionFor: SELECTOR) ifTrue: [
 		(self class >> SELECTOR) inliningStrategy installInlinedWithLayers: self activeLayers on: self.
 		^ self perform: SELECTOR withArguments: ARGUMENTS ].
 ! !
@@ -567,6 +587,10 @@ incrementCompositionVersion
 ! !
 
 !Layer class methodsFor: 'testing'!
+
+affectsClass: base
+	^ self partialClasses anySatisfy: [ :partial | partial base = base ]
+!
 
 hasPartial: selector for: base
 	| partialClass |
@@ -836,7 +860,7 @@ ensurePartialsCollectionInitialized
 !
 
 incrementLayerCompositionVersion
-	< if (typeof(self['activeLayersVersion']) === 'undefined') {
+	< if (typeof(self['layerCompositionVersion']) === 'undefined') {
 		self['layerCompositionVersion'] = 2;
 	} else {
 		self['layerCompositionVersion'] = self['layerCompositionVersion'] + 1;
@@ -1040,8 +1064,8 @@ incrementCompositionVersion
 !
 
 inliningStrategy
-	^ ObjectWideInliningStrategy on: self
-	"^ ClassWideInliningStrategy on: self"
+	"^ ObjectWideInliningStrategy on: self"
+	^ ClassWideInliningStrategy on: self
 !
 
 isPartial
@@ -1054,6 +1078,10 @@ methodCache
 	} 
 	return self['methodCache'];
 	>
+!
+
+resetCompositionVersion
+	< self['compositionVersion'] = 0; >
 ! !
 
 !Compiler methodsFor: '*ContextAmber'!
@@ -1168,13 +1196,7 @@ activateLayer: aLayer
 
 activeLayers
 	| layers |
-	layers := OrderedCollection new.
-	layers addAll: ContextAmber defaultActive.
-
-	ContextAmber scopedStack do: [ :operation :layer |
-		operation = #add
-			ifTrue: [ layers indexOf: layer ifAbsent: [ layers add: layer ] ]
-			ifFalse: [ layers remove: layer ifAbsent: [ ] ] ].
+	layers := ContextAmber globalLayerComposition.
 
 	self layerStack ifNotNil: [
 		self layerStack do: [ :operation :layer | 
@@ -1224,6 +1246,10 @@ compositionSignature
 		self['activeLayersVersion'] = self._class()._layerCompositionVersion();
 	}
 	return self['compositionSignature']; >
+!
+
+compositionVersionFor: selector
+	<return self.klass.methods[selector]['compositionVersion'];>
 !
 
 deactivateLayer: aLayer

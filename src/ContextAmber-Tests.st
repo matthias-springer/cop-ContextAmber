@@ -59,8 +59,7 @@ callMethod4
 	self error: 'expected partial'.
 !
 
-method1
-	^ 5
+method1 ^ 5
 !
 
 method3
@@ -205,6 +204,18 @@ setUp
 	layer3 := ContextAmberDemoLayer new.
 !
 
+testAffectsClass
+	self assert: (ContextAmberDemoLayer2 affectsClass: ContextAmberDemoClass2).
+	self deny: (ContextAmberDemoLayer2 affectsClass: ContextAmberDemoClass1).
+!
+
+testClassWideLayerCompositionVersion
+	| version |
+	version := DemoClass layerCompositionVersion.
+	DemoClass incrementLayerCompositionVersion.
+	self assert: DemoClass layerCompositionVersion equals: version + 1.
+!
+
 testCompositionVersion
 	| oldVersion |
 	oldVersion := (ContextAmberDemoClass1>>#method1) compositionVersion.
@@ -223,6 +234,49 @@ testDefaultLayers
 	
 	layer1 deactivate.
 	self assert: self activeLayers size equals: 0.
+!
+
+testGlobalLayerComposition
+	self assert: ContextAmber globalLayerComposition size equals: 0.
+	
+	layer1 activate.
+	self assert: ContextAmber globalLayerComposition size equals: 1.
+	self assert: (ContextAmber globalLayerComposition at: 1) equals: layer1.
+	
+	layer2 activate.
+	self assert: ContextAmber globalLayerComposition size equals: 2.
+	self assert: (ContextAmber globalLayerComposition at: 1) equals: layer1.
+	self assert: (ContextAmber globalLayerComposition at: 2) equals: layer2.
+	
+	layer1 deactivate.
+	self assert: ContextAmber globalLayerComposition size equals: 1.
+	self assert: (ContextAmber globalLayerComposition at: 1) equals: layer2.
+	
+	layer2 deactivate.
+	self assert: ContextAmber globalLayerComposition size equals: 0.
+!
+
+testGlobalLayerCompositionWithScoped
+	| comp |
+	self assert: ContextAmber globalLayerComposition size equals: 0.
+	
+	layer1 activate.
+	self assert: ContextAmber globalLayerComposition size equals: 1.
+	self assert: (ContextAmber globalLayerComposition at: 1) equals: layer1.
+	
+	comp := [ ContextAmber globalLayerComposition ] withLayer: layer2.
+	self assert: comp size equals: 2.
+	self assert: (comp at: 1) equals: layer1.
+	self assert: (comp at: 2) equals: layer2.
+	
+	layer1 deactivate.
+	self assert: ContextAmber globalLayerComposition size equals: 0.
+	
+	comp := [ ContextAmber globalLayerComposition ] withLayer: layer1.
+	self assert: comp size equals: 1.
+	self assert: (comp at: 1) equals: layer1.
+
+	self assert: ContextAmber globalLayerComposition size equals: 0.
 !
 
 testHasPartial

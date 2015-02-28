@@ -607,6 +607,107 @@ $globals.ContextAmber.klass);
 
 $core.addMethod(
 $core.method({
+selector: "globalLayerComposition",
+protocol: 'accessing',
+fn: function (){
+var self=this;
+var layers;
+function $OrderedCollection(){return $globals.OrderedCollection||(typeof OrderedCollection=="undefined"?nil:OrderedCollection)}
+function $ContextAmber(){return $globals.ContextAmber||(typeof ContextAmber=="undefined"?nil:ContextAmber)}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+var $1,$2,$3,$4,$receiver;
+layers=$recv($OrderedCollection())._new();
+$recv(layers)._addAll_($recv($ContextAmber())._defaultActive());
+$recv($recv($ContextAmber())._scopedStack())._do_((function(operation,layer){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+$1=$recv(operation).__eq("add");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["="]=1;
+//>>excludeEnd("ctx");
+if($core.assert($1)){
+return $recv(layers)._indexOf_ifAbsent_(layer,(function(){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx3) {
+//>>excludeEnd("ctx");
+return $recv(layers)._add_(layer);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx3.sendIdx["add:"]=1;
+//>>excludeEnd("ctx");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx3) {$ctx3.fillBlock({},$ctx2,3)});
+//>>excludeEnd("ctx");
+}));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["indexOf:ifAbsent:"]=1;
+//>>excludeEnd("ctx");
+} else {
+return $recv(layers)._remove_ifAbsent_(layer,(function(){
+
+}));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["remove:ifAbsent:"]=1;
+//>>excludeEnd("ctx");
+};
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({operation:operation,layer:layer},$ctx1,1)});
+//>>excludeEnd("ctx");
+}));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["do:"]=1;
+//>>excludeEnd("ctx");
+$2=self._layerStack();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["layerStack"]=1;
+//>>excludeEnd("ctx");
+if(($receiver = $2) == null || $receiver.isNil){
+$2;
+} else {
+$recv(self._layerStack())._do_((function(operation,layer){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+$3=$recv(operation).__eq("add");
+if($core.assert($3)){
+return $recv(layers)._indexOf_ifAbsent_(layer,(function(){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx3) {
+//>>excludeEnd("ctx");
+return $recv(layers)._add_(layer);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx3) {$ctx3.fillBlock({},$ctx2,9)});
+//>>excludeEnd("ctx");
+}));
+} else {
+return $recv(layers)._remove_ifAbsent_(layer,(function(){
+
+}));
+};
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({operation:operation,layer:layer},$ctx1,7)});
+//>>excludeEnd("ctx");
+}));
+};
+$4=layers;
+return $4;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"globalLayerComposition",{layers:layers},$globals.ContextAmber.klass)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "globalLayerComposition\x0a\x09| layers |\x0a\x09layers := OrderedCollection new.\x0a\x09layers addAll: ContextAmber defaultActive.\x0a\x0a\x09ContextAmber scopedStack do: [ :operation :layer |\x0a\x09\x09operation = #add\x0a\x09\x09\x09ifTrue: [ layers indexOf: layer ifAbsent: [ layers add: layer ] ]\x0a\x09\x09\x09ifFalse: [ layers remove: layer ifAbsent: [ ] ] ].\x0a\x0a\x09self layerStack ifNotNil: [\x0a\x09\x09self layerStack do: [ :operation :layer | \x0a\x09\x09\x09operation = #add\x0a\x09\x09\x09\x09ifTrue: [ layers indexOf: layer ifAbsent: [ layers add: layer ] ]\x0a\x09\x09\x09\x09ifFalse: [ layers remove: layer ifAbsent: [ ] ] ] ].\x0a\x09\x09\x09\x09\x0a\x09^ layers",
+referencedClasses: ["OrderedCollection", "ContextAmber"],
+//>>excludeEnd("ide");
+messageSends: ["new", "addAll:", "defaultActive", "do:", "scopedStack", "ifTrue:ifFalse:", "=", "indexOf:ifAbsent:", "add:", "remove:ifAbsent:", "ifNotNil:", "layerStack"]
+}),
+$globals.ContextAmber.klass);
+
+$core.addMethod(
+$core.method({
 selector: "handleClassRemoved:",
 protocol: 'announcements',
 fn: function (announcement){
@@ -1546,6 +1647,7 @@ $ctx1.sendIdx["basicAt:put:"]=3;
 $recv(wrapper)._basicAt_put_("args",$recv(self["@method"])._arguments());
 $recv(wrapper)._selector_($recv(self["@method"])._selector());
 $recv(wrapper)._source_($recv(self["@method"])._source());
+$recv(wrapper)._resetCompositionVersion();
 $22=wrapper;
 return $22;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -1554,10 +1656,10 @@ return $22;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "wrapper\x0a\x09| wrapper wrapperTemplate methodSignature |\x0a\x09methodSignature := ''.\x0a\x09(method selector tokenize: ':') allButLast with: method arguments do: [ :sel :arg | methodSignature := methodSignature, sel, ': ', arg, ' ' ].\x0a\x09methodSignature = '' ifTrue: [ methodSignature := method selector ].\x0a\x09wrapperTemplate := (self class >> #wrapperTemplate) source.\x0a\x09wrapperTemplate := wrapperTemplate replace: 'wrapperTemplate' with: methodSignature.\x0a\x09wrapperTemplate := wrapperTemplate replace: 'SELECTOR' with: '#', method selector.\x0a\x09wrapperTemplate := wrapperTemplate replace: 'ARGUMENTS' with: '{ ', (method arguments join: '. '), ' }'.\x0a\x09wrapper := self compiler eval: (self compiler compile: wrapperTemplate forClass: self base).\x0a\x09wrapper fn basicAt: #selector put: method selector.\x0a\x09wrapper fn basicAt: #original put: method.\x0a\x09wrapper fn basicAt: #compiledSource put: method fn compiledSource.\x0a\x09wrapper basicAt: #args put: method arguments.\x0a\x09wrapper selector: method selector.\x0a\x09wrapper source: method source.\x0a\x09^ wrapper",
+source: "wrapper\x0a\x09| wrapper wrapperTemplate methodSignature |\x0a\x09methodSignature := ''.\x0a\x09(method selector tokenize: ':') allButLast with: method arguments do: [ :sel :arg | methodSignature := methodSignature, sel, ': ', arg, ' ' ].\x0a\x09methodSignature = '' ifTrue: [ methodSignature := method selector ].\x0a\x09wrapperTemplate := (self class >> #wrapperTemplate) source.\x0a\x09wrapperTemplate := wrapperTemplate replace: 'wrapperTemplate' with: methodSignature.\x0a\x09wrapperTemplate := wrapperTemplate replace: 'SELECTOR' with: '#', method selector.\x0a\x09wrapperTemplate := wrapperTemplate replace: 'ARGUMENTS' with: '{ ', (method arguments join: '. '), ' }'.\x0a\x09wrapper := self compiler eval: (self compiler compile: wrapperTemplate forClass: self base).\x0a\x09wrapper fn basicAt: #selector put: method selector.\x0a\x09wrapper fn basicAt: #original put: method.\x0a\x09wrapper fn basicAt: #compiledSource put: method fn compiledSource.\x0a\x09wrapper basicAt: #args put: method arguments.\x0a\x09wrapper selector: method selector.\x0a\x09wrapper source: method source.\x0a\x09wrapper resetCompositionVersion.\x0a\x09^ wrapper",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["with:do:", "allButLast", "tokenize:", "selector", "arguments", ",", "ifTrue:", "=", "source", ">>", "class", "replace:with:", "join:", "eval:", "compiler", "compile:forClass:", "base", "basicAt:put:", "fn", "compiledSource", "selector:", "source:"]
+messageSends: ["with:do:", "allButLast", "tokenize:", "selector", "arguments", ",", "ifTrue:", "=", "source", ">>", "class", "replace:with:", "join:", "eval:", "compiler", "compile:forClass:", "base", "basicAt:put:", "fn", "compiledSource", "selector:", "source:", "resetCompositionVersion"]
 }),
 $globals.InliningStrategy);
 
@@ -2080,21 +2182,12 @@ function $ARGUMENTS(){return $globals.ARGUMENTS||(typeof ARGUMENTS=="undefined"?
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $4,$3,$2,$1,$5;
-$4=self._class();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["class"]=1;
-//>>excludeEnd("ctx");
-$3=$recv($4).__gt_gt($SELECTOR());
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx[">>"]=1;
-//>>excludeEnd("ctx");
-$2=$recv($3)._compositionVersion();
-$1=$recv($VERSION()).__tild_eq($2);
+var $1,$2;
+$1=$recv($VERSION()).__tild_eq(self._compositionVersionFor_($SELECTOR()));
 if($core.assert($1)){
 $recv($recv($recv(self._class()).__gt_gt($SELECTOR()))._inliningStrategy())._installInlinedWithLayers_on_(self._activeLayers(),self);
-$5=self._perform_withArguments_($SELECTOR(),$ARGUMENTS());
-return $5;
+$2=self._perform_withArguments_($SELECTOR(),$ARGUMENTS());
+return $2;
 };
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -2103,10 +2196,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "updateMethodTemplate\x0a\x09VERSION ~= (self class >> SELECTOR) compositionVersion ifTrue: [\x0a\x09\x09(self class >> SELECTOR) inliningStrategy installInlinedWithLayers: self activeLayers on: self.\x0a\x09\x09^ self perform: SELECTOR withArguments: ARGUMENTS ].",
+source: "updateMethodTemplate\x0a\x09VERSION ~= (self compositionVersionFor: SELECTOR) ifTrue: [\x0a\x09\x09(self class >> SELECTOR) inliningStrategy installInlinedWithLayers: self activeLayers on: self.\x0a\x09\x09^ self perform: SELECTOR withArguments: ARGUMENTS ].",
 referencedClasses: ["VERSION", "SELECTOR", "ARGUMENTS"],
 //>>excludeEnd("ide");
-messageSends: ["ifTrue:", "~=", "compositionVersion", ">>", "class", "installInlinedWithLayers:on:", "inliningStrategy", "activeLayers", "perform:withArguments:"]
+messageSends: ["ifTrue:", "~=", "compositionVersionFor:", "installInlinedWithLayers:on:", "inliningStrategy", ">>", "class", "activeLayers", "perform:withArguments:"]
 }),
 $globals.ObjectWideInliningStrategy);
 
@@ -2330,6 +2423,39 @@ $globals.Layer);
 
 
 $globals.Layer.klass.iVarNames = ['partialClasses','nextId'];
+$core.addMethod(
+$core.method({
+selector: "affectsClass:",
+protocol: 'testing',
+fn: function (base){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+var $1;
+$1=$recv(self._partialClasses())._anySatisfy_((function(partial){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $recv($recv(partial)._base()).__eq(base);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({partial:partial},$ctx1,1)});
+//>>excludeEnd("ctx");
+}));
+return $1;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"affectsClass:",{base:base},$globals.Layer.klass)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["base"],
+source: "affectsClass: base\x0a\x09^ self partialClasses anySatisfy: [ :partial | partial base = base ] ",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["anySatisfy:", "partialClasses", "=", "base"]
+}),
+$globals.Layer.klass);
+
 $core.addMethod(
 $core.method({
 selector: "at:ifPresent:",
@@ -3749,7 +3875,7 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
- if (typeof(self['activeLayersVersion']) === 'undefined') {
+ if (typeof(self['layerCompositionVersion']) === 'undefined') {
 		self['layerCompositionVersion'] = 2;
 	} else {
 		self['layerCompositionVersion'] = self['layerCompositionVersion'] + 1;
@@ -3761,7 +3887,7 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "incrementLayerCompositionVersion\x0a\x09< if (typeof(self['activeLayersVersion']) === 'undefined') {\x0a\x09\x09self['layerCompositionVersion'] = 2;\x0a\x09} else {\x0a\x09\x09self['layerCompositionVersion'] = self['layerCompositionVersion'] + 1;\x0a\x09} >",
+source: "incrementLayerCompositionVersion\x0a\x09< if (typeof(self['layerCompositionVersion']) === 'undefined') {\x0a\x09\x09self['layerCompositionVersion'] = 2;\x0a\x09} else {\x0a\x09\x09self['layerCompositionVersion'] = self['layerCompositionVersion'] + 1;\x0a\x09} >",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: []
@@ -4685,12 +4811,12 @@ selector: "inliningStrategy",
 protocol: '*ContextAmber',
 fn: function (){
 var self=this;
-function $ObjectWideInliningStrategy(){return $globals.ObjectWideInliningStrategy||(typeof ObjectWideInliningStrategy=="undefined"?nil:ObjectWideInliningStrategy)}
+function $ClassWideInliningStrategy(){return $globals.ClassWideInliningStrategy||(typeof ClassWideInliningStrategy=="undefined"?nil:ClassWideInliningStrategy)}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
 var $1;
-$1=$recv($ObjectWideInliningStrategy())._on_(self);
+$1=$recv($ClassWideInliningStrategy())._on_(self);
 return $1;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"inliningStrategy",{},$globals.CompiledMethod)});
@@ -4698,8 +4824,8 @@ return $1;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "inliningStrategy\x0a\x09^ ObjectWideInliningStrategy on: self\x0a\x09\x22^ ClassWideInliningStrategy on: self\x22",
-referencedClasses: ["ObjectWideInliningStrategy"],
+source: "inliningStrategy\x0a\x09\x22^ ObjectWideInliningStrategy on: self\x22\x0a\x09^ ClassWideInliningStrategy on: self",
+referencedClasses: ["ClassWideInliningStrategy"],
 //>>excludeEnd("ide");
 messageSends: ["on:"]
 }),
@@ -4752,6 +4878,30 @@ return self;
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
 source: "methodCache\x0a\x09< if (typeof(self['methodCache']) === 'undefined') {\x0a\x09\x09self['methodCache'] = smalltalk.MethodCache._on_(self);\x0a\x09} \x0a\x09return self['methodCache'];\x0a\x09>",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.CompiledMethod);
+
+$core.addMethod(
+$core.method({
+selector: "resetCompositionVersion",
+protocol: '*ContextAmber',
+fn: function (){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+ self['compositionVersion'] = 0; ;
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"resetCompositionVersion",{},$globals.CompiledMethod)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "resetCompositionVersion\x0a\x09< self['compositionVersion'] = 0; >",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: []
@@ -5218,73 +5368,32 @@ protocol: '*ContextAmber',
 fn: function (){
 var self=this;
 var layers;
-function $OrderedCollection(){return $globals.OrderedCollection||(typeof OrderedCollection=="undefined"?nil:OrderedCollection)}
 function $ContextAmber(){return $globals.ContextAmber||(typeof ContextAmber=="undefined"?nil:ContextAmber)}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1,$2,$3,$4,$receiver;
-layers=$recv($OrderedCollection())._new();
-$recv(layers)._addAll_($recv($ContextAmber())._defaultActive());
-$recv($recv($ContextAmber())._scopedStack())._do_((function(operation,layer){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx2) {
-//>>excludeEnd("ctx");
-$1=$recv(operation).__eq("add");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx["="]=1;
-//>>excludeEnd("ctx");
-if($core.assert($1)){
-return $recv(layers)._indexOf_ifAbsent_(layer,(function(){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx3) {
-//>>excludeEnd("ctx");
-return $recv(layers)._add_(layer);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx3.sendIdx["add:"]=1;
-//>>excludeEnd("ctx");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx3) {$ctx3.fillBlock({},$ctx2,3)});
-//>>excludeEnd("ctx");
-}));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx["indexOf:ifAbsent:"]=1;
-//>>excludeEnd("ctx");
-} else {
-return $recv(layers)._remove_ifAbsent_(layer,(function(){
-
-}));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx["remove:ifAbsent:"]=1;
-//>>excludeEnd("ctx");
-};
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({operation:operation,layer:layer},$ctx1,1)});
-//>>excludeEnd("ctx");
-}));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["do:"]=1;
-//>>excludeEnd("ctx");
-$2=self._layerStack();
+var $1,$2,$3,$receiver;
+layers=$recv($ContextAmber())._globalLayerComposition();
+$1=self._layerStack();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["layerStack"]=1;
 //>>excludeEnd("ctx");
-if(($receiver = $2) == null || $receiver.isNil){
-$2;
+if(($receiver = $1) == null || $receiver.isNil){
+$1;
 } else {
 $recv(self._layerStack())._do_((function(operation,layer){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
-$3=$recv(operation).__eq("add");
-if($core.assert($3)){
+$2=$recv(operation).__eq("add");
+if($core.assert($2)){
 return $recv(layers)._indexOf_ifAbsent_(layer,(function(){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx3) {
 //>>excludeEnd("ctx");
 return $recv(layers)._add_(layer);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx3) {$ctx3.fillBlock({},$ctx2,9)});
+}, function($ctx3) {$ctx3.fillBlock({},$ctx2,4)});
 //>>excludeEnd("ctx");
 }));
 } else {
@@ -5293,22 +5402,22 @@ return $recv(layers)._remove_ifAbsent_(layer,(function(){
 }));
 };
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({operation:operation,layer:layer},$ctx1,7)});
+}, function($ctx2) {$ctx2.fillBlock({operation:operation,layer:layer},$ctx1,2)});
 //>>excludeEnd("ctx");
 }));
 };
-$4=layers;
-return $4;
+$3=layers;
+return $3;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"activeLayers",{layers:layers},$globals.Object)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "activeLayers\x0a\x09| layers |\x0a\x09layers := OrderedCollection new.\x0a\x09layers addAll: ContextAmber defaultActive.\x0a\x0a\x09ContextAmber scopedStack do: [ :operation :layer |\x0a\x09\x09operation = #add\x0a\x09\x09\x09ifTrue: [ layers indexOf: layer ifAbsent: [ layers add: layer ] ]\x0a\x09\x09\x09ifFalse: [ layers remove: layer ifAbsent: [ ] ] ].\x0a\x0a\x09self layerStack ifNotNil: [\x0a\x09\x09self layerStack do: [ :operation :layer | \x0a\x09\x09\x09operation = #add\x0a\x09\x09\x09\x09ifTrue: [ layers indexOf: layer ifAbsent: [ layers add: layer ] ]\x0a\x09\x09\x09\x09ifFalse: [ layers remove: layer ifAbsent: [ ] ] ] ].\x0a\x09\x09\x09\x09\x09\x09\x0a\x09^ layers",
-referencedClasses: ["OrderedCollection", "ContextAmber"],
+source: "activeLayers\x0a\x09| layers |\x0a\x09layers := ContextAmber globalLayerComposition.\x0a\x0a\x09self layerStack ifNotNil: [\x0a\x09\x09self layerStack do: [ :operation :layer | \x0a\x09\x09\x09operation = #add\x0a\x09\x09\x09\x09ifTrue: [ layers indexOf: layer ifAbsent: [ layers add: layer ] ]\x0a\x09\x09\x09\x09ifFalse: [ layers remove: layer ifAbsent: [ ] ] ] ].\x0a\x09\x09\x09\x09\x09\x09\x0a\x09^ layers",
+referencedClasses: ["ContextAmber"],
 //>>excludeEnd("ide");
-messageSends: ["new", "addAll:", "defaultActive", "do:", "scopedStack", "ifTrue:ifFalse:", "=", "indexOf:ifAbsent:", "add:", "remove:ifAbsent:", "ifNotNil:", "layerStack"]
+messageSends: ["globalLayerComposition", "ifNotNil:", "layerStack", "do:", "ifTrue:ifFalse:", "=", "indexOf:ifAbsent:", "add:", "remove:ifAbsent:"]
 }),
 $globals.Object);
 
@@ -5487,6 +5596,30 @@ return self;
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
 source: "compositionSignature\x0a\x09< if (self['activeLayersDirty'] === true || self['activeLayersDirty'] === undefined || self['activeLayersVersion'] != self.klass._layerCompositionVersion()) {\x0a\x09\x09self._basicCompositionSignature_(self._activeLayers()._asCompositionSignature());\x0a\x09\x09self['activeLayersDirty'] = false;\x0a\x09\x09self['activeLayersVersion'] = self._class()._layerCompositionVersion();\x0a\x09}\x0a\x09return self['compositionSignature']; >",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.Object);
+
+$core.addMethod(
+$core.method({
+selector: "compositionVersionFor:",
+protocol: '*ContextAmber',
+fn: function (selector){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) { 
+//>>excludeEnd("ctx");
+return self.klass.methods[selector]['compositionVersion'];;
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"compositionVersionFor:",{selector:selector},$globals.Object)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["selector"],
+source: "compositionVersionFor: selector\x0a\x09<return self.klass.methods[selector]['compositionVersion'];>",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: []
