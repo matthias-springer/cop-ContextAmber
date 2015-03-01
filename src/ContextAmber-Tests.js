@@ -150,23 +150,62 @@ selector: "callMethod1",
 protocol: 'not yet classified',
 fn: function (){
 var self=this;
+var inlined;
+function $Transcript(){return $globals.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
+function $String(){return $globals.String||(typeof String=="undefined"?nil:String)}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1;
-$recv($recv($recv(self._class()).__gt_gt("callMethod1"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
-$1=self._perform_withArguments_("callMethod1",[]);
-return $1;
+var $8,$7,$6,$5,$4,$3,$10,$9,$2,$1,$11;
+$8=self._class();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"callMethod1",{},$globals.ContextAmberDemoClass1)});
+$ctx1.sendIdx["class"]=1;
+//>>excludeEnd("ctx");
+$7=$recv($8)._asString();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["asString"]=1;
+//>>excludeEnd("ctx");
+$6="[LOG] installing object-wide inlined method class ".__comma($7);
+$5=$recv($6).__comma(" selector ");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=5;
+//>>excludeEnd("ctx");
+$4=$recv($5).__comma("callMethod1");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=4;
+//>>excludeEnd("ctx");
+$3=$recv($4).__comma(" activeLayers: ");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=3;
+//>>excludeEnd("ctx");
+$10=self._activeLayers();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["activeLayers"]=1;
+//>>excludeEnd("ctx");
+$9=$recv($10)._asString();
+$2=$recv($3).__comma($9);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=2;
+//>>excludeEnd("ctx");
+$1=$recv($2).__comma($recv($String())._lf());
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=1;
+//>>excludeEnd("ctx");
+$recv($Transcript())._show_($1);
+inlined=$recv($recv($recv(self._class()).__gt_gt("callMethod1"))._methodCache())._at_(self._activeLayers());
+self._basicAt_put_("callMethod1"._asJavaScriptMethodName(),inlined);
+$11=self._perform_withArguments_("callMethod1",[]);
+return $11;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"callMethod1",{inlined:inlined},$globals.ContextAmberDemoClass1)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
 source: "callMethod1\x0a\x09self error: 'expected partial'.",
-referencedClasses: [],
+referencedClasses: ["Transcript", "String"],
 //>>excludeEnd("ide");
-messageSends: ["installInlinedWithLayers:", "inliningStrategy", ">>", "class", "activeLayers", "perform:withArguments:"]
+messageSends: ["show:", ",", "asString", "class", "activeLayers", "lf", "at:", "methodCache", ">>", "basicAt:put:", "asJavaScriptMethodName", "perform:withArguments:"]
 }),
 $globals.ContextAmberDemoClass1);
 
@@ -176,23 +215,62 @@ selector: "callMethod4",
 protocol: 'not yet classified',
 fn: function (){
 var self=this;
+var inlined;
+function $Transcript(){return $globals.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
+function $String(){return $globals.String||(typeof String=="undefined"?nil:String)}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1;
-$recv($recv($recv(self._class()).__gt_gt("callMethod4"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
-$1=self._perform_withArguments_("callMethod4",[]);
-return $1;
+var $8,$7,$6,$5,$4,$3,$10,$9,$2,$1,$11;
+$8=self._class();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"callMethod4",{},$globals.ContextAmberDemoClass1)});
+$ctx1.sendIdx["class"]=1;
+//>>excludeEnd("ctx");
+$7=$recv($8)._asString();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["asString"]=1;
+//>>excludeEnd("ctx");
+$6="[LOG] installing object-wide inlined method class ".__comma($7);
+$5=$recv($6).__comma(" selector ");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=5;
+//>>excludeEnd("ctx");
+$4=$recv($5).__comma("callMethod4");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=4;
+//>>excludeEnd("ctx");
+$3=$recv($4).__comma(" activeLayers: ");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=3;
+//>>excludeEnd("ctx");
+$10=self._activeLayers();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["activeLayers"]=1;
+//>>excludeEnd("ctx");
+$9=$recv($10)._asString();
+$2=$recv($3).__comma($9);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=2;
+//>>excludeEnd("ctx");
+$1=$recv($2).__comma($recv($String())._lf());
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=1;
+//>>excludeEnd("ctx");
+$recv($Transcript())._show_($1);
+inlined=$recv($recv($recv(self._class()).__gt_gt("callMethod4"))._methodCache())._at_(self._activeLayers());
+self._basicAt_put_("callMethod4"._asJavaScriptMethodName(),inlined);
+$11=self._perform_withArguments_("callMethod4",[]);
+return $11;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"callMethod4",{inlined:inlined},$globals.ContextAmberDemoClass1)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
 source: "callMethod4\x0a\x09self error: 'expected partial'.",
-referencedClasses: [],
+referencedClasses: ["Transcript", "String"],
 //>>excludeEnd("ide");
-messageSends: ["installInlinedWithLayers:", "inliningStrategy", ">>", "class", "activeLayers", "perform:withArguments:"]
+messageSends: ["show:", ",", "asString", "class", "activeLayers", "lf", "at:", "methodCache", ">>", "basicAt:put:", "asJavaScriptMethodName", "perform:withArguments:"]
 }),
 $globals.ContextAmberDemoClass1);
 
@@ -202,23 +280,62 @@ selector: "method1",
 protocol: 'not yet classified',
 fn: function (){
 var self=this;
+var inlined;
+function $Transcript(){return $globals.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
+function $String(){return $globals.String||(typeof String=="undefined"?nil:String)}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1;
-$recv($recv($recv(self._class()).__gt_gt("method1"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
-$1=self._perform_withArguments_("method1",[]);
-return $1;
+var $8,$7,$6,$5,$4,$3,$10,$9,$2,$1,$11;
+$8=self._class();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"method1",{},$globals.ContextAmberDemoClass1)});
+$ctx1.sendIdx["class"]=1;
+//>>excludeEnd("ctx");
+$7=$recv($8)._asString();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["asString"]=1;
+//>>excludeEnd("ctx");
+$6="[LOG] installing object-wide inlined method class ".__comma($7);
+$5=$recv($6).__comma(" selector ");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=5;
+//>>excludeEnd("ctx");
+$4=$recv($5).__comma("method1");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=4;
+//>>excludeEnd("ctx");
+$3=$recv($4).__comma(" activeLayers: ");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=3;
+//>>excludeEnd("ctx");
+$10=self._activeLayers();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["activeLayers"]=1;
+//>>excludeEnd("ctx");
+$9=$recv($10)._asString();
+$2=$recv($3).__comma($9);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=2;
+//>>excludeEnd("ctx");
+$1=$recv($2).__comma($recv($String())._lf());
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=1;
+//>>excludeEnd("ctx");
+$recv($Transcript())._show_($1);
+inlined=$recv($recv($recv(self._class()).__gt_gt("method1"))._methodCache())._at_(self._activeLayers());
+self._basicAt_put_("method1"._asJavaScriptMethodName(),inlined);
+$11=self._perform_withArguments_("method1",[]);
+return $11;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"method1",{inlined:inlined},$globals.ContextAmberDemoClass1)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
 source: "method1 ^ 5",
-referencedClasses: [],
+referencedClasses: ["Transcript", "String"],
 //>>excludeEnd("ide");
-messageSends: ["installInlinedWithLayers:", "inliningStrategy", ">>", "class", "activeLayers", "perform:withArguments:"]
+messageSends: ["show:", ",", "asString", "class", "activeLayers", "lf", "at:", "methodCache", ">>", "basicAt:put:", "asJavaScriptMethodName", "perform:withArguments:"]
 }),
 $globals.ContextAmberDemoClass1);
 
@@ -272,23 +389,62 @@ selector: "method5",
 protocol: 'not yet classified',
 fn: function (){
 var self=this;
+var inlined;
+function $Transcript(){return $globals.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
+function $String(){return $globals.String||(typeof String=="undefined"?nil:String)}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1;
-$recv($recv($recv(self._class()).__gt_gt("method5"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
-$1=self._perform_withArguments_("method5",[]);
-return $1;
+var $8,$7,$6,$5,$4,$3,$10,$9,$2,$1,$11;
+$8=self._class();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"method5",{},$globals.ContextAmberDemoClass1)});
+$ctx1.sendIdx["class"]=1;
+//>>excludeEnd("ctx");
+$7=$recv($8)._asString();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["asString"]=1;
+//>>excludeEnd("ctx");
+$6="[LOG] installing object-wide inlined method class ".__comma($7);
+$5=$recv($6).__comma(" selector ");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=5;
+//>>excludeEnd("ctx");
+$4=$recv($5).__comma("method5");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=4;
+//>>excludeEnd("ctx");
+$3=$recv($4).__comma(" activeLayers: ");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=3;
+//>>excludeEnd("ctx");
+$10=self._activeLayers();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["activeLayers"]=1;
+//>>excludeEnd("ctx");
+$9=$recv($10)._asString();
+$2=$recv($3).__comma($9);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=2;
+//>>excludeEnd("ctx");
+$1=$recv($2).__comma($recv($String())._lf());
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=1;
+//>>excludeEnd("ctx");
+$recv($Transcript())._show_($1);
+inlined=$recv($recv($recv(self._class()).__gt_gt("method5"))._methodCache())._at_(self._activeLayers());
+self._basicAt_put_("method5"._asJavaScriptMethodName(),inlined);
+$11=self._perform_withArguments_("method5",[]);
+return $11;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"method5",{inlined:inlined},$globals.ContextAmberDemoClass1)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
 source: "method5\x0a\x09^ 100",
-referencedClasses: [],
+referencedClasses: ["Transcript", "String"],
 //>>excludeEnd("ide");
-messageSends: ["installInlinedWithLayers:", "inliningStrategy", ">>", "class", "activeLayers", "perform:withArguments:"]
+messageSends: ["show:", ",", "asString", "class", "activeLayers", "lf", "at:", "methodCache", ">>", "basicAt:put:", "asJavaScriptMethodName", "perform:withArguments:"]
 }),
 $globals.ContextAmberDemoClass1);
 
@@ -298,23 +454,62 @@ selector: "methodWithBlock:and:",
 protocol: 'not yet classified',
 fn: function (var1,var2){
 var self=this;
+var inlined;
+function $Transcript(){return $globals.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
+function $String(){return $globals.String||(typeof String=="undefined"?nil:String)}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1;
-$recv($recv($recv(self._class()).__gt_gt("methodWithBlock:and:"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
-$1=self._perform_withArguments_("methodWithBlock:and:",[var1,var2]);
-return $1;
+var $8,$7,$6,$5,$4,$3,$10,$9,$2,$1,$11;
+$8=self._class();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"methodWithBlock:and:",{var1:var1,var2:var2},$globals.ContextAmberDemoClass1)});
+$ctx1.sendIdx["class"]=1;
+//>>excludeEnd("ctx");
+$7=$recv($8)._asString();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["asString"]=1;
+//>>excludeEnd("ctx");
+$6="[LOG] installing object-wide inlined method class ".__comma($7);
+$5=$recv($6).__comma(" selector ");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=5;
+//>>excludeEnd("ctx");
+$4=$recv($5).__comma("methodWithBlock:and:");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=4;
+//>>excludeEnd("ctx");
+$3=$recv($4).__comma(" activeLayers: ");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=3;
+//>>excludeEnd("ctx");
+$10=self._activeLayers();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["activeLayers"]=1;
+//>>excludeEnd("ctx");
+$9=$recv($10)._asString();
+$2=$recv($3).__comma($9);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=2;
+//>>excludeEnd("ctx");
+$1=$recv($2).__comma($recv($String())._lf());
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=1;
+//>>excludeEnd("ctx");
+$recv($Transcript())._show_($1);
+inlined=$recv($recv($recv(self._class()).__gt_gt("methodWithBlock:and:"))._methodCache())._at_(self._activeLayers());
+self._basicAt_put_("methodWithBlock:and:"._asJavaScriptMethodName(),inlined);
+$11=self._perform_withArguments_("methodWithBlock:and:",[var1,var2]);
+return $11;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"methodWithBlock:and:",{var1:var1,var2:var2,inlined:inlined},$globals.ContextAmberDemoClass1)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["var1", "var2"],
 source: "methodWithBlock: var1 and: var2\x0a\x09var1 = var2\x0a\x09\x09ifTrue: [ ^ var1 * 2 ].\x0a\x09^ var1 + var2",
-referencedClasses: [],
+referencedClasses: ["Transcript", "String"],
 //>>excludeEnd("ide");
-messageSends: ["installInlinedWithLayers:", "inliningStrategy", ">>", "class", "activeLayers", "perform:withArguments:"]
+messageSends: ["show:", ",", "asString", "class", "activeLayers", "lf", "at:", "methodCache", ">>", "basicAt:put:", "asJavaScriptMethodName", "perform:withArguments:"]
 }),
 $globals.ContextAmberDemoClass1);
 
@@ -324,23 +519,62 @@ selector: "multiply:with:",
 protocol: 'not yet classified',
 fn: function (aNumber,anotherNumber){
 var self=this;
+var inlined;
+function $Transcript(){return $globals.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
+function $String(){return $globals.String||(typeof String=="undefined"?nil:String)}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1;
-$recv($recv($recv(self._class()).__gt_gt("multiply:with:"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
-$1=self._perform_withArguments_("multiply:with:",[aNumber,anotherNumber]);
-return $1;
+var $8,$7,$6,$5,$4,$3,$10,$9,$2,$1,$11;
+$8=self._class();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"multiply:with:",{aNumber:aNumber,anotherNumber:anotherNumber},$globals.ContextAmberDemoClass1)});
+$ctx1.sendIdx["class"]=1;
+//>>excludeEnd("ctx");
+$7=$recv($8)._asString();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["asString"]=1;
+//>>excludeEnd("ctx");
+$6="[LOG] installing object-wide inlined method class ".__comma($7);
+$5=$recv($6).__comma(" selector ");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=5;
+//>>excludeEnd("ctx");
+$4=$recv($5).__comma("multiply:with:");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=4;
+//>>excludeEnd("ctx");
+$3=$recv($4).__comma(" activeLayers: ");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=3;
+//>>excludeEnd("ctx");
+$10=self._activeLayers();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["activeLayers"]=1;
+//>>excludeEnd("ctx");
+$9=$recv($10)._asString();
+$2=$recv($3).__comma($9);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=2;
+//>>excludeEnd("ctx");
+$1=$recv($2).__comma($recv($String())._lf());
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=1;
+//>>excludeEnd("ctx");
+$recv($Transcript())._show_($1);
+inlined=$recv($recv($recv(self._class()).__gt_gt("multiply:with:"))._methodCache())._at_(self._activeLayers());
+self._basicAt_put_("multiply:with:"._asJavaScriptMethodName(),inlined);
+$11=self._perform_withArguments_("multiply:with:",[aNumber,anotherNumber]);
+return $11;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"multiply:with:",{aNumber:aNumber,anotherNumber:anotherNumber,inlined:inlined},$globals.ContextAmberDemoClass1)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["aNumber", "anotherNumber"],
 source: "multiply: aNumber with: anotherNumber\x0a\x09^ aNumber * anotherNumber",
-referencedClasses: [],
+referencedClasses: ["Transcript", "String"],
 //>>excludeEnd("ide");
-messageSends: ["installInlinedWithLayers:", "inliningStrategy", ">>", "class", "activeLayers", "perform:withArguments:"]
+messageSends: ["show:", ",", "asString", "class", "activeLayers", "lf", "at:", "methodCache", ">>", "basicAt:put:", "asJavaScriptMethodName", "perform:withArguments:"]
 }),
 $globals.ContextAmberDemoClass1);
 
@@ -353,23 +587,62 @@ selector: "add:and:",
 protocol: 'not yet classified',
 fn: function (aNumber,anotherNumber){
 var self=this;
+var inlined;
+function $Transcript(){return $globals.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
+function $String(){return $globals.String||(typeof String=="undefined"?nil:String)}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1;
-$recv($recv($recv(self._class()).__gt_gt("add:and:"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
-$1=self._perform_withArguments_("add:and:",[aNumber,anotherNumber]);
-return $1;
+var $8,$7,$6,$5,$4,$3,$10,$9,$2,$1,$11;
+$8=self._class();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"add:and:",{aNumber:aNumber,anotherNumber:anotherNumber},$globals.ContextAmberDemoClass2)});
+$ctx1.sendIdx["class"]=1;
+//>>excludeEnd("ctx");
+$7=$recv($8)._asString();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["asString"]=1;
+//>>excludeEnd("ctx");
+$6="[LOG] installing object-wide inlined method class ".__comma($7);
+$5=$recv($6).__comma(" selector ");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=5;
+//>>excludeEnd("ctx");
+$4=$recv($5).__comma("add:and:");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=4;
+//>>excludeEnd("ctx");
+$3=$recv($4).__comma(" activeLayers: ");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=3;
+//>>excludeEnd("ctx");
+$10=self._activeLayers();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["activeLayers"]=1;
+//>>excludeEnd("ctx");
+$9=$recv($10)._asString();
+$2=$recv($3).__comma($9);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=2;
+//>>excludeEnd("ctx");
+$1=$recv($2).__comma($recv($String())._lf());
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=1;
+//>>excludeEnd("ctx");
+$recv($Transcript())._show_($1);
+inlined=$recv($recv($recv(self._class()).__gt_gt("add:and:"))._methodCache())._at_(self._activeLayers());
+self._basicAt_put_("add:and:"._asJavaScriptMethodName(),inlined);
+$11=self._perform_withArguments_("add:and:",[aNumber,anotherNumber]);
+return $11;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"add:and:",{aNumber:aNumber,anotherNumber:anotherNumber,inlined:inlined},$globals.ContextAmberDemoClass2)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["aNumber", "anotherNumber"],
 source: "add: aNumber and: anotherNumber\x0a\x09^ aNumber + anotherNumber",
-referencedClasses: [],
+referencedClasses: ["Transcript", "String"],
 //>>excludeEnd("ide");
-messageSends: ["installInlinedWithLayers:", "inliningStrategy", ">>", "class", "activeLayers", "perform:withArguments:"]
+messageSends: ["show:", ",", "asString", "class", "activeLayers", "lf", "at:", "methodCache", ">>", "basicAt:put:", "asJavaScriptMethodName", "perform:withArguments:"]
 }),
 $globals.ContextAmberDemoClass2);
 
@@ -397,23 +670,62 @@ selector: "method2",
 protocol: 'not yet classified',
 fn: function (){
 var self=this;
+var inlined;
+function $Transcript(){return $globals.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
+function $String(){return $globals.String||(typeof String=="undefined"?nil:String)}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1;
-$recv($recv($recv(self._class()).__gt_gt("method2"))._inliningStrategy())._installInlinedWithLayers_(self._activeLayers());
-$1=self._perform_withArguments_("method2",[]);
-return $1;
+var $8,$7,$6,$5,$4,$3,$10,$9,$2,$1,$11;
+$8=self._class();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"method2",{},$globals.ContextAmberDemoClass2)});
+$ctx1.sendIdx["class"]=1;
+//>>excludeEnd("ctx");
+$7=$recv($8)._asString();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["asString"]=1;
+//>>excludeEnd("ctx");
+$6="[LOG] installing object-wide inlined method class ".__comma($7);
+$5=$recv($6).__comma(" selector ");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=5;
+//>>excludeEnd("ctx");
+$4=$recv($5).__comma("method2");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=4;
+//>>excludeEnd("ctx");
+$3=$recv($4).__comma(" activeLayers: ");
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=3;
+//>>excludeEnd("ctx");
+$10=self._activeLayers();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["activeLayers"]=1;
+//>>excludeEnd("ctx");
+$9=$recv($10)._asString();
+$2=$recv($3).__comma($9);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=2;
+//>>excludeEnd("ctx");
+$1=$recv($2).__comma($recv($String())._lf());
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx[","]=1;
+//>>excludeEnd("ctx");
+$recv($Transcript())._show_($1);
+inlined=$recv($recv($recv(self._class()).__gt_gt("method2"))._methodCache())._at_(self._activeLayers());
+self._basicAt_put_("method2"._asJavaScriptMethodName(),inlined);
+$11=self._perform_withArguments_("method2",[]);
+return $11;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"method2",{inlined:inlined},$globals.ContextAmberDemoClass2)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
 source: "method2",
-referencedClasses: [],
+referencedClasses: ["Transcript", "String"],
 //>>excludeEnd("ide");
-messageSends: ["installInlinedWithLayers:", "inliningStrategy", ">>", "class", "activeLayers", "perform:withArguments:"]
+messageSends: ["show:", ",", "asString", "class", "activeLayers", "lf", "at:", "methodCache", ">>", "basicAt:put:", "asJavaScriptMethodName", "perform:withArguments:"]
 }),
 $globals.ContextAmberDemoClass2);
 

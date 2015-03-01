@@ -47,11 +47,11 @@ inlinedMethod
 	self activeLayers: self skipLayers.
 	self activeLayers isEmpty
 		ifTrue: [
-			partialMethodNode := (self base >> self selector) ast ]
+			partialMethodNode := (self base \> self selector) ast ]
 		ifFalse: [ 
 			nextLayer := self activeLayers removeLast.
-			partialMethodNode := ((nextLayer class partialFor: self base) >> self selector) ast ].
-	partialMethodNode sequenceNode addFirstNode: ((self base >> self selector) inliningStrategy updateMethodAST: currentActiveLayers) sequenceNode.
+			partialMethodNode := ((nextLayer class partialFor: self base) \> self selector) ast ].
+	partialMethodNode sequenceNode addFirstNode: ((self base \> self selector) inliningStrategy updateMethodAST: currentActiveLayers) sequenceNode.
 	self visit: partialMethodNode.
 	^ ContextInliningCodeGenerator new
 		currentClass: self base;
@@ -64,10 +64,10 @@ inlinedSend: args
 		remainingLayers := self skipLayers.
 		remainingLayers isEmpty
 			ifTrue: [
-				nextPartialMethodAST := (self base >> self selector) ast ]
+				nextPartialMethodAST := (self base \> self selector) ast ]
 			ifFalse: [ 
 				nextLayer := remainingLayers removeLast.
-				nextPartialMethodAST := ((nextLayer class partialFor: self base) >> self selector) ast ].
+				nextPartialMethodAST := ((nextLayer class partialFor: self base) \> self selector) ast ].
 		recursiveInliner := self class for: self selector in: self base withLayers: remainingLayers.
 		recursiveInliner visit: nextPartialMethodAST.
 		blockNode := PartialBlockNode new
@@ -355,7 +355,6 @@ selector
 !InliningStrategy methodsFor: 'wrapper'!
 
 installWrapper
-	Transcript show: '[LOG] installing wrapper for ', method methodClass asString, '>>', method selector, String lf.
 	ClassBuilder new installMethod: self wrapper forClass: self base protocol: self protocol.
 !
 
@@ -364,7 +363,7 @@ wrapper
 	methodSignature := ''.
 	(method selector tokenize: ':') allButLast with: method arguments do: [ :sel :arg | methodSignature := methodSignature, sel, ': ', arg, ' ' ].
 	methodSignature = '' ifTrue: [ methodSignature := method selector ].
-	wrapperTemplate := (self class >> #wrapperTemplate) source.
+	wrapperTemplate := (self class \> #wrapperTemplate) source.
 	wrapperTemplate := wrapperTemplate replace: 'wrapperTemplate' with: methodSignature.
 	wrapperTemplate := wrapperTemplate replace: 'SELECTOR' with: '#', method selector.
 	wrapperTemplate := wrapperTemplate replace: 'ARGUMENTS' with: '{ ', (method arguments join: '. '), ' }'.
@@ -396,30 +395,22 @@ InliningStrategy subclass: #ClassWideInliningStrategy
 !ClassWideInliningStrategy methodsFor: 'inlining'!
 
 installInlinedWithLayers: activeLayers
-	| inlined |
-	Transcript show: '[LOG] installing inlined method class ', self base asString, ' selector ', self method selector, ' activeLayers: ', activeLayers asString, String lf.
-	inlined := (self base >> self selector) methodCache at: activeLayers.
-	"inlined := ASTProceedInliner new
-		selector: self selector;
-		base: self base;
-		activeLayers: activeLayers;
-		inlinedCompiledMethod."
-	self method fn: inlined.
+	self method fn: ((self base \> self selector) methodCache at: activeLayers).
 	ClassBuilder new installMethod: self method forClass: self base protocol: self protocol.
 !
 
 updateMethodAST: activeLayers
 	| source |
-	source := (self class >> #updateMethodTemplate) source.
+	source := (self class \> #updateMethodTemplate) source.
 	source := source replace: 'SELECTOR' with: '#', self selector.
 	source := source replace: 'ACTIVELAYERS' with: '''', activeLayers asCompositionSignature, ''''.
-	source := source replace: 'ARGUMENTS' with: '{ ', ((self base >> self selector) arguments join: '. '), ' }'.
+	source := source replace: 'ARGUMENTS' with: '{ ', ((self base \> self selector) arguments join: '. '), ' }'.
 	^ Smalltalk parse: source
 !
 
 updateMethodTemplate
 	(self compositionSignature = ACTIVELAYERS) ifFalse: [ 
-		(self class >> SELECTOR) inliningStrategy installInlinedWithLayers: self activeLayers.
+		(self class \> SELECTOR) inliningStrategy installInlinedWithLayers: self activeLayers.
 		^ self perform: SELECTOR withArguments: ARGUMENTS ]
 ! !
 
@@ -436,7 +427,7 @@ globalLayerCompositionChanged
 !ClassWideInliningStrategy methodsFor: 'wrapper'!
 
 wrapperTemplate
-	(self class >> SELECTOR) inliningStrategy installInlinedWithLayers: self activeLayers.
+	(self class \> SELECTOR) inliningStrategy installInlinedWithLayers: self activeLayers.
 	^ self perform: SELECTOR withArguments: ARGUMENTS
 ! !
 
@@ -447,25 +438,22 @@ InliningStrategy subclass: #ObjectWideInliningStrategy
 !ObjectWideInliningStrategy methodsFor: 'inlining'!
 
 installInlinedWithLayers: layerComposition on: object
-	| inlined |
-	Transcript show: '[LOG] installing object-wide inlined method class ', self base asString, ' selector ', self selector, ' activeLayers: ', layerComposition asString, String lf.
-	inlined := (self base >> self selector) methodCache at: layerComposition.
-	object basicAt: self selector asJavaScriptMethodName put: inlined.
+	object basicAt: self selector asJavaScriptMethodName put: ((self base \> self selector) methodCache at: layerComposition).
 !
 
 updateMethodAST: activeLayers
 	| source |
-	source := (self class >> #updateMethodTemplate) source.
+	source := (self class \> #updateMethodTemplate) source.
 	source := source replace: 'SELECTOR' with: '#', self selector.
 	source := source replace: 'ACTIVELAYERS' with: '{ ', ((activeLayers collect: [ :layer | layer id ]) join: '. '), ' }'.
-	source := source replace: 'ARGUMENTS' with: '{ ', ((self base >> self selector) arguments join: '. '), ' }'.
-	source := source replace: 'GLOBALSIGNATURE' with: '''', (self base >> self selector) globalCompositionSignature, ''''.
+	source := source replace: 'ARGUMENTS' with: '{ ', ((self base \> self selector) arguments join: '. '), ' }'.
+	source := source replace: 'GLOBALSIGNATURE' with: '''', (self base \> self selector) globalCompositionSignature, ''''.
 	^ Smalltalk parse: source
 !
 
 updateMethodTemplate
 	GLOBALSIGNATURE ~= (self globalCompositionSignatureFor: SELECTOR) ifTrue: [
-		(self class >> SELECTOR) inliningStrategy installInlinedWithLayers: self activeLayers on: self.
+		(self class \> SELECTOR) inliningStrategy installInlinedWithLayers: self activeLayers on: self.
 		^ self perform: SELECTOR withArguments: ARGUMENTS ].
 ! !
 
@@ -476,16 +464,13 @@ compositionChangeForObject: anObject
 !
 
 globalLayerCompositionChanged
-	(self base >> self selector) globalLayerCompositionChanged.
+	(self base \> self selector) globalLayerCompositionChanged.
 ! !
 
 !ObjectWideInliningStrategy methodsFor: 'wrapper'!
 
 wrapperTemplate
-	| inlined |
-	Transcript show: '[LOG] installing object-wide inlined method class ', self class asString, ' selector ', SELECTOR, ' activeLayers: ', self activeLayers asString, String lf.
-	inlined := (self class >> SELECTOR) methodCache at: self activeLayers.
-	self basicAt: SELECTOR asJavaScriptMethodName put: inlined.
+	self basicAt: SELECTOR asJavaScriptMethodName put: ((self class \> SELECTOR) methodCache at: self activeLayers).
 	^ self perform: SELECTOR withArguments: ARGUMENTS
 ! !
 
@@ -797,20 +782,20 @@ initialize
 !PartialClass class methodsFor: 'layer composition'!
 
 compositionChangeForObject: anObject
-	self methods do: [ :method | (self base >> method selector) inliningStrategy compositionChangeForObject: anObject ].
+	self methods do: [ :method | (self base \> method selector) inliningStrategy compositionChangeForObject: anObject ].
 !
 
 globalLayerCompositionChanged
-	self methods do: [ :method | (self base >> method selector) inliningStrategy globalLayerCompositionChanged ].
+	self methods do: [ :method | (self base \> method selector) inliningStrategy globalLayerCompositionChanged ].
 ! !
 
 !PartialClass class methodsFor: 'partial methods'!
 
 handleMethodAdded: method
 	| isPartialMethod |
-	isPartialMethod := (self base canUnderstand: method selector) and: [ (self base >> method selector) protocol ~= '*Context-Hidden' ].
+	isPartialMethod := (self base canUnderstand: method selector) and: [ (self base \> method selector) protocol ~= '*Context-Hidden' ].
 	isPartialMethod
-			ifTrue: [ (self base >> method selector) inliningStrategy installWrapper ]
+			ifTrue: [ (self base \> method selector) inliningStrategy installWrapper ]
 			ifFalse: [ | protocol | "TODO: handle like partial method"
 				protocol := method protocol.
 				ClassBuilder new installMethod: method forClass: self base protocol: '*Context-Hidden'.
@@ -1045,8 +1030,8 @@ hasPartial
 !
 
 inliningStrategy
-	^ ObjectWideInliningStrategy on: self
-	"^ ClassWideInliningStrategy on: self"
+	"^ ObjectWideInliningStrategy on: self"
+	^ ClassWideInliningStrategy on: self
 !
 
 isPartial
