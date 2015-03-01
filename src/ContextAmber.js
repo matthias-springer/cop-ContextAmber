@@ -1733,24 +1733,10 @@ selector: "installInlinedWithLayers:",
 protocol: 'inlining',
 fn: function (activeLayers){
 var self=this;
-function $ClassBuilder(){return $globals.ClassBuilder||(typeof ClassBuilder=="undefined"?nil:ClassBuilder)}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $1,$5,$4,$3,$2;
-$1=self._method();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["method"]=1;
-//>>excludeEnd("ctx");
-$5=self._base();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["base"]=1;
-//>>excludeEnd("ctx");
-$4=$recv($5).__backslash_gt(self._selector());
-$3=$recv($4)._methodCache();
-$2=$recv($3)._at_(activeLayers);
-$recv($1)._fn_($2);
-$recv($recv($ClassBuilder())._new())._installMethod_forClass_protocol_(self._method(),self._base(),self._protocol());
+ self._base().fn.prototype[self._selector()._asJavaScriptMethodName()] = self._base().__backslash_gt(self._selector())._methodCache()._at_(activeLayers); ;
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"installInlinedWithLayers:",{activeLayers:activeLayers},$globals.ClassWideInliningStrategy)});
@@ -1758,10 +1744,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["activeLayers"],
-source: "installInlinedWithLayers: activeLayers\x0a\x09self method fn: ((self base \x5c> self selector) methodCache at: activeLayers).\x0a\x09ClassBuilder new installMethod: self method forClass: self base protocol: self protocol.",
-referencedClasses: ["ClassBuilder"],
+source: "installInlinedWithLayers: activeLayers\x0a\x09< self._base().fn.prototype[self._selector()._asJavaScriptMethodName()] = self._base().__backslash_gt(self._selector())._methodCache()._at_(activeLayers); >",
+referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["fn:", "method", "at:", "methodCache", "\x5c>", "base", "selector", "installMethod:forClass:protocol:", "new", "protocol"]
+messageSends: []
 }),
 $globals.ClassWideInliningStrategy);
 
@@ -1945,29 +1931,23 @@ $core.addMethod(
 $core.method({
 selector: "installInlinedWithLayers:on:",
 protocol: 'inlining',
-fn: function (layerComposition,object){
+fn: function (activeLayers,object){
 var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $2,$1;
-$2=self._selector();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["selector"]=1;
-//>>excludeEnd("ctx");
-$1=$recv($2)._asJavaScriptMethodName();
-$recv(object)._basicAt_put_($1,$recv($recv($recv(self._base()).__backslash_gt(self._selector()))._methodCache())._at_(layerComposition));
+ object[self._selector()._asJavaScriptMethodName()] = self._base().__backslash_gt(self._selector())._methodCache()._at_(activeLayers); ;
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"installInlinedWithLayers:on:",{layerComposition:layerComposition,object:object},$globals.ObjectWideInliningStrategy)});
+}, function($ctx1) {$ctx1.fill(self,"installInlinedWithLayers:on:",{activeLayers:activeLayers,object:object},$globals.ObjectWideInliningStrategy)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["layerComposition", "object"],
-source: "installInlinedWithLayers: layerComposition on: object\x0a\x09object basicAt: self selector asJavaScriptMethodName put: ((self base \x5c> self selector) methodCache at: layerComposition).",
+args: ["activeLayers", "object"],
+source: "installInlinedWithLayers: activeLayers on: object\x0a\x09< object[self._selector()._asJavaScriptMethodName()] = self._base().__backslash_gt(self._selector())._methodCache()._at_(activeLayers); >",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["basicAt:put:", "asJavaScriptMethodName", "selector", "at:", "methodCache", "\x5c>", "base"]
+messageSends: []
 }),
 $globals.ObjectWideInliningStrategy);
 

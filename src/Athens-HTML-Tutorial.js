@@ -1383,13 +1383,11 @@ selector: "step2",
 protocol: 'steps',
 fn: function (){
 var self=this;
-function $ControlPointLayer(){return $globals.ControlPointLayer||(typeof ControlPointLayer=="undefined"?nil:ControlPointLayer)}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
 var $1,$2,$3,$4,$5,$6,$7,$8,$9,$10;
 self._initializeAthens();
-self["@layer"]=$recv($ControlPointLayer())._new();
 self["@path1"]=$recv(self["@surface"])._createPath_((function(builder){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
@@ -1469,10 +1467,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "step2\x0a\x0a\x09self initializeAthens.\x0a\x09\x0a    \x22ContextAmber init\x22\x0a\x09layer := ControlPointLayer new.\x0a\x09\x0a\x09path1 := surface createPath: [ :builder |\x0a\x09\x09builder \x0a\x09\x09\x09absolute;      \x0a\x09\x09\x09lineTo: -50@ -50;          \x0a\x09\x09\x09cwArcTo: 50@100 angle: 45; \x0a\x09\x09\x09ccwArcTo: -150@100 angle: 45;\x0a\x09\x09\x09close ].\x0a\x0a\x0a\x09path2 := surface createPath: [ :builder |\x0a\x09\x09builder \x0a\x09\x09\x09absolute;  \x0a\x09\x09\x09lineTo: -200@ -150;          \x0a\x09\x09\x09curveVia: 0@ -80 to: 50@ -50;           \x0a\x09\x09\x09curveVia: 100@ -20 and: -50@20 to: 50@ 50;\x0a\x09\x09\x09close ].",
-referencedClasses: ["ControlPointLayer"],
+source: "step2\x0a\x0a\x09self initializeAthens.\x0a\x09\x0a    \x22ContextAmber init\x22\x0a\x09\x22layer := ControlPointLayer new.\x0a\x09layer activate.\x22\x0a\x09\x0a\x09path1 := surface createPath: [ :builder |\x0a\x09\x09builder \x0a\x09\x09\x09absolute;      \x0a\x09\x09\x09lineTo: -50@ -50;          \x0a\x09\x09\x09cwArcTo: 50@100 angle: 45; \x0a\x09\x09\x09ccwArcTo: -150@100 angle: 45;\x0a\x09\x09\x09close ].\x0a\x0a\x0a\x09path2 := surface createPath: [ :builder |\x0a\x09\x09builder \x0a\x09\x09\x09absolute;  \x0a\x09\x09\x09lineTo: -200@ -150;          \x0a\x09\x09\x09curveVia: 0@ -80 to: 50@ -50;           \x0a\x09\x09\x09curveVia: 100@ -20 and: -50@20 to: 50@ 50;\x0a\x09\x09\x09close ].",
+referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["initializeAthens", "new", "createPath:", "absolute", "lineTo:", "@", "cwArcTo:angle:", "ccwArcTo:angle:", "close", "curveVia:to:", "curveVia:and:to:"]
+messageSends: ["initializeAthens", "createPath:", "absolute", "lineTo:", "@", "cwArcTo:angle:", "ccwArcTo:angle:", "close", "curveVia:to:", "curveVia:and:to:"]
 }),
 $globals.AthensTutorial);
 
@@ -2472,28 +2470,17 @@ selector: "step4",
 protocol: 'steps',
 fn: function (){
 var self=this;
-function $Color(){return $globals.Color||(typeof Color=="undefined"?nil:Color)}
+function $AthensVGTigerDemo(){return $globals.AthensVGTigerDemo||(typeof AthensVGTigerDemo=="undefined"?nil:AthensVGTigerDemo)}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
-var $2,$1;
-$recv(self["@surface"])._drawDuring_((function(canvas){
+var $1;
+$1=$recv($AthensVGTigerDemo())._instance();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx2) {
+$ctx1.sendIdx["instance"]=1;
 //>>excludeEnd("ctx");
-$recv(self["@surface"])._clear_($recv($Color())._black());
-$recv(canvas)._setPaint_($recv($Color())._green());
-$2=(40).__at((40));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx["@"]=1;
-//>>excludeEnd("ctx");
-$1=$recv($2)._corner_((100).__at((100)));
-$recv(canvas)._setShape_($1);
-return $recv(canvas)._draw();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({canvas:canvas},$ctx1,1)});
-//>>excludeEnd("ctx");
-}));
+$recv($1)._surface_(self["@surface"]);
+$recv($recv($AthensVGTigerDemo())._instance())._toggle();
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"step4",{},$globals.AthensTutorial)});
@@ -2501,10 +2488,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "step4\x0a    \x22Step 4: Shapes and paints.\x22\x0a\x0a    surface drawDuring: [ :canvas |\x0a        surface clear: Color black. \x0a    \x0a        \x22There's two objects involved in any draw operation: \x0a        - paint\x0a        - shape\x0a        \x0a        The #draw API method simply fills current shape with current paint.\x22\x0a    \x0a        \x22To set current paint, use #setPaint: method\x22\x0a        canvas setPaint: Color green.\x0a\x0a        \x22To set current shape use #setShape: method\x22\x0a        canvas setShape: (40 @ 40 corner: 100 @ 100).\x0a\x0a        \x22Nothing will be drawn until #draw command will be issued:\x22\x0a        canvas draw ].",
-referencedClasses: ["Color"],
+source: "step4\x0a\x09\x22Tiger Demo\x22\x0a\x0a    AthensVGTigerDemo instance surface: surface.\x0a    AthensVGTigerDemo instance toggle.",
+referencedClasses: ["AthensVGTigerDemo"],
 //>>excludeEnd("ide");
-messageSends: ["drawDuring:", "clear:", "black", "setPaint:", "green", "setShape:", "corner:", "@", "draw"]
+messageSends: ["surface:", "instance", "toggle"]
 }),
 $globals.AthensTutorial);
 
@@ -3178,7 +3165,7 @@ $globals.AthensTutorialWidget);
 
 
 
-$core.addClass('AthensVGTigerDemo', $globals.Object, ['surface', 'renderInterval', 'looping', 'frames', 'time'], 'Athens-HTML-Tutorial');
+$core.addClass('AthensVGTigerDemo', $globals.Object, ['surface', 'renderInterval', 'looping', 'frames', 'time', 'layer'], 'Athens-HTML-Tutorial');
 $core.addMethod(
 $core.method({
 selector: "assert:",
@@ -3237,7 +3224,8 @@ selector: "convertPathData2",
 protocol: 'data',
 fn: function (){
 var self=this;
-var paths,pathData,cmdStream,ptStream,fillBlocks,strokeBlocks,capBlocks,joinBlocks,cmdBlocks,ctr;
+var paths,pathData,cmdStream,ptStream,fillBlocks,strokeBlocks,capBlocks,joinBlocks,cmdBlocks,ctr,ctr2,tempPath;
+function $ControlPointLayer(){return $globals.ControlPointLayer||(typeof ControlPointLayer=="undefined"?nil:ControlPointLayer)}
 function $OrderedCollection(){return $globals.OrderedCollection||(typeof OrderedCollection=="undefined"?nil:OrderedCollection)}
 function $AthensTigerShape(){return $globals.AthensTigerShape||(typeof AthensTigerShape=="undefined"?nil:AthensTigerShape)}
 function $Color(){return $globals.Color||(typeof Color=="undefined"?nil:Color)}
@@ -3246,9 +3234,13 @@ function $Transcript(){return $globals.Transcript||(typeof Transcript=="undefine
 return $core.withContext(function($ctx1) { 
 //>>excludeEnd("ctx");
 var $2,$1,$3,$4,$6,$7,$5,$9,$10,$8,$12,$13,$11,$15,$16,$14,$18,$19,$17,$20,$21,$22,$23,$25,$27,$26,$24,$29,$31,$30,$28,$33,$35,$34,$32,$37,$39,$38,$36,$40,$41,$42,$43,$44,$46,$47,$48,$45,$49,$51,$52,$53,$50,$54,$55,$56;
-paths=$recv($OrderedCollection())._new();
+self["@layer"]=$recv($ControlPointLayer())._new();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["new"]=1;
+//>>excludeEnd("ctx");
+paths=$recv($OrderedCollection())._new();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["new"]=2;
 //>>excludeEnd("ctx");
 $2=self._class();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -3262,6 +3254,7 @@ $ctx1.sendIdx["readStream"]=1;
 ptStream=$recv($recv(self._class())._tigerPoints())._readStream();
 pathData=nil;
 ctr=(0);
+ctr2=(0);
 fillBlocks=[(function(){
 
 }),(function(){
@@ -3623,7 +3616,7 @@ $ctx2.sendIdx["next"]=22;
 //>>excludeEnd("ctx");
 $50=$recv($Color())._r_g_b_($51,$52,$53);
 $recv($49)._fillPaint_($50);
-$recv(pathData)._setPath_($recv(self["@surface"])._createPath_((function(builder){
+tempPath=$recv(self["@surface"])._createPath_((function(builder){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx3) {
 //>>excludeEnd("ctx");
@@ -3644,7 +3637,9 @@ return $recv($recv(cmdBlocks)._at_("MLCE"._indexOf_($recv(cmdStream)._next()))).
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx3) {$ctx3.fillBlock({builder:builder},$ctx2,22)});
 //>>excludeEnd("ctx");
-})));
+}));
+tempPath;
+$recv(pathData)._setPath_(tempPath);
 $55=$recv($recv(ctr).__backslash_backslash(self._maxPaths())).__eq((1));
 if($core.assert($55)){
 $recv(paths)._add_(pathData);
@@ -3669,15 +3664,15 @@ return $recv(ea)._prepareFor_(self["@surface"]);
 $56=paths;
 return $56;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"convertPathData2",{paths:paths,pathData:pathData,cmdStream:cmdStream,ptStream:ptStream,fillBlocks:fillBlocks,strokeBlocks:strokeBlocks,capBlocks:capBlocks,joinBlocks:joinBlocks,cmdBlocks:cmdBlocks,ctr:ctr},$globals.AthensVGTigerDemo)});
+}, function($ctx1) {$ctx1.fill(self,"convertPathData2",{paths:paths,pathData:pathData,cmdStream:cmdStream,ptStream:ptStream,fillBlocks:fillBlocks,strokeBlocks:strokeBlocks,capBlocks:capBlocks,joinBlocks:joinBlocks,cmdBlocks:cmdBlocks,ctr:ctr,ctr2:ctr2,tempPath:tempPath},$globals.AthensVGTigerDemo)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "convertPathData2\x0a\x0a    | paths pathData cmdStream ptStream fillBlocks strokeBlocks capBlocks joinBlocks cmdBlocks ctr |\x0a    \x0a    paths := OrderedCollection new.\x0a    cmdStream := self class commands readStream.\x0a    ptStream := self class tigerPoints readStream.\x0a    pathData := nil.\x0a    ctr := 0.\x0a    \x0a    fillBlocks := { \x0a        \x22N\x22 [].\x0a        \x22F\x22 [ pathData addFill ].\x0a        \x22E\x22 [ pathData addFill; fillRule: #VGEVENODD ] }.\x0a\x0a    strokeBlocks := {\x0a        \x22N\x22 [].\x0a        \x22S\x22 [ pathData addStroke ] }.\x0a    \x0a    capBlocks := {\x0a        \x22B\x22 [ pathData capStyle: #VGCAPBUTT ].\x0a        \x22R\x22 [ pathData capStyle: #VGCAPROUND ].\x0a        \x22S\x22 [ pathData capStyle: #VGCAPSQUARE ] }.\x0a    \x0a    joinBlocks := {\x0a        \x22M\x22 [ pathData joinStyle: #VGJOINMITER ].\x0a        \x22R\x22 [ pathData joinStyle: #VGJOINROUND ].\x0a        \x22B\x22 [ pathData joinStyle: #VGJOINBEVEL ] }.\x0a        \x0a    cmdBlocks := {      \x0a        \x22M\x22[:s | s moveTo: ptStream next @ ptStream next ].\x0a        \x22L\x22 [:s | s lineTo: ptStream next @ ptStream next ].\x0a        \x22C\x22 [:s | s  \x0a            curveVia: (ptStream next @ ptStream next)\x0a            and: (ptStream next @ ptStream next)\x0a            to: (ptStream next @ ptStream next) ].\x0a        \x22E\x22 [:s | s close ] }.\x0a\x0a    [       \x0a        pathData := AthensTigerShape new.\x0a\x0a        fillBlocks := { \x0a            \x22N\x22 [].\x0a            \x22F\x22 [ pathData addFill; fillRule: #VGNONZERO.  ].\x0a            \x22E\x22 [ pathData addFill; fillRule: #VGEVENODD ] }.\x0a\x0a        strokeBlocks := {\x0a            \x22N\x22 [].\x0a            \x22S\x22 [ pathData addStroke ] }.\x0a        \x0a\x0a        \x22 fill type \x22\x0a        pathData fillRule: #VGNONZERO.\x0a        (fillBlocks at: ('NFE' indexOf: cmdStream next)) value.\x0a\x0a        \x22 stroke type \x22 \x0a        (strokeBlocks at: ('NS' indexOf: cmdStream next)) value.\x0a\x0a        \x22 line cap \x22\x0a        (capBlocks at: ('BRS' indexOf: cmdStream next)) value.\x0a    \x0a        \x22 line join \x22\x0a        (joinBlocks at: ('MRB' indexOf: cmdStream next)) value.\x0a    \x0a        \x22 the rest of stroke attributes \x22\x0a        pathData miterLimit: ptStream next.\x0a        pathData strokeWidth: ptStream next.\x0a\x0a        \x22 paints \x22\x0a        pathData strokePaint: ((Color r: ptStream next g: ptStream next b: ptStream next )).\x0a        \x0a        pathData fillPaint: ((Color r: ptStream next g: ptStream next b: ptStream next )).\x0a        \x0a        pathData setPath: (\x0a            surface createPath: [:builder |\x0a                builder absolute.\x0a                (ptStream next) timesRepeat: [\x0a                    (cmdBlocks at: ('MLCE' indexOf: cmdStream next) ) value: builder.\x0a                ]\x0a                ]\x0a        ).\x0a\x0a\x09\x09ctr \x5c\x5c self maxPaths = 1 ifTrue: [\x0a        paths add: pathData].\x0a        ctr := ctr + 1.\x0a        cmdStream atEnd\x0a    ] whileFalse. \x22whileTrue: [ ctr < 305 ].\x22\x0aTranscript show: ctr.\x0a\x0a    paths do: [:ea |\x0a       \x22 self assert: ea fillRule = #VGNONZERO.  \x22\x0a        ea prepareFor: surface\x0a        ].\x0a    \x0a    \x22self assert: (ptStream atEnd).\x22\x0a    \x0a    ^ paths",
-referencedClasses: ["OrderedCollection", "AthensTigerShape", "Color", "Transcript"],
+source: "convertPathData2\x0a\x0a    | paths pathData cmdStream ptStream fillBlocks strokeBlocks capBlocks joinBlocks cmdBlocks ctr ctr2 tempPath |\x0a    layer := ControlPointLayer new.\x0a\x09\x0a    paths := OrderedCollection new.\x0a    cmdStream := self class commands readStream.\x0a    ptStream := self class tigerPoints readStream.\x0a    pathData := nil.\x0a    ctr := 0.\x0a    ctr2 := 0.\x0a\x09\x0a    fillBlocks := { \x0a        \x22N\x22 [].\x0a        \x22F\x22 [ pathData addFill ].\x0a        \x22E\x22 [ pathData addFill; fillRule: #VGEVENODD ] }.\x0a\x0a    strokeBlocks := {\x0a        \x22N\x22 [].\x0a        \x22S\x22 [ pathData addStroke ] }.\x0a    \x0a    capBlocks := {\x0a        \x22B\x22 [ pathData capStyle: #VGCAPBUTT ].\x0a        \x22R\x22 [ pathData capStyle: #VGCAPROUND ].\x0a        \x22S\x22 [ pathData capStyle: #VGCAPSQUARE ] }.\x0a    \x0a    joinBlocks := {\x0a        \x22M\x22 [ pathData joinStyle: #VGJOINMITER ].\x0a        \x22R\x22 [ pathData joinStyle: #VGJOINROUND ].\x0a        \x22B\x22 [ pathData joinStyle: #VGJOINBEVEL ] }.\x0a        \x0a    cmdBlocks := {      \x0a        \x22M\x22[:s | s moveTo: ptStream next @ ptStream next ].\x0a        \x22L\x22 [:s | s lineTo: ptStream next @ ptStream next ].\x0a        \x22C\x22 [:s | s  \x0a            curveVia: (ptStream next @ ptStream next)\x0a            and: (ptStream next @ ptStream next)\x0a            to: (ptStream next @ ptStream next) ].\x0a        \x22E\x22 [:s | s close ] }.\x0a\x0a    [       \x0a        pathData := AthensTigerShape new.\x0a\x0a        fillBlocks := { \x0a            \x22N\x22 [].\x0a            \x22F\x22 [ pathData addFill; fillRule: #VGNONZERO.  ].\x0a            \x22E\x22 [ pathData addFill; fillRule: #VGEVENODD ] }.\x0a\x0a        strokeBlocks := {\x0a            \x22N\x22 [].\x0a            \x22S\x22 [ pathData addStroke ] }.\x0a        \x0a\x0a        \x22 fill type \x22\x0a        pathData fillRule: #VGNONZERO.\x0a        (fillBlocks at: ('NFE' indexOf: cmdStream next)) value.\x0a\x0a        \x22 stroke type \x22 \x0a        (strokeBlocks at: ('NS' indexOf: cmdStream next)) value.\x0a\x0a        \x22 line cap \x22\x0a        (capBlocks at: ('BRS' indexOf: cmdStream next)) value.\x0a    \x0a        \x22 line join \x22\x0a        (joinBlocks at: ('MRB' indexOf: cmdStream next)) value.\x0a    \x0a        \x22 the rest of stroke attributes \x22\x0a        pathData miterLimit: ptStream next.\x0a        pathData strokeWidth: ptStream next.\x0a\x0a        \x22 paints \x22\x0a        pathData strokePaint: ((Color r: ptStream next g: ptStream next b: ptStream next )).\x0a        \x0a        pathData fillPaint: ((Color r: ptStream next g: ptStream next b: ptStream next )).\x0a        \x0a\x09\x09tempPath := (\x0a            surface createPath: [:builder |\x0a                builder absolute.\x0a                (ptStream next) timesRepeat: [\x0a                    (cmdBlocks at: ('MLCE' indexOf: cmdStream next) ) value: builder.\x0a                ]\x0a                ]\x0a        ).\x0a\x09\x09\x0a\x0a\x09\x09\x09\x0a        pathData setPath: tempPath.\x0a\x0a\x09\x09ctr \x5c\x5c self maxPaths = 1 ifTrue: [\x0a\x09\x09\x09\x09\x09\x22ctr2 \x5c\x5c 2 = 0 ifTrue: [ tempPath activateLayer: layer ].\x0a\x09\x09\x09ctr2 := ctr2 + 1.\x22\x0a        \x09paths add: pathData].\x0a        ctr := ctr + 1.\x0a        cmdStream atEnd\x0a    ] whileFalse. \x22whileTrue: [ ctr < 305 ].\x22\x0aTranscript show: ctr.\x0a\x0a    paths do: [:ea |\x0a       \x22 self assert: ea fillRule = #VGNONZERO.  \x22\x0a        ea prepareFor: surface\x0a        ].\x0a    \x0a    \x22self assert: (ptStream atEnd).\x22\x0a    \x0a    ^ paths",
+referencedClasses: ["ControlPointLayer", "OrderedCollection", "AthensTigerShape", "Color", "Transcript"],
 //>>excludeEnd("ide");
-messageSends: ["new", "readStream", "commands", "class", "tigerPoints", "addFill", "fillRule:", "addStroke", "capStyle:", "joinStyle:", "moveTo:", "@", "next", "lineTo:", "curveVia:and:to:", "close", "whileFalse", "value", "at:", "indexOf:", "miterLimit:", "strokeWidth:", "strokePaint:", "r:g:b:", "fillPaint:", "setPath:", "createPath:", "absolute", "timesRepeat:", "value:", "ifTrue:", "=", "\x5c\x5c", "maxPaths", "add:", "+", "atEnd", "show:", "do:", "prepareFor:"]
+messageSends: ["new", "readStream", "commands", "class", "tigerPoints", "addFill", "fillRule:", "addStroke", "capStyle:", "joinStyle:", "moveTo:", "@", "next", "lineTo:", "curveVia:and:to:", "close", "whileFalse", "value", "at:", "indexOf:", "miterLimit:", "strokeWidth:", "strokePaint:", "r:g:b:", "fillPaint:", "createPath:", "absolute", "timesRepeat:", "value:", "setPath:", "ifTrue:", "=", "\x5c\x5c", "maxPaths", "add:", "+", "atEnd", "show:", "do:", "prepareFor:"]
 }),
 $globals.AthensVGTigerDemo);
 

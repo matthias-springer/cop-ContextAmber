@@ -576,7 +576,8 @@ step2
 	self initializeAthens.
 	
     "ContextAmber init"
-	layer := ControlPointLayer new.
+	"layer := ControlPointLayer new.
+	layer activate."
 	
 	path1 := surface createPath: [ :builder |
 		builder 
@@ -991,25 +992,10 @@ step32
 !
 
 step4
-    "Step 4: Shapes and paints."
+	"Tiger Demo"
 
-    surface drawDuring: [ :canvas |
-        surface clear: Color black. 
-    
-        "There's two objects involved in any draw operation: 
-        - paint
-        - shape
-        
-        The #draw API method simply fills current shape with current paint."
-    
-        "To set current paint, use #setPaint: method"
-        canvas setPaint: Color green.
-
-        "To set current shape use #setShape: method"
-        canvas setShape: (40 @ 40 corner: 100 @ 100).
-
-        "Nothing will be drawn until #draw command will be issued:"
-        canvas draw ].
+    AthensVGTigerDemo instance surface: surface.
+    AthensVGTigerDemo instance toggle.
 !
 
 step5
@@ -1242,7 +1228,7 @@ renderOn: html
 ! !
 
 Object subclass: #AthensVGTigerDemo
-	instanceVariableNames: 'surface renderInterval looping frames time'
+	instanceVariableNames: 'surface renderInterval looping frames time layer'
 	package: 'Athens-HTML-Tutorial'!
 
 !AthensVGTigerDemo methodsFor: 'accessing'!
@@ -1255,14 +1241,16 @@ surface: anHTMLSurface
 
 convertPathData2
 
-    | paths pathData cmdStream ptStream fillBlocks strokeBlocks capBlocks joinBlocks cmdBlocks ctr |
-    
+    | paths pathData cmdStream ptStream fillBlocks strokeBlocks capBlocks joinBlocks cmdBlocks ctr ctr2 tempPath |
+    layer := ControlPointLayer new.
+	
     paths := OrderedCollection new.
     cmdStream := self class commands readStream.
     ptStream := self class tigerPoints readStream.
     pathData := nil.
     ctr := 0.
-    
+    ctr2 := 0.
+	
     fillBlocks := { 
         "N" [].
         "F" [ pathData addFill ].
@@ -1326,7 +1314,7 @@ convertPathData2
         
         pathData fillPaint: ((Color r: ptStream next g: ptStream next b: ptStream next )).
         
-        pathData setPath: (
+		tempPath := (
             surface createPath: [:builder |
                 builder absolute.
                 (ptStream next) timesRepeat: [
@@ -1334,9 +1322,15 @@ convertPathData2
                 ]
                 ]
         ).
+		
+
+			
+        pathData setPath: tempPath.
 
 		ctr \\ self maxPaths = 1 ifTrue: [
-        paths add: pathData].
+					"ctr2 \\ 2 = 0 ifTrue: [ tempPath activateLayer: layer ].
+			ctr2 := ctr2 + 1."
+        	paths add: pathData].
         ctr := ctr + 1.
         cmdStream atEnd
     ] whileFalse. "whileTrue: [ ctr < 305 ]."

@@ -395,8 +395,7 @@ InliningStrategy subclass: #ClassWideInliningStrategy
 !ClassWideInliningStrategy methodsFor: 'inlining'!
 
 installInlinedWithLayers: activeLayers
-	self method fn: ((self base \> self selector) methodCache at: activeLayers).
-	ClassBuilder new installMethod: self method forClass: self base protocol: self protocol.
+	< self._base().fn.prototype[self._selector()._asJavaScriptMethodName()] = self._base().__backslash_gt(self._selector())._methodCache()._at_(activeLayers); >
 !
 
 updateMethodAST: activeLayers
@@ -437,8 +436,8 @@ InliningStrategy subclass: #ObjectWideInliningStrategy
 
 !ObjectWideInliningStrategy methodsFor: 'inlining'!
 
-installInlinedWithLayers: layerComposition on: object
-	object basicAt: self selector asJavaScriptMethodName put: ((self base \> self selector) methodCache at: layerComposition).
+installInlinedWithLayers: activeLayers on: object
+	< object[self._selector()._asJavaScriptMethodName()] = self._base().__backslash_gt(self._selector())._methodCache()._at_(activeLayers); >
 !
 
 updateMethodAST: activeLayers
