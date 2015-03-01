@@ -1358,6 +1358,10 @@ clearLoop
     < clearInterval(self['@renderInterval']); >
 !
 
+maxFrames
+	^ 1000
+!
+
 maxPaths
 	^ 10
 !
@@ -1374,6 +1378,41 @@ runDemo
     frames := 0.
     looping := true.
     
+	
+	"first frame"
+		time := Time millisecondClockValue.
+	    rotation := rotation + rotationSpeed.
+        frames := frames + 1.
+
+        zoom := (frames/100) sin abs .
+        
+        surface 
+
+            drawDuring: [:can |
+
+                can pathTransform 
+                    loadIdentity. 
+                    
+                can 
+                    setPaint: Color white;
+                    drawShape: (0@0 corner: surface extent).
+                    
+                can pathTransform 
+                    translateByX: (0.5 * (extent x - (self class tigerMaxX * scale*zoom))) Y: extent y / -12.0 ;
+                    scaleBy: scale*zoom ;
+
+                    translateByX: (self class tigerMaxX * 0.5) Y: (self class tigerMaxY * 0.5 );
+                    scaleBy: 0.8;
+                    rotateByDegrees: rotation;
+                    translateByX: (self class tigerMaxX * -0.5) Y: (self class tigerMaxY * -0.5 ).
+
+                paths do: [:each | each renderOn: can ].
+                
+            ].
+	
+		Transcript show: 'first frame (ms): ', (Time millisecondClockValue - time).
+	
+	
     time := Time millisecondClockValue.
     
     self startLoop: [
@@ -1405,6 +1444,8 @@ runDemo
                 paths do: [:each | each renderOn: can ].
                 
             ].
+			
+			frames = self maxFrames ifTrue: [self stopDemo].
     ].
 !
 

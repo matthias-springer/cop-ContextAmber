@@ -426,7 +426,7 @@ updateMethodTemplate
 !ClassWideInliningStrategy methodsFor: 'layer composition'!
 
 compositionChangeForObject: anObject
-	anObject activeLayersDirty: true.
+	anObject markLayersDirty.
 !
 
 globalLayerCompositionChanged
@@ -449,12 +449,8 @@ InliningStrategy subclass: #ObjectWideInliningStrategy
 installInlinedWithLayers: layerComposition on: object
 	| inlined |
 	Transcript show: '[LOG] installing object-wide inlined method class ', self base asString, ' selector ', self selector, ' activeLayers: ', layerComposition asString, String lf.
-	inlined := ASTProceedInliner new
-		selector: self selector;
-		base: self base;
-		activeLayers: layerComposition;
-		inlinedCompiledMethod.
-	object basicAt: self selector asJavaScriptMethodName put: inlined fn.
+	inlined := (self base >> self selector) methodCache at: layerComposition.
+	object basicAt: self selector asJavaScriptMethodName put: inlined.
 !
 
 updateMethodAST: activeLayers
@@ -488,12 +484,8 @@ globalLayerCompositionChanged
 wrapperTemplate
 	| inlined |
 	Transcript show: '[LOG] installing object-wide inlined method class ', self class asString, ' selector ', SELECTOR, ' activeLayers: ', self activeLayers asString, String lf.
-	inlined := ASTProceedInliner new
-		selector: SELECTOR;
-		base: self class;
-		activeLayers: self activeLayers;
-		inlinedCompiledMethod.
-	self basicAt: SELECTOR asJavaScriptMethodName put: inlined fn.
+	inlined := (self class >> SELECTOR) methodCache at: self activeLayers.
+	self basicAt: SELECTOR asJavaScriptMethodName put: inlined.
 	^ self perform: SELECTOR withArguments: ARGUMENTS
 ! !
 
@@ -845,6 +837,10 @@ replace: aNode with: anotherNode
 
 !Behavior methodsFor: '*ContextAmber'!
 
+\> aString
+	< return self['methods'][aString]; >
+!
+
 addPartial: class
 	self ensurePartialsCollectionInitialized.
 	self partials add: class.
@@ -866,19 +862,6 @@ incrementLayerCompositionVersion
 	} else {
 		self['layerCompositionVersion'] = self['layerCompositionVersion'] + 1;
 	} >
-!
-
-installInlined: selector withLayers: activeLayers
-	| method wrapper |
-	wrapper := self >> selector.
-	Transcript show: '[LOG] installing inlined method class ', self asString, ' selector ', selector, ' activeLayers: ', activeLayers asString, String lf.
-	method := ASTProceedInliner new
-		selector: selector;
-		base: self;
-		activeLayers: activeLayers;
-		inlinedCompiledMethod.
-	wrapper fn: method fn.
-	ClassBuilder new installMethod: wrapper forClass: self protocol: wrapper protocol.
 !
 
 layerCompositionVersion
@@ -1201,41 +1184,9 @@ activeLayers
 	^ layers
 !
 
-activeLayersDirty
-	< if (typeof(self['activeLayersDirty']) === 'undefined') {
-		return true;
-	} else {
-		return self['activeLayersDirty'];
-	} >
-!
-
-activeLayersDirty: aBoolean
-	< self['activeLayersDirty']  = aBoolean; >
-!
-
-activeLayersVersion
-	< if (typeof(self['activeLayersVersion']) === 'undefined') {
-		return 0;
-	} else {
-		return self['activeLayersVersion'];
-	} >
-!
-
-activeLayersVersion: anInteger
-	< self['activeLayersVersion']  = anInteger; >
-!
-
-basicCompositionSignature
-	< return self['compositionSignature']; >
-!
-
-basicCompositionSignature: anOrderedCollection
-	< self['compositionSignature']  = anOrderedCollection; >
-!
-
 compositionSignature
 	< if (self['activeLayersDirty'] === true || self['activeLayersDirty'] === undefined || self['activeLayersVersion'] !!= self.klass._layerCompositionVersion()) {
-		self._basicCompositionSignature_(self._activeLayers()._asCompositionSignature());
+		self['compositionSignature'] = self._activeLayers()._asCompositionSignature();
 		self['activeLayersDirty'] = false;
 		self['activeLayersVersion'] = self._class()._layerCompositionVersion();
 	}
@@ -1257,15 +1208,17 @@ globalCompositionSignatureFor: selector
 !
 
 initializeLayers
-	self layerStack ifNil: [ self layerStack: LayerStack new ].
+	< if (self['layerStack'] === undefined) {
+		self['layerStack'] = smalltalk.LayerStack._new();
+	} >
 !
 
 layerStack
 	< return self['layerStack']; >
 !
 
-layerStack: aStack
-	< self['layerStack'] = aStack; >
+markLayersDirty
+	< self['activeLayersDirty']  = true; >
 !
 
 resetLayer: aLayer
